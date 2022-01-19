@@ -7,7 +7,13 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() {}
+#include "Constants.h"
+
+Robot::Robot() {}
+
+void Robot::RobotInit() {
+  frc2::CommandScheduler::GetInstance().SetPeriod(Constants::LoopPeriod);
+}
 
 /**
  * This function is called every robot packet, no matter the mode. Use
