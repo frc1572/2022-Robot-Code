@@ -22,7 +22,7 @@ void FlywheelSubsystem::Periodic() {
 }
 
 void FlywheelSubsystem::SimulationPeriodic() {
-    m_plantSim.SetInput(0, m_leader.GetMotorOutputVoltage());
+    m_plantSim.SetInput(0, m_leader.GetMotorOutputVoltage() - Constants::Flywheel::Ks / 1_V);
     m_plantSim.Update(Constants::LoopPeriod);
     auto output = m_plantSim.GetOutput(0) * 1_rad_per_s * Constants::TicksPerRevolution::TalonFX;
     auto leaderSim = m_leader.GetSimCollection();

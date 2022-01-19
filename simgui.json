@@ -5,6 +5,11 @@
         "header": {
           "open": true
         }
+      },
+      "Talon FX[0]/Integrated Sensor": {
+        "header": {
+          "open": true
+        }
       }
     }
   },
@@ -30,6 +35,31 @@
   "NetworkTables": {
     "SmartDashboard": {
       "open": true
+    }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "axis": [
+            {
+              "autoFit": true
+            }
+          ],
+          "height": 338,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "CANEncoder:Talon FX[0]/Integrated Sensor-velocity"
+            }
+          ]
+        }
+      ]
     }
   }
 }
