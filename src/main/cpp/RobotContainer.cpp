@@ -17,6 +17,8 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here
+  //Changed The Speed Values To Negitive To Reverse The Direction & Added a 0 RPM Button
+  frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
   frc2::JoystickButton(&m_joystick, 1).WhenPressed(FlywheelSpinupCommand(1000, m_flywheel));
   frc2::JoystickButton(&m_joystick, 2).WhenPressed(FlywheelSpinupCommand(2000, m_flywheel));
   frc2::JoystickButton(&m_joystick, 3).WhenPressed(FlywheelSpinupCommand(3000, m_flywheel));

@@ -38,8 +38,8 @@ private:
 
     frc::KalmanFilter<1, 1, 1> m_filter = frc::KalmanFilter{
         m_plant,
-        {5}, // model error stddev
-        {5}, // measurement error stddev
+        {6.2793}, // model error stddev      -Updated as of 1_20_22
+        {.1, // measurement error stddev   -Updated as of 1_20_22 (.1 = no stuttering, .0075 is more accurate but has stuttering)
         Constants::LoopPeriod};
 
     frc::LinearSystemLoop<1, 1, 1> m_loop = frc::LinearSystemLoop{

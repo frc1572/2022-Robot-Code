@@ -17,6 +17,10 @@ void FlywheelSubsystem::Periodic() {
     m_loop.Predict(Constants::LoopPeriod);
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
+    if(m_loop.NextR(0) == 0) {
+        m_leader.SetVoltage(0_V);
+    }
+    //^^^Set as an On/Off of Voltage if the next refrence is 0 (Button 5)
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
     frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
