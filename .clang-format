@@ -1,0 +1,32 @@
+---
+Language: Cpp
+BasedOnStyle: Microsoft
+AccessModifierOffset: -4
+AlignAfterOpenBracket: AlwaysBreak
+AlignOperands: DontAlign
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Allman
+# ColumnLimit: 120
+ConstructorInitializerIndentWidth: 2
+DeriveLineEnding: false
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '^<(ctre|frc2?|units|wpi)/'
+    Priority:        2
+    CaseSensitive:   false
+  - Regex:           '^<'
+    Priority:        1
+    CaseSensitive:   false
+  - Regex:           '.*'
+    Priority:        3
+    CaseSensitive:   false
+IndentCaseBlocks: true
+# IndentWidth: 4
+KeepEmptyLinesAtTheStartOfBlocks: false
+NamespaceIndentation: All
+PointerAlignment: Left
+ShortNamespaceLines: 0
+SortIncludes: CaseInsensitive
+Standard: c++17
+UseCRLF: false

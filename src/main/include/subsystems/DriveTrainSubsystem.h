@@ -1,23 +1,25 @@
-#pragma once 
-#include <frc2/command/SubsystemBase.h>
-#include <ctre/Phoenix.h>
-#include <wpi/array.h>
-#include <units/angle.h>
-#include <frc/kinematics/SwerveDriveKinematics.h>
-#include <frc/geometry/Translation2d.h>
+#pragma once
 #include <AHRS.h>
+
+#include <ctre/Phoenix.h>
+#include <frc/geometry/Translation2d.h>
+#include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/SPI.h>
+#include <frc2/command/SubsystemBase.h>
+#include <units/angle.h>
+#include <wpi/array.h>
 
 #include "SwerveModuleSubsystem.h"
 
-class DriveTrainSubsystem : public frc2::SubsystemBase {
+class DriveTrainSubsystem : public frc2::SubsystemBase
+{
 public:
     void Drive(frc::ChassisSpeeds&& chassisSpeeds);
     frc::Rotation2d GetRotation();
-    //void Periodic() override;
+    // void Periodic() override;
 
 private:
-    AHRS m_NavX{frc::SPI::Port::kMXP};   
+    AHRS m_NavX{frc::SPI::Port::kMXP};
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
         SwerveModuleSubsystem{1, 2, 0_deg},
