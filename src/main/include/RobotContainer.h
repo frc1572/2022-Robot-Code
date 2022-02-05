@@ -8,6 +8,7 @@
 #include <frc/Joystick.h>
 
 #include "subsystems/FlywheelSubsystem.h"
+#include "subsystems/DriveTrainSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -23,10 +24,13 @@ class RobotContainer {
   frc2::Command* GetAutonomousCommand();
 
  private:
-  frc::Joystick m_joystick{0};
+  //frc::Joystick m_joystick{0};
+  frc::Joystick m_TranslationJoystick{0};
+  frc::Joystick m_SteeringJoystick{1};
 
   // The robot's subsystems and commands are defined here...
-  FlywheelSubsystem m_flywheel;
+  DriveTrainSubsystem m_drivetrain;
+  //FlywheelSubsystem m_flywheel;
 
   void ConfigureButtonBindings();
 };
