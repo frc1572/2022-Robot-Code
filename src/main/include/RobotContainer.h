@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include <frc2/command/Command.h>
 #include <frc/Joystick.h>
+#include <frc2/command/Command.h>
 
+#include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
 
 /**
@@ -16,17 +17,21 @@
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and button mappings) should be declared here.
  */
-class RobotContainer {
- public:
-  RobotContainer();
+class RobotContainer
+{
+public:
+    RobotContainer();
 
-  frc2::Command* GetAutonomousCommand();
+    frc2::Command* GetAutonomousCommand();
 
- private:
-  frc::Joystick m_joystick{0};
+private:
+    // frc::Joystick m_joystick{0};
+    frc::Joystick m_TranslationJoystick{0};
+    frc::Joystick m_SteeringJoystick{1};
 
-  // The robot's subsystems and commands are defined here...
-  FlywheelSubsystem m_flywheel;
+    // The robot's subsystems and commands are defined here...
+    DriveTrainSubsystem m_drivetrain;
+    // FlywheelSubsystem m_flywheel;
 
-  void ConfigureButtonBindings();
+    void ConfigureButtonBindings();
 };
