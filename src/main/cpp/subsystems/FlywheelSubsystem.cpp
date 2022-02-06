@@ -1,5 +1,6 @@
 #include "subsystems/FlywheelSubsystem.h"
 
+#include <Eigen/Core>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 FlywheelSubsystem::FlywheelSubsystem()
@@ -17,7 +18,7 @@ void FlywheelSubsystem::Periodic()
 {
     rad_per_s_t velocity = m_leader.GetSelectedSensorVelocity() / Constants::TicksPerRevolution::TalonFX /
         Constants::VelocityFactor::TalonFX;
-    m_loop.Correct(frc::MakeMatrix<1, 1>(velocity.to<double>()));
+    m_loop.Correct(Eigen::Vector<double, 1>(velocity.to<double>()));
     m_loop.Predict(Constants::LoopPeriod);
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
@@ -44,7 +45,7 @@ void FlywheelSubsystem::SimulationPeriodic()
 
 void FlywheelSubsystem::SetSetpoint(rad_per_s_t setpoint)
 {
-    m_loop.SetNextR(frc::MakeMatrix<1, 1>(setpoint.to<double>()));
+    m_loop.SetNextR(Eigen::Vector<double, 1>(setpoint.to<double>()));
 
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", setpoint.to<double>());
 }

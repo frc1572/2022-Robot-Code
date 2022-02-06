@@ -12,7 +12,7 @@ ConstructorInitializerIndentWidth: 2
 DeriveLineEnding: false
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '^<(ctre|frc2?|units|wpi)/'
+  - Regex:           '^<(ctre|Eigen|frc2?|fmt|networktables|units|wpi)/'
     Priority:        2
     CaseSensitive:   false
   - Regex:           '^<'
@@ -29,4 +29,3 @@ PointerAlignment: Left
 ShortNamespaceLines: 0
 SortIncludes: CaseInsensitive
 Standard: c++17
-UseCRLF: false

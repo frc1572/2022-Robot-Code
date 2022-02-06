@@ -3,7 +3,10 @@
 #include <iostream>
 #include <memory>
 
-#include <wpi/math>
+#include <Eigen/Core>
+#include <fmt/format.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <wpi/numbers>
 
 #include "CustomUnits.h"
 
@@ -11,63 +14,69 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
   : m_throttleMotor(std::make_unique<WPI_TalonFX>(throttlePort)),
     m_steeringMotor(std::make_unique<WPI_TalonFX>(steeringPort)), m_steeringoffset(steeringOffset)
 {
+    SetName(fmt::format("SwerveModuleSubsystem({}, {})", throttlePort, steeringPort));
+
     m_throttleMotor->ConfigFactoryDefault();
     m_throttleMotor->SetNeutralMode(NeutralMode::Coast);
 
     m_steeringMotor->ConfigFactoryDefault();
-    m_steeringMotor->SetNeutralMode(NeutralMode::Coast);
+    m_steeringMotor->SetNeutralMode(NeutralMode::Brake);
     m_steeringMotor->ConfigIntegratedSensorInitializationStrategy(SensorInitializationStrategy::BootToAbsolutePosition);
-
-    std::cout << "SwerveModuleSubsystem(" << throttlePort << ", " << steeringPort << ") "
-              << GetMeasuredRotation().Degrees().value() << std::endl;
 }
 
 void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
 {
     auto optimizedState = frc::SwerveModuleState::Optimize(desiredState, GetMeasuredRotation());
-    auto OffsetAngle = optimizedState.angle.Radians() + m_steeringoffset;
-    rad_per_s_t SteeringVelocity = m_steeringMotor->GetSelectedSensorVelocity() /
-        Constants::TicksPerRevolution::TalonFX / Constants::VelocityFactor::TalonFX /
-        Constants::SwerveModule::SteeringGearing * -1.0;
+    auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset;
 
-    double throttlefeedforward = m_throttleFeedforward.Calculate(
-        frc::MakeMatrix<1, 1>(GetMeasuredVelocity().value()), frc::MakeMatrix<1, 1>(optimizedState.speed.value()))[0];
-    double steeringfeedforward = m_steeringFeedforward.Calculate(
-        frc::MakeMatrix<1, 2>(GetMeasuredRotation().Radians().value(), SteeringVelocity.value()),
-        frc::MakeMatrix<1, 2>(OffsetAngle.value(), 0.0))[0];
+    double throttlefeedforward =
+        m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0];
+    double steeringfeedforward = m_steeringFeedforward.Calculate(Eigen::Vector2d(offsetAngle.value(), 0.0))[0];
 
     m_throttleMotor->Set(
         ControlMode::Velocity,
-        optimizedState.speed * Constants::TicksPerRevolution::TalonFX * Constants::VelocityFactor::TalonFX /
-            Constants::SwerveModule::WheelCircumference * 2_rad * wpi::numbers::pi * Constants::SwerveModule::Gearing,
+        optimizedState.speed / Constants::SwerveModule::RolloutRatio * Constants::SwerveModule::ThrottleGearing *
+            Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
-        throttlefeedforward / 12);
+        (throttlefeedforward + Constants::SwerveModule::ThrottleKs.value() * wpi::sgn(throttlefeedforward)) / 12.0);
     m_steeringMotor->Set(
         ControlMode::Position,
-        OffsetAngle * Constants::TicksPerRevolution::TalonFX * Constants::SwerveModule::SteeringGearing * -1.0,
+        offsetAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
-        steeringfeedforward / 12 * -1.0);
+        (steeringfeedforward + Constants::SwerveModule::SteeringKs.value() * wpi::sgn(steeringfeedforward)) / 12.0);
+
+    frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.DesiredSteeringPosition", GetName()), optimizedState.angle.Radians().value());
 }
 
 frc::Rotation2d SwerveModuleSubsystem::GetMeasuredRotation()
 {
     return {
         (m_steeringMotor->GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX - m_steeringoffset) /
-        Constants::SwerveModule::SteeringGearing * -1.0};
+        Constants::SwerveModule::SteeringGearing};
 }
 frc::SwerveModuleState SwerveModuleSubsystem::GetMeasuredState()
 {
-    return {.speed = GetMeasuredVelocity(), .angle = GetMeasuredRotation()};
+    return {GetMeasuredVelocity(), GetMeasuredRotation()};
 }
 
 decltype(0_mps) SwerveModuleSubsystem::GetMeasuredVelocity()
 {
     return m_throttleMotor->GetSelectedSensorVelocity() / Constants::TicksPerRevolution::TalonFX /
-        Constants::VelocityFactor::TalonFX * Constants::SwerveModule::WheelCircumference / 2_rad / wpi::numbers::pi /
-        Constants::SwerveModule::Gearing;
+        Constants::VelocityFactor::TalonFX * Constants::SwerveModule::ThrottleGearing *
+        Constants::SwerveModule::RolloutRatio;
 }
 
 void SwerveModuleSubsystem::TestingVoltage()
 {
     m_throttleMotor->Set(ControlMode::PercentOutput, .1);
-};
+}
+
+void SwerveModuleSubsystem::Periodic()
+{
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
+}

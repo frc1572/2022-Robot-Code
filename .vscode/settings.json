@@ -77,7 +77,10 @@
     "streambuf": "cpp",
     "thread": "cpp",
     "cinttypes": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "core": "cpp",
+    "*.inc": "cpp",
+    "numbers": "cpp"
   },
   "editor.formatOnSave": true,
   "[cpp]": {

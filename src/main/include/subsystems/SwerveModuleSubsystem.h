@@ -20,6 +20,7 @@ public:
     frc::SwerveModuleState GetMeasuredState();
     decltype(0_mps) GetMeasuredVelocity();
     void TestingVoltage();
+    void Periodic() override;
 
 private:
     std::unique_ptr<WPI_TalonFX> m_throttleMotor;
@@ -28,9 +29,9 @@ private:
     units::radian_t m_steeringoffset;
 
     const frc::LinearSystem<1, 1, 1> m_throttleSystem = frc::LinearSystemId::IdentifyVelocitySystem<units::meter>(
-        Constants::SwerveModule::throttleKv, Constants::SwerveModule::throttleKa);
+        Constants::SwerveModule::ThrottleKv, Constants::SwerveModule::ThrottleKa);
     const frc::LinearSystem<2, 1, 1> m_steeringSystem = frc::LinearSystemId::IdentifyPositionSystem<units::radian>(
-        Constants::SwerveModule::steeringKv, Constants::SwerveModule::steeringKa);
+        Constants::SwerveModule::SteeringKv, Constants::SwerveModule::SteeringKa);
     frc::LinearPlantInversionFeedforward<1, 1> m_throttleFeedforward{m_throttleSystem, Constants::LoopPeriod};
     frc::LinearPlantInversionFeedforward<2, 1> m_steeringFeedforward{m_steeringSystem, Constants::LoopPeriod};
 };

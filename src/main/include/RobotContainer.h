@@ -26,8 +26,8 @@ public:
 
 private:
     // frc::Joystick m_joystick{0};
-    frc::Joystick m_TranslationJoystick{0};
-    frc::Joystick m_SteeringJoystick{1};
+    frc::Joystick m_translationJoystick{0};
+    frc::Joystick m_steeringJoystick{1};
 
     // The robot's subsystems and commands are defined here...
     DriveTrainSubsystem m_drivetrain;

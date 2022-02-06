@@ -12,7 +12,7 @@
 RobotContainer::RobotContainer()
 {
     // Initialize all of your commands and subsystems here
-    m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_TranslationJoystick, m_SteeringJoystick));
+    m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
     // Configure the button bindings
     ConfigureButtonBindings();
 }

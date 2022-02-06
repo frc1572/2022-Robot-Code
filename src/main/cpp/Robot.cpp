@@ -4,8 +4,10 @@
 
 #include "Robot.h"
 
+#include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+#include <networktables/NetworkTableInstance.h>
 
 #include "Constants.h"
 
@@ -29,6 +31,10 @@ void Robot::RobotInit()
 void Robot::RobotPeriodic()
 {
     frc2::CommandScheduler::GetInstance().Run();
+    if (!frc::DriverStation::IsFMSAttached())
+    {
+        nt::NetworkTableInstance::GetDefault().Flush();
+    }
 }
 
 /**
