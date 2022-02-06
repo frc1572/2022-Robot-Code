@@ -14,15 +14,18 @@
 class SwerveModuleSubsystem : public frc2::SubsystemBase
 {
 public:
-    SwerveModuleSubsystem(int throttlePort, int steeringPort, units::degree_t steeringOffset);
+    SwerveModuleSubsystem(int throttlePort, int steeringPort, units::radian_t steeringOffset);
     void SetDesiredState(frc::SwerveModuleState desiredState);
     frc::Rotation2d GetMeasuredRotation();
     frc::SwerveModuleState GetMeasuredState();
     decltype(0_mps) GetMeasuredVelocity();
+    void TestingVoltage();
 
 private:
     std::unique_ptr<WPI_TalonFX> m_throttleMotor;
     std::unique_ptr<WPI_TalonFX> m_steeringMotor;
+
+    units::radian_t m_steeringoffset;
 
     const frc::LinearSystem<1, 1, 1> m_throttleSystem = frc::LinearSystemId::IdentifyVelocitySystem<units::meter>(
         Constants::SwerveModule::throttleKv, Constants::SwerveModule::throttleKa);

@@ -8,6 +8,7 @@ DriveTeleopCommand::DriveTeleopCommand(
 }
 void DriveTeleopCommand::Execute()
 {
+    // m_drivetrain.TestDrive();
     m_drivetrain.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
         -m_TranslationJoystick.GetY() * 10_mps,
         -m_TranslationJoystick.GetX() * 10_mps,
