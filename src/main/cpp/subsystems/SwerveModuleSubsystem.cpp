@@ -38,12 +38,12 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
         optimizedState.speed / Constants::SwerveModule::RolloutRatio * Constants::SwerveModule::ThrottleGearing *
             Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
-        (throttlefeedforward + Constants::SwerveModule::ThrottleKs.value() * wpi::sgn(throttlefeedforward)) / 12.0);
+        (throttlefeedforward * 1_V + Constants::SwerveModule::ThrottleKs * wpi::sgn(throttlefeedforward)) / 12.0_V);
     m_steeringMotor->Set(
         ControlMode::Position,
         offsetAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
-        (steeringfeedforward + Constants::SwerveModule::SteeringKs.value() * wpi::sgn(steeringfeedforward)) / 12.0);
+        (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
     frc::SmartDashboard::PutNumber(
