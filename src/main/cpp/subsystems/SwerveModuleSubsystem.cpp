@@ -30,6 +30,23 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     std::cout << throttlePort << ", " << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
 }
 
+frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::SwerveModuleState state)
+{
+    // Optimizes module state for a continuously rotating module.
+    //
+    // For example, if the desired angle is 10 degrees, then 10, 190, 370, etc. are all valid angles as well. The same
+    // goes for the negative direction. Given our current angle, we want to find the nearest member of that sequence
+    // and use it as our optimized angle. We do this by factoring the desired angle out of both the sequence and our
+    // current angle, then finding x s.t. x * 180 is closest to the adjusted current angle.
+    auto measuredDegrees = GetMeasuredRotation().Degrees();
+    auto stateDegrees = state.angle.Degrees();
+    int nearest180 = units::math::round((measuredDegrees - stateDegrees) / 180_deg);
+    return {
+        state.speed * ((units::math::abs(stateDegrees - frc::AngleModulus(measuredDegrees)) > 90_deg) ? -1.0 : 1.0),
+        nearest180 * 180_deg + stateDegrees,
+    };
+}
+
 void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
 {
     if (desiredState.speed == 0_mps)
@@ -38,15 +55,7 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
     }
     m_desiredState = desiredState;
 
-    // Optimizes desiredState for our continuous-rotation modules
-    frc::SwerveModuleState optimizedState;
-    int halfTurns = std::round(((GetMeasuredRotation().Degrees() - desiredState.angle.Degrees()) / 180_deg).value());
-    optimizedState.angle = halfTurns * 180_deg + desiredState.angle.Degrees();
-    optimizedState.speed = desiredState.speed;
-    if (units::math::abs(desiredState.angle.Degrees() - frc::AngleModulus(GetMeasuredRotation().Degrees())) > 90_deg)
-    {
-        optimizedState.speed *= -1;
-    }
+    auto optimizedState = OptimizeStateContinuous(desiredState);
     auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset / Constants::SwerveModule::SteeringGearing;
 
     double throttlefeedforward =

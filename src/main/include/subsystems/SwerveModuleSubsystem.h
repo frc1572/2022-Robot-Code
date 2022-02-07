@@ -15,6 +15,7 @@ class SwerveModuleSubsystem : public frc2::SubsystemBase
 {
 public:
     SwerveModuleSubsystem(int throttlePort, int steeringPort, units::radian_t steeringOffset);
+    frc::SwerveModuleState OptimizeStateContinuous(frc::SwerveModuleState state);
     void SetDesiredState(frc::SwerveModuleState desiredState);
     frc::Rotation2d GetMeasuredRotation();
     frc::SwerveModuleState GetMeasuredState();
