@@ -5,6 +5,7 @@
 
 #include <Eigen/Core>
 #include <fmt/format.h>
+#include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <wpi/numbers>
 
@@ -22,12 +23,31 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     m_steeringMotor->ConfigFactoryDefault();
     m_steeringMotor->SetNeutralMode(NeutralMode::Brake);
     m_steeringMotor->ConfigIntegratedSensorInitializationStrategy(SensorInitializationStrategy::BootToAbsolutePosition);
+    // m_steeringMotor->SetSensorPhase(true);
+    // m_steeringMotor->ConfigClosedloopRamp(0.25);
+    m_steeringMotor->Config_kP(0, 0.5);
+    m_steeringMotor->Config_kD(0, 0.1);
+    std::cout << throttlePort << ", " << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
 }
 
 void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
 {
-    auto optimizedState = frc::SwerveModuleState::Optimize(desiredState, GetMeasuredRotation());
-    auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset;
+    if (desiredState.speed == 0_mps)
+    {
+        desiredState.angle = m_desiredState.angle;
+    }
+    m_desiredState = desiredState;
+
+    // Optimizes desiredState for our continuous-rotation modules
+    frc::SwerveModuleState optimizedState;
+    int halfTurns = std::round(((GetMeasuredRotation().Degrees() - desiredState.angle.Degrees()) / 180_deg).value());
+    optimizedState.angle = halfTurns * 180_deg + desiredState.angle.Degrees();
+    optimizedState.speed = desiredState.speed;
+    if (units::math::abs(desiredState.angle.Degrees() - frc::AngleModulus(GetMeasuredRotation().Degrees())) > 90_deg)
+    {
+        optimizedState.speed *= -1;
+    }
+    auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset / Constants::SwerveModule::SteeringGearing;
 
     double throttlefeedforward =
         m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0];
@@ -45,9 +65,15 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.DesiredSteeringPosition", GetName()), optimizedState.angle.Radians().value());
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
 }
 
 frc::Rotation2d SwerveModuleSubsystem::GetMeasuredRotation()
@@ -73,10 +99,7 @@ void SwerveModuleSubsystem::TestingVoltage()
     m_throttleMotor->Set(ControlMode::PercentOutput, .1);
 }
 
-void SwerveModuleSubsystem::Periodic()
-{
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
-}
+// void SwerveModuleSubsystem::Periodic()
+// {
+//     std::cout << "periodic" << std::endl;
+// }

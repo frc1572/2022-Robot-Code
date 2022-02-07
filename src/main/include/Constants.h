@@ -37,6 +37,7 @@ namespace Constants
         constexpr auto WheelDiameter = 3.25_in;
         constexpr auto RolloutRatio = WheelDiameter / 2_rad;
         constexpr auto ThrottleMaxVelocity = 17_fps;
+        constexpr auto SteeringMaxVelocity = 1 * 360_deg_per_s;
     } // namespace SwerveModule
 
     namespace TicksPerRevolution
