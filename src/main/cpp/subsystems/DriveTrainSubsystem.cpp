@@ -17,13 +17,12 @@ DriveTrainSubsystem::DriveTrainSubsystem()
 void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 {
     m_desiredHeading += chassisSpeeds.omega * Constants::LoopPeriod;
-    auto headingOutput =
-        m_headingController.Calculate(GetRotation().Degrees().value(), m_desiredHeading.value()) * 1_deg_per_s;
-    if (units::math::abs(headingOutput) < 5_deg_per_s)
+    double headingOutput = m_headingController.Calculate(GetRotation().Degrees().value(), m_desiredHeading.value());
+    if (std::abs(GetRotation().Degrees().value() - m_desiredHeading.value()) < 1.5)
     {
-        headingOutput = 0_deg_per_s;
+        headingOutput = 0;
     }
-    chassisSpeeds.omega = headingOutput;
+    chassisSpeeds.omega = headingOutput * 1_deg_per_s;
 
     auto moduleStates = DriveTrainSubsystem::m_swerveKinematics.ToSwerveModuleStates(chassisSpeeds);
     m_swerveModules[0].SetDesiredState(moduleStates[0]);
@@ -33,7 +32,7 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 
     frc::SmartDashboard::PutNumber("DriveTrain.MeasuredHeading", GetRotation().Degrees().value());
     frc::SmartDashboard::PutNumber("DriveTrain.DesiredHeading", m_desiredHeading.value());
-    frc::SmartDashboard::PutNumber("DriveTrain.HeadingError", m_headingController.GetPositionError());
+    frc::SmartDashboard::PutNumber("DriveTrain.HeadingOutput", GetRotation().Degrees().value());
 }
 
 frc::Rotation2d DriveTrainSubsystem::GetRotation()
