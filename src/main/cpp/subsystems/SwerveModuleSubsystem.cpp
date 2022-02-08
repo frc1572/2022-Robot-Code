@@ -18,15 +18,14 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     SetName(fmt::format("SwerveModuleSubsystem({}, {})", throttlePort, steeringPort));
 
     m_throttleMotor->ConfigFactoryDefault();
-    m_throttleMotor->SetNeutralMode(NeutralMode::Coast);
+    m_throttleMotor->SetNeutralMode(NeutralMode::Brake);
 
     m_steeringMotor->ConfigFactoryDefault();
     m_steeringMotor->SetNeutralMode(NeutralMode::Brake);
     m_steeringMotor->ConfigIntegratedSensorInitializationStrategy(SensorInitializationStrategy::BootToAbsolutePosition);
-    // m_steeringMotor->SetSensorPhase(true);
-    // m_steeringMotor->ConfigClosedloopRamp(0.25);
-    m_steeringMotor->Config_kP(0, 0.5);
-    m_steeringMotor->Config_kD(0, 0.1);
+    m_steeringMotor->ConfigClosedloopRamp(0.05);
+    m_steeringMotor->Config_kP(0, 0.2);
+    m_steeringMotor->Config_kD(0, 0.005);
     std::cout << throttlePort << ", " << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
 }
 

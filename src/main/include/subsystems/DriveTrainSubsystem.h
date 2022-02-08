@@ -38,5 +38,5 @@ private:
         frc::Translation2d{-11.75_in, 11.75_in}};
 
     units::degree_t m_desiredHeading;
-    frc::PIDController m_headingController{4, 0.0, 0.0035, Constants::LoopPeriod};
+    frc::PIDController m_headingController{4, 0.0, 0.0, Constants::LoopPeriod};
 };
