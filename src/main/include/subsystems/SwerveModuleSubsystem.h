@@ -2,6 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <frc/controller/LinearPlantInversionFeedforward.h>
+#include <frc/DutyCycleEncoder.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/system/LinearSystem.h>
@@ -14,7 +15,8 @@
 class SwerveModuleSubsystem : public frc2::SubsystemBase
 {
 public:
-    SwerveModuleSubsystem(int throttlePort, int steeringPort, units::radian_t steeringOffset);
+    SwerveModuleSubsystem(
+        int throttlePort, int steeringPort, int absoluteEncoderPort, units::degree_t absoluteEncoderOffset);
     frc::SwerveModuleState OptimizeStateContinuous(frc::SwerveModuleState state);
     void SetDesiredState(frc::SwerveModuleState desiredState);
     frc::Rotation2d GetMeasuredRotation();
@@ -26,8 +28,8 @@ public:
 private:
     std::unique_ptr<WPI_TalonFX> m_throttleMotor;
     std::unique_ptr<WPI_TalonFX> m_steeringMotor;
+    frc::DutyCycleEncoder m_absoluteEncoder;
 
-    units::radian_t m_steeringoffset;
     frc::SwerveModuleState m_desiredState;
 
     const frc::LinearSystem<1, 1, 1> m_throttleSystem = frc::LinearSystemId::IdentifyVelocitySystem<units::meter>(
