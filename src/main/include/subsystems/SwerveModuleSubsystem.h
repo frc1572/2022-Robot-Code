@@ -23,7 +23,7 @@ public:
     frc::SwerveModuleState GetMeasuredState();
     decltype(0_mps) GetMeasuredVelocity();
     void TestingVoltage();
-    void Periodic(int absoluteEncoderPort) override;
+    void Periodic() override;
     // void Periodic() override;
 
 private:

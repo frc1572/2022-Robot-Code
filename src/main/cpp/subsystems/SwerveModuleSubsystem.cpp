@@ -32,9 +32,9 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
 }
 
 // Temp Testing of the Encoders VVV (>>>Might be broken<<< I may have done this wrong, sorry lol)
-void SwerveModuleSubsystem::Periodic(int absoluteEncoderPort) : m_absoluteEncoder(absoluteEncoderPort)
+void SwerveModuleSubsystem::Periodic()
 {
-    std::cout << absoluteEncoderPort << " - " << m_absoluteEncoder.Get().value() << std::endl;
+    std::cout << m_absoluteEncoder.GetSourceChannel() << " - " << m_absoluteEncoder.Get().value() << std::endl;
 }
 
 frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::SwerveModuleState state)
