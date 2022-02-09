@@ -29,7 +29,11 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
     m_steeringMotor->ConfigClosedloopRamp(0.05);
     m_steeringMotor->Config_kP(0, 0.2);
     m_steeringMotor->Config_kD(0, 0.005);
+}
 
+// Temp Testing of the Encoders VVV (>>>Might be broken<<< I may have done this wrong, sorry lol)
+void SwerveModuleSubsystem::Periodic(int absoluteEncoderPort) : m_absoluteEncoder(absoluteEncoderPort)
+{
     std::cout << absoluteEncoderPort << " - " << m_absoluteEncoder.Get().value() << std::endl;
 }
 
