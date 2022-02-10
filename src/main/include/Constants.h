@@ -33,7 +33,7 @@ namespace Constants
         constexpr Ka_t<units::radian_t> SteeringKa = 0.0008629_V / 1_rad_per_s_sq; // TODO: transcription error
 
         const double ThrottleGearing = 6.54;
-        const double SteeringGearing = 72.0 / 14.0 * 24.0 / 8.0;
+        const double SteeringGearing =  72.0 / 14.0 * 24.0 / 8.0;
         constexpr auto WheelDiameter = 3.25_in;
         constexpr auto RolloutRatio = WheelDiameter / 2_rad;
         constexpr auto ThrottleMaxVelocity = 7_fps; // adjusted for driver, nominally 17 ft/s

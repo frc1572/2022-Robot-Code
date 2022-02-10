@@ -13,8 +13,8 @@
 
 SwerveModuleSubsystem::SwerveModuleSubsystem(
     int throttlePort, int steeringPort, int absoluteEncoderPort, units::degree_t absoluteEncoderOffset)
-  : m_throttleMotor(std::make_unique<WPI_TalonFX>(throttlePort, "canivore")),
-    m_steeringMotor(std::make_unique<WPI_TalonFX>(steeringPort, "canivore")), m_absoluteEncoder(absoluteEncoderPort)
+  : m_throttleMotor(std::make_unique<WPI_TalonFX>(throttlePort, "rio")),
+    m_steeringMotor(std::make_unique<WPI_TalonFX>(steeringPort, "rio")), m_absoluteEncoder(absoluteEncoderPort)
 {
     SetName(fmt::format("SwerveModuleSubsystem({}, {})", throttlePort, steeringPort));
 
@@ -32,11 +32,12 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
 }
 
 // Temp Testing of the Encoders VVV (>>>Might be broken<<< I may have done this wrong, sorry lol)
+/*
 void SwerveModuleSubsystem::Periodic()
 {
     std::cout << m_absoluteEncoder.GetSourceChannel() << " - " << m_absoluteEncoder.Get().value() << std::endl;
 }
-
+*/
 frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::SwerveModuleState state)
 {
     // Optimizes module state for a continuously rotating module.
@@ -81,6 +82,7 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
+    std::cout << m_absoluteEncoder.GetSourceChannel() << " - " << m_absoluteEncoder.Get().value() << std::endl;
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
