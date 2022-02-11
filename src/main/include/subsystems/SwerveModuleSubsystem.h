@@ -2,14 +2,14 @@
 
 #include <ctre/Phoenix.h>
 #include <frc/controller/LinearPlantInversionFeedforward.h>
-#include <frc/DutyCycleEncoder.h>
+#include <frc/DutyCycle.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/system/LinearSystem.h>
 #include <frc/system/plant/LinearSystemId.h>
 #include <frc2/command/SubsystemBase.h>
 #include <units/angle.h>
-
+#include <frc/DigitalInput.h>
 #include "Constants.h"
 
 class SwerveModuleSubsystem : public frc2::SubsystemBase
@@ -29,7 +29,8 @@ public:
 private:
     std::unique_ptr<WPI_TalonFX> m_throttleMotor;
     std::unique_ptr<WPI_TalonFX> m_steeringMotor;
-    frc::DutyCycleEncoder m_absoluteEncoder;
+    frc::DigitalInput m_absoluteEncoderDI;
+    frc::DutyCycle m_absoluteEncoder;
 
     frc::SwerveModuleState m_desiredState;
 

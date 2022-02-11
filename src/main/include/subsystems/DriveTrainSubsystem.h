@@ -27,10 +27,10 @@ private:
     AHRS m_NavX{frc::SPI::Port::kMXP};
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
-        SwerveModuleSubsystem{1, 2, 0, -0.5603851_tr},
-        SwerveModuleSubsystem{4, 3, 3, -0.442999_tr},
-        SwerveModuleSubsystem{5, 6, 2, 0.0322221_tr},
-        SwerveModuleSubsystem{8, 7, 1, -0.577164_tr}};
+        SwerveModuleSubsystem{1, 2, 0, 0.563827_tr}, 
+        SwerveModuleSubsystem{4, 3, 3, 0.439079_tr},
+        SwerveModuleSubsystem{5, 6, 2, 0.959607_tr},
+        SwerveModuleSubsystem{8, 7, 1, 0.569833_tr}};
     frc::SwerveDriveKinematics<4> m_swerveKinematics{
         frc::Translation2d{-11.75_in, -11.75_in},
         frc::Translation2d{11.75_in, -11.75_in},
