@@ -82,7 +82,8 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
-    //std::cout << m_absoluteEncoderDI.GetChannel() << " - " << m_absoluteEncoder.GetOutput() << std::endl;
+    std::cout << m_absoluteEncoderDI.GetChannel() << " - " << m_absoluteEncoder.GetOutput() << std::endl;
+    std::cout << m_steeringMotor->GetSelectedSensorPosition() << " Steering" << std::endl;
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
