@@ -67,28 +67,31 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
     auto motorAngle = optimizedState.angle.Radians();
 
     double throttlefeedforward =
-        m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0];
+        m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(m_desiredState.speed.value()))[0];
     double steeringfeedforward = m_steeringFeedforward.Calculate(Eigen::Vector2d(motorAngle.value(), 0.0))[0];
 
+    
     m_throttleMotor->Set(
         ControlMode::Velocity,
-        optimizedState.speed / Constants::SwerveModule::RolloutRatio * Constants::SwerveModule::ThrottleGearing *
+        m_desiredState.speed / Constants::SwerveModule::RolloutRatio * Constants::SwerveModule::ThrottleGearing *
             Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
         (throttlefeedforward * 1_V + Constants::SwerveModule::ThrottleKs * wpi::sgn(throttlefeedforward)) / 12.0_V);
+    
     m_steeringMotor->Set(
         ControlMode::Position,
         motorAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
-
+    
+    //std::cout << m_absoluteEncoderDI.GetChannel() << " - " << m_steeringMotor->GetDeviceID() << std::endl;
     std::cout << m_absoluteEncoderDI.GetChannel() << " - " << m_absoluteEncoder.GetOutput() << std::endl;
     std::cout << m_steeringMotor->GetSelectedSensorPosition() << " Steering" << std::endl;
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
-    frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
+    frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), m_desiredState.speed.value());
     frc::SmartDashboard::PutNumber(
-        fmt::format("{}.DesiredSteeringPosition", GetName()), optimizedState.angle.Radians().value());
+        fmt::format("{}.DesiredSteeringPosition", GetName()), m_desiredState.angle.Radians().value());
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
     frc::SmartDashboard::PutNumber(

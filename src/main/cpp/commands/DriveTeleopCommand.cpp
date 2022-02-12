@@ -28,5 +28,5 @@ void DriveTeleopCommand::Execute()
         -translationX * Constants::SwerveModule::ThrottleMaxVelocity,
         translationY * Constants::SwerveModule::ThrottleMaxVelocity,
         steeringX * Constants::SwerveModule::SteeringMaxVelocity,
-        m_drivetrain.GetRotation()));
+        frc::Rotation2d(0_deg)));
 }

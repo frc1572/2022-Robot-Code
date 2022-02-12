@@ -16,6 +16,7 @@ DriveTrainSubsystem::DriveTrainSubsystem()
 
 void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 {
+    /*
     m_desiredHeading += chassisSpeeds.omega * Constants::LoopPeriod;
     auto headingOutput =
         m_headingController.Calculate(GetRotation().Degrees().value(), m_desiredHeading.value()) * 1_deg_per_s;
@@ -24,6 +25,7 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
         headingOutput = 0_deg_per_s;
     }
     chassisSpeeds.omega = headingOutput;
+    */
 
     auto moduleStates = DriveTrainSubsystem::m_swerveKinematics.ToSwerveModuleStates(chassisSpeeds);
     m_swerveModules[0].SetDesiredState(moduleStates[0]);
