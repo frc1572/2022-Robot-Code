@@ -42,7 +42,7 @@ namespace Constants
 
     namespace TicksPerRevolution
     {
-        constexpr auto TalonFX = 2048 / 1_tr;
+        constexpr auto TalonFX = 2048 / 2_rad / wpi::numbers::pi;
     } // namespace TicksPerRevolution
 
     namespace VelocityFactor

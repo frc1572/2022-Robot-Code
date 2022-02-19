@@ -11,10 +11,9 @@
 
 #include "CustomUnits.h"
 
-SwerveModuleSubsystem::SwerveModuleSubsystem(
-    int throttlePort, int steeringPort, int absoluteEncoderPort, units::degree_t absoluteEncoderOffset)
-  : m_throttleMotor(std::make_unique<WPI_TalonFX>(throttlePort, "canivore")),
-    m_steeringMotor(std::make_unique<WPI_TalonFX>(steeringPort, "canivore")), m_absoluteEncoder(absoluteEncoderPort)
+SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort, units::radian_t steeringOffset)
+  : m_throttleMotor(std::make_unique<WPI_TalonFX>(throttlePort)),
+    m_steeringMotor(std::make_unique<WPI_TalonFX>(steeringPort)), m_steeringoffset(steeringOffset)
 {
     SetName(fmt::format("SwerveModuleSubsystem({}, {})", throttlePort, steeringPort));
 
@@ -23,18 +22,11 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(
 
     m_steeringMotor->ConfigFactoryDefault();
     m_steeringMotor->SetNeutralMode(NeutralMode::Brake);
-    m_steeringMotor->SetSelectedSensorPosition(
-        (m_absoluteEncoder.Get() + absoluteEncoderOffset) * Constants::SwerveModule::SteeringGearing *
-        Constants::TicksPerRevolution::TalonFX);
+    m_steeringMotor->ConfigIntegratedSensorInitializationStrategy(SensorInitializationStrategy::BootToAbsolutePosition);
     m_steeringMotor->ConfigClosedloopRamp(0.05);
     m_steeringMotor->Config_kP(0, 0.2);
     m_steeringMotor->Config_kD(0, 0.005);
-}
-
-// Temp Testing of the Encoders VVV (>>>Might be broken<<< I may have done this wrong, sorry lol)
-void SwerveModuleSubsystem::Periodic()
-{
-    std::cout << m_absoluteEncoder.GetSourceChannel() << " - " << m_absoluteEncoder.Get().value() << std::endl;
+    std::cout << throttlePort << ", " << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
 }
 
 frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::SwerveModuleState state)
@@ -63,11 +55,11 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
     m_desiredState = desiredState;
 
     auto optimizedState = OptimizeStateContinuous(desiredState);
-    auto motorAngle = optimizedState.angle.Radians();
+    auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset / Constants::SwerveModule::SteeringGearing;
 
     double throttlefeedforward =
         m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0];
-    double steeringfeedforward = m_steeringFeedforward.Calculate(Eigen::Vector2d(motorAngle.value(), 0.0))[0];
+    double steeringfeedforward = m_steeringFeedforward.Calculate(Eigen::Vector2d(offsetAngle.value(), 0.0))[0];
 
     m_throttleMotor->Set(
         ControlMode::Velocity,
@@ -77,7 +69,7 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
         (throttlefeedforward * 1_V + Constants::SwerveModule::ThrottleKs * wpi::sgn(throttlefeedforward)) / 12.0_V);
     m_steeringMotor->Set(
         ControlMode::Position,
-        motorAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
+        offsetAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
@@ -95,7 +87,7 @@ void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
 frc::Rotation2d SwerveModuleSubsystem::GetMeasuredRotation()
 {
     return {
-        units::radian_t(m_steeringMotor->GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX) /
+        (m_steeringMotor->GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX - m_steeringoffset) /
         Constants::SwerveModule::SteeringGearing};
 }
 frc::SwerveModuleState SwerveModuleSubsystem::GetMeasuredState()

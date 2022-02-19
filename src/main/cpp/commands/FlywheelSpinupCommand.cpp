@@ -9,7 +9,7 @@ FlywheelSpinupCommand::FlywheelSpinupCommand(rad_per_s_t omega, FlywheelSubsyste
 }
 
 FlywheelSpinupCommand::FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flywheel)
-  : FlywheelSpinupCommand(rpm * 1_tr / 1_min, flywheel)
+  : FlywheelSpinupCommand(rpm * 2_rad * wpi::numbers::pi / 1_min, flywheel)
 {
 }
 
