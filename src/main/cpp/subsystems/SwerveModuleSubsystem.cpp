@@ -107,7 +107,6 @@ void SwerveModuleSubsystem::TestingVoltage()
     m_throttleMotor->Set(ControlMode::PercentOutput, .1);
 }
 
-// void SwerveModuleSubsystem::Periodic()
-// {
-//     std::cout << "periodic" << std::endl;
-// }
+void SwerveModuleSubsystem::Periodic()
+{
+}

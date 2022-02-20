@@ -1,5 +1,4 @@
 #pragma once
-#include <AHRS.h>
 
 #include <ctre/Phoenix.h>
 #include <frc/controller/PIDController.h>
@@ -21,10 +20,10 @@ public:
     void Drive(frc::ChassisSpeeds&& chassisSpeeds);
     frc::Rotation2d GetRotation();
     void TestDrive();
-    // void Periodic() override;
+    void Periodic() override;
 
 private:
-    AHRS m_NavX{frc::SPI::Port::kMXP};
+    WPI_Pigeon2 m_IMU{frc::SPI::Port::kMXP};
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
         SwerveModuleSubsystem{1, 2, 1142 / Constants::TicksPerRevolution::TalonFX},

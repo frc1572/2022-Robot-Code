@@ -10,8 +10,13 @@
 
 DriveTrainSubsystem::DriveTrainSubsystem()
 {
-    m_NavX.Reset();
+    m_IMU.Reset();
     m_headingController.EnableContinuousInput(0, 360);
+    // Subsytem move constructor does not register, so we must do it by hand
+    for (auto& module : m_swerveModules)
+    {
+        module.Register();
+    }
 }
 
 void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
@@ -26,10 +31,10 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
     chassisSpeeds.omega = headingOutput;
 
     auto moduleStates = DriveTrainSubsystem::m_swerveKinematics.ToSwerveModuleStates(chassisSpeeds);
-    m_swerveModules[0].SetDesiredState(moduleStates[0]);
-    m_swerveModules[1].SetDesiredState(moduleStates[1]);
-    m_swerveModules[2].SetDesiredState(moduleStates[2]);
-    m_swerveModules[3].SetDesiredState(moduleStates[3]);
+    for (int i = 0; i < m_swerveModules.size(); i++)
+    {
+        m_swerveModules[i].SetDesiredState(moduleStates[i]);
+    }
 
     frc::SmartDashboard::PutNumber("DriveTrain.MeasuredHeading", GetRotation().Degrees().value());
     frc::SmartDashboard::PutNumber("DriveTrain.DesiredHeading", m_desiredHeading.value());
@@ -38,18 +43,19 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 
 frc::Rotation2d DriveTrainSubsystem::GetRotation()
 {
-    frc::SmartDashboard::PutNumber("Gyro", m_NavX.GetAngle());
-    return {m_NavX.GetAngle() * 1_deg};
+    return {m_IMU.GetAngle() * 1_deg};
 }
 
 void DriveTrainSubsystem::TestDrive()
 {
-    m_swerveModules[0].TestingVoltage();
-    m_swerveModules[1].TestingVoltage();
-    m_swerveModules[2].TestingVoltage();
-    m_swerveModules[3].TestingVoltage();
+    for (auto& module : m_swerveModules)
+    {
+        module.TestingVoltage();
+    }
 }
-// void DriveTrainSubsystem::Periodic() {
-//     m_field.SetRobotPose(GetPose());
-//     frc::SmartDashboard::PutData("Field", &m_field);
-// }
+void DriveTrainSubsystem::Periodic()
+{
+    // m_field.SetRobotPose(GetPose());
+    // frc::SmartDashboard::PutData("Field", &m_field);
+    frc::SmartDashboard::PutNumber("Gyro", m_IMU.GetAngle());
+}

@@ -21,7 +21,7 @@ public:
     frc::SwerveModuleState GetMeasuredState();
     decltype(0_mps) GetMeasuredVelocity();
     void TestingVoltage();
-    // void Periodic() override;
+    void Periodic() override;
 
 private:
     std::unique_ptr<WPI_TalonFX> m_throttleMotor;
