@@ -40,17 +40,16 @@ frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::Swerv
     auto measuredDegrees = GetMeasuredRotation().Degrees();
     auto stateDegrees = state.angle.Degrees();
     int nearest180 = units::math::round((measuredDegrees - stateDegrees) / 180_deg);
+    bool shouldInvertThrottle = units::math::abs(frc::AngleModulus(stateDegrees - measuredDegrees)) > 90_deg;
     return {
-        state.speed * ((units::math::abs(stateDegrees - frc::AngleModulus(measuredDegrees)) > 90_deg) ? -1.0 : 1.0),
+        state.speed * (shouldInvertThrottle ? -1.0 : 1.0),
         nearest180 * 180_deg + stateDegrees,
     };
 }
 
 void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
 {
-    m_desiredState = {
-        desiredState.speed,
-        desiredState.speed == 0_mps ? m_desiredState.angle : desiredState.angle};
+    m_desiredState = {desiredState.speed, desiredState.speed == 0_mps ? m_desiredState.angle : desiredState.angle};
 }
 
 frc::Rotation2d SwerveModuleSubsystem::GetMeasuredRotation()
@@ -67,7 +66,7 @@ frc::SwerveModuleState SwerveModuleSubsystem::GetMeasuredState()
 decltype(0_mps) SwerveModuleSubsystem::GetMeasuredVelocity()
 {
     return m_throttleMotor->GetSelectedSensorVelocity() / Constants::TicksPerRevolution::TalonFX /
-        Constants::VelocityFactor::TalonFX * Constants::SwerveModule::ThrottleGearing *
+        Constants::VelocityFactor::TalonFX / Constants::SwerveModule::ThrottleGearing *
         Constants::SwerveModule::RolloutRatio;
 }
 
@@ -108,7 +107,28 @@ void SwerveModuleSubsystem::Periodic()
         fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
 }
 
-void SwerveModuleSubsystem::Reset() {
+void SwerveModuleSubsystem::SimulationPeriodic()
+{
+    m_throttleSim.SetInput(0, m_throttleMotor->GetMotorOutputVoltage());
+    m_steeringSim.SetInput(0, m_steeringMotor->GetMotorOutputVoltage());
+
+    m_throttleSim.Update(Constants::LoopPeriod);
+    m_steeringSim.Update(Constants::LoopPeriod);
+
+    auto throttleMotorSim = m_throttleMotor->GetSimCollection();
+    auto throttleVelocityTicks = m_throttleSim.GetOutput(0) * 1_mps / Constants::SwerveModule::RolloutRatio *
+        Constants::SwerveModule::ThrottleGearing * Constants::TicksPerRevolution::TalonFX;
+    throttleMotorSim.SetIntegratedSensorVelocity(throttleVelocityTicks * Constants::VelocityFactor::TalonFX);
+    throttleMotorSim.AddIntegratedSensorPosition(throttleVelocityTicks * Constants::LoopPeriod);
+
+    auto steeringMotorSim = m_steeringMotor->GetSimCollection();
+    auto steeringPositionTicks = m_steeringSim.GetOutput(0) * 1_rad * Constants::SwerveModule::SteeringGearing *
+        Constants::TicksPerRevolution::TalonFX;
+    steeringMotorSim.SetIntegratedSensorRawPosition(steeringPositionTicks);
+}
+
+void SwerveModuleSubsystem::Reset()
+{
     m_desiredState = {};
     // TODO: use mag-encoders to reset integrated relative encoders
     m_throttleFeedforward.Reset(Eigen::Vector<double, 1>(GetMeasuredVelocity().value()));

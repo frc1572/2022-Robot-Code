@@ -18,6 +18,7 @@ public:
     void SetDesiredPosition(units::radian_t desiredPosition);
     void AddDesiredPosition(units::radian_t positionOffset);
     void Periodic() override;
+
 private:
     WPI_TalonFX m_turret{Constants::Turret::TurretPort};
     units::radian_t m_desiredPosition;

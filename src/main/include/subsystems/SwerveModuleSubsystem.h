@@ -4,6 +4,7 @@
 #include <frc/controller/LinearPlantInversionFeedforward.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <frc/simulation/LinearSystemSim.h>
 #include <frc/system/LinearSystem.h>
 #include <frc/system/plant/LinearSystemId.h>
 #include <frc2/command/SubsystemBase.h>
@@ -22,6 +23,7 @@ public:
     decltype(0_mps) GetMeasuredVelocity();
     void TestingVoltage();
     void Periodic() override;
+    void SimulationPeriodic() override;
     void Reset();
 
 private:
@@ -37,4 +39,7 @@ private:
         Constants::SwerveModule::SteeringKv, Constants::SwerveModule::SteeringKa);
     frc::LinearPlantInversionFeedforward<1, 1> m_throttleFeedforward{m_throttleSystem, Constants::LoopPeriod};
     frc::LinearPlantInversionFeedforward<2, 1> m_steeringFeedforward{m_steeringSystem, Constants::LoopPeriod};
+
+    frc::sim::LinearSystemSim<1, 1, 1> m_throttleSim{m_throttleSystem, {0.0}};
+    frc::sim::LinearSystemSim<2, 1, 1> m_steeringSim{m_steeringSystem, {0.0}};
 };

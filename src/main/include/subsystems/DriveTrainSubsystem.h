@@ -2,8 +2,11 @@
 
 #include <ctre/Phoenix.h>
 #include <frc/controller/PIDController.h>
+#include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
+#include <frc/kinematics/SwerveDriveOdometry.h>
+#include <frc/smartdashboard/Field2d.h>
 #include <frc/SPI.h>
 #include <frc/Timer.h>
 #include <frc2/command/SubsystemBase.h>
@@ -19,8 +22,10 @@ public:
     DriveTrainSubsystem();
     void Drive(frc::ChassisSpeeds&& chassisSpeeds);
     frc::Rotation2d GetRotation();
+    frc::Pose2d GetPose();
     void TestDrive();
     void Periodic() override;
+    void SimulationPeriodic() override;
     void Reset();
 
 private:
@@ -32,11 +37,15 @@ private:
         SwerveModuleSubsystem{5, 6, 1142 / Constants::TicksPerRevolution::TalonFX},
         SwerveModuleSubsystem{8, 7, 1273 / Constants::TicksPerRevolution::TalonFX}};
     frc::SwerveDriveKinematics<4> m_swerveKinematics{
-        frc::Translation2d{-11.75_in, -11.75_in},
-        frc::Translation2d{11.75_in, -11.75_in},
+        frc::Translation2d{-11.75_in, 11.75_in},
         frc::Translation2d{11.75_in, 11.75_in},
-        frc::Translation2d{-11.75_in, 11.75_in}};
+        frc::Translation2d{11.75_in, -11.75_in},
+        frc::Translation2d{-11.75_in, -11.75_in}};
 
     units::degree_t m_desiredHeading;
     frc::PIDController m_headingController{4, 0.0, 0.0, Constants::LoopPeriod};
+
+    frc::SwerveDriveOdometry<4> m_swerveOdometry{m_swerveKinematics, frc::Rotation2d(0_rad)};
+
+    frc::Field2d m_field;
 };

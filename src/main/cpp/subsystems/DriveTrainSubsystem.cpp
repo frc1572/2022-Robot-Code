@@ -1,10 +1,8 @@
 #include "subsystems/DriveTrainSubsystem.h"
 
-#include <cmath>
-#include <iostream>
-
 #include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/Timer.h>
 #include <units/angular_velocity.h>
 #include <wpi/numbers>
 
@@ -43,7 +41,20 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 
 frc::Rotation2d DriveTrainSubsystem::GetRotation()
 {
-    return {m_IMU.GetAngle() * 1_deg};
+    return m_IMU.GetRotation2d();
+}
+
+frc::Pose2d DriveTrainSubsystem::GetPose()
+{
+    // TODO: use a kalman filter to estimate pose instead of odometry
+    m_swerveOdometry.UpdateWithTime(
+        frc::Timer::GetFPGATimestamp(),
+        GetRotation(),
+        m_swerveModules[0].GetMeasuredState(),
+        m_swerveModules[1].GetMeasuredState(),
+        m_swerveModules[2].GetMeasuredState(),
+        m_swerveModules[3].GetMeasuredState());
+    return m_swerveOdometry.GetPose();
 }
 
 void DriveTrainSubsystem::TestDrive()
@@ -55,14 +66,28 @@ void DriveTrainSubsystem::TestDrive()
 }
 void DriveTrainSubsystem::Periodic()
 {
-    // m_field.SetRobotPose(GetPose());
-    // frc::SmartDashboard::PutData("Field", &m_field);
-    frc::SmartDashboard::PutNumber("Gyro", m_IMU.GetAngle());
+    m_field.SetRobotPose(GetPose());
+    frc::SmartDashboard::PutData("Field", &m_field);
+    frc::SmartDashboard::PutNumber("Gyro", m_IMU.GetRotation2d().Degrees().value());
 }
 
-void DriveTrainSubsystem::Reset() {
+void DriveTrainSubsystem::SimulationPeriodic()
+{
+    auto chassisSpeeds = m_swerveKinematics.ToChassisSpeeds(
+        m_swerveModules[0].GetMeasuredState(),
+        m_swerveModules[1].GetMeasuredState(),
+        m_swerveModules[2].GetMeasuredState(),
+        m_swerveModules[3].GetMeasuredState());
+
+    auto imuSim = m_IMU.GetSimCollection();
+    imuSim.AddHeading(units::degree_t(chassisSpeeds.omega * Constants::LoopPeriod).value());
+}
+
+void DriveTrainSubsystem::Reset()
+{
     m_IMU.Reset();
-    for (auto& module : m_swerveModules) {
+    for (auto& module : m_swerveModules)
+    {
         module.Reset();
     }
 }

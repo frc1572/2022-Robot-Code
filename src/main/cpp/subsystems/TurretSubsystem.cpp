@@ -26,11 +26,13 @@ void TurretSubsystem::SetDesiredPosition(units::radian_t desiredPosition)
     m_desiredPosition = desiredPosition;
 }
 
-void TurretSubsystem::AddDesiredPosition(units::radian_t positionOffset) {
+void TurretSubsystem::AddDesiredPosition(units::radian_t positionOffset)
+{
     m_desiredPosition += positionOffset;
 }
 
-void TurretSubsystem::Periodic() {
+void TurretSubsystem::Periodic()
+{
     double ffOutput = m_turretFeedForward.Calculate(Eigen::Vector2d(m_desiredPosition.value(), 0.0))[0];
 
     m_turret.Set(
