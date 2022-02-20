@@ -24,7 +24,7 @@ public:
     void Reset();
 
 private:
-    WPI_Pigeon2 m_IMU{frc::SPI::Port::kMXP};
+    WPI_Pigeon2 m_IMU{frc::SPI::Port::kMXP, "canivore"};
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
         SwerveModuleSubsystem{1, 2, 1142 / Constants::TicksPerRevolution::TalonFX},
