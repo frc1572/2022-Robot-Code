@@ -6,6 +6,7 @@
 #include <Eigen/Core>
 #include <fmt/format.h>
 #include <frc/MathUtil.h>
+#include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <wpi/numbers>
 
@@ -19,6 +20,10 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
 
     m_throttleMotor->ConfigFactoryDefault();
     m_throttleMotor->SetNeutralMode(NeutralMode::Brake);
+    if (frc::RobotBase::IsReal())
+    {
+        m_throttleMotor->SetInverted(true);
+    }
 
     m_steeringMotor->ConfigFactoryDefault();
     m_steeringMotor->SetNeutralMode(NeutralMode::Brake);
