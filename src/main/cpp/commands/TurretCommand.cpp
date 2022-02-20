@@ -9,9 +9,5 @@ TurretCommand::TurretCommand(TurretSubsystem& Turret, frc::Joystick& TurretJoyst
 void TurretCommand::Execute()
 {
     // TODO: Add deadband
-
-    double PositionX = m_turretJoystick.GetX();
-
-    // m_turret.SetDesiredPosition(PositionX * Constants::Turret::TurretMaxVelocity);
-    m_turret.SetDesiredPosition(0_deg);
+    m_turret.AddDesiredPosition(m_turretJoystick.GetX() * Constants::Turret::TurretMaxVelocity * Constants::LoopPeriod);
 }

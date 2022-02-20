@@ -48,40 +48,9 @@ frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::Swerv
 
 void SwerveModuleSubsystem::SetDesiredState(frc::SwerveModuleState desiredState)
 {
-    if (desiredState.speed == 0_mps)
-    {
-        desiredState.angle = m_desiredState.angle;
-    }
-    m_desiredState = desiredState;
-
-    auto optimizedState = OptimizeStateContinuous(desiredState);
-    auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset / Constants::SwerveModule::SteeringGearing;
-
-    double throttlefeedforward =
-        m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0];
-    double steeringfeedforward = m_steeringFeedforward.Calculate(Eigen::Vector2d(offsetAngle.value(), 0.0))[0];
-
-    m_throttleMotor->Set(
-        ControlMode::Velocity,
-        optimizedState.speed / Constants::SwerveModule::RolloutRatio * Constants::SwerveModule::ThrottleGearing *
-            Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
-        DemandType::DemandType_ArbitraryFeedForward,
-        (throttlefeedforward * 1_V + Constants::SwerveModule::ThrottleKs * wpi::sgn(throttlefeedforward)) / 12.0_V);
-    m_steeringMotor->Set(
-        ControlMode::Position,
-        offsetAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
-        DemandType::DemandType_ArbitraryFeedForward,
-        (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
-
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
-    frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.DesiredSteeringPosition", GetName()), optimizedState.angle.Radians().value());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
+    m_desiredState = {
+        desiredState.speed,
+        desiredState.speed == 0_mps ? m_desiredState.angle : desiredState.angle};
 }
 
 frc::Rotation2d SwerveModuleSubsystem::GetMeasuredRotation()
@@ -109,4 +78,32 @@ void SwerveModuleSubsystem::TestingVoltage()
 
 void SwerveModuleSubsystem::Periodic()
 {
+    auto optimizedState = OptimizeStateContinuous(m_desiredState);
+    auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset / Constants::SwerveModule::SteeringGearing;
+
+    double throttlefeedforward =
+        m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0];
+    double steeringfeedforward = m_steeringFeedforward.Calculate(Eigen::Vector2d(offsetAngle.value(), 0.0))[0];
+
+    m_throttleMotor->Set(
+        ControlMode::Velocity,
+        optimizedState.speed / Constants::SwerveModule::RolloutRatio * Constants::SwerveModule::ThrottleGearing *
+            Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
+        DemandType::DemandType_ArbitraryFeedForward,
+        (throttlefeedforward * 1_V + Constants::SwerveModule::ThrottleKs * wpi::sgn(throttlefeedforward)) / 12.0_V);
+    m_steeringMotor->Set(
+        ControlMode::Position,
+        offsetAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
+        DemandType::DemandType_ArbitraryFeedForward,
+        (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
+
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
+    frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.DesiredSteeringPosition", GetName()), optimizedState.angle.Radians().value());
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
+    frc::SmartDashboard::PutNumber(
+        fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
 }

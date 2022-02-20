@@ -16,31 +16,26 @@ frc::Rotation2d TurretSubsystem::GetMeasuredPosition()
         (m_turret.GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX) /
         Constants::Turret::TurretGearing};
 }
-void TurretSubsystem::GetMotorVoltageSpike()
+double TurretSubsystem::GetCurrent()
 {
-    // TODO: Make method for returning bool based on if Spike in voltage
-}
-void TurretSubsystem::SetAbsolutePosition(double AbsolutePosition)
-{
-    while (m_turret.GetMotorOutputVoltage() > 1)
-    {
-        m_turret.Set(
-            ControlMode::Velocity,
-            1_rad_per_s * Constants::Turret::TurretGearing * Constants::VelocityFactor::TalonFX *
-                Constants::TicksPerRevolution::TalonFX);
-    }
-    AbsolutePosition = m_turret.GetSelectedSensorPosition();
+    return m_turret.GetStatorCurrent();
 }
 
-void TurretSubsystem::SetDesiredPosition(units::radian_t DesiredPosition)
+void TurretSubsystem::SetDesiredPosition(units::radian_t desiredPosition)
 {
-    m_desiredPosition = DesiredPosition;
-    units::radian_t TurretAngle = m_desiredPosition / Constants::Turret::TurretGearing;
-    double TurretFeedForward = m_turretFeedForward.Calculate(Eigen::Vector2d(m_desiredPosition.value(), 0.0))[0];
+    m_desiredPosition = desiredPosition;
+}
+
+void TurretSubsystem::AddDesiredPosition(units::radian_t positionOffset) {
+    m_desiredPosition += positionOffset;
+}
+
+void TurretSubsystem::Periodic() {
+    double ffOutput = m_turretFeedForward.Calculate(Eigen::Vector2d(m_desiredPosition.value(), 0.0))[0];
 
     m_turret.Set(
         ControlMode::Position,
-        TurretAngle * Constants::Turret::TurretGearing * Constants::TicksPerRevolution::TalonFX,
+        m_desiredPosition * Constants::Turret::TurretGearing * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
-        (TurretFeedForward * 1_V + Constants::Turret::TurretKs * wpi::sgn(TurretFeedForward)) / 12.0_V);
+        (ffOutput * 1_V + Constants::Turret::TurretKs * wpi::sgn(ffOutput)) / 12.0_V);
 }
