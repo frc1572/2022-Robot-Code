@@ -107,3 +107,10 @@ void SwerveModuleSubsystem::Periodic()
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
 }
+
+void SwerveModuleSubsystem::Reset() {
+    m_desiredState = {};
+    // TODO: use mag-encoders to reset integrated relative encoders
+    m_throttleFeedforward.Reset(Eigen::Vector<double, 1>(GetMeasuredVelocity().value()));
+    m_steeringFeedforward.Reset(Eigen::Vector<double, 2>(GetMeasuredRotation().Radians().value(), 0.0));
+}

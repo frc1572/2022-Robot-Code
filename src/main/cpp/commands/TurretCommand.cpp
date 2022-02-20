@@ -4,7 +4,7 @@ TurretCommand::TurretCommand(TurretSubsystem& Turret, frc::Joystick& TurretJoyst
   : m_turret(Turret), m_turretJoystick(TurretJoystick)
 {
     AddRequirements(&m_turret);
-};
+}
 
 void TurretCommand::Execute()
 {

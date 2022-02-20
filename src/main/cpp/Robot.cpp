@@ -56,6 +56,7 @@ void Robot::DisabledPeriodic()
  */
 void Robot::AutonomousInit()
 {
+    m_container.Reset();
     m_autonomousCommand = m_container.GetAutonomousCommand();
 
     if (m_autonomousCommand != nullptr)
@@ -70,6 +71,7 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit()
 {
+    m_container.Reset();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

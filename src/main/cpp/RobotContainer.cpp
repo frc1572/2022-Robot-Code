@@ -35,3 +35,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand()
     // An example command will be run in autonomous
     return nullptr;
 }
+
+void RobotContainer::Reset() {
+    m_drivetrain.Reset();
+}

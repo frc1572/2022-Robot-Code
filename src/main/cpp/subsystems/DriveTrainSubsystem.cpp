@@ -59,3 +59,10 @@ void DriveTrainSubsystem::Periodic()
     // frc::SmartDashboard::PutData("Field", &m_field);
     frc::SmartDashboard::PutNumber("Gyro", m_IMU.GetAngle());
 }
+
+void DriveTrainSubsystem::Reset() {
+    m_IMU.Reset();
+    for (auto& module : m_swerveModules) {
+        module.Reset();
+    }
+}

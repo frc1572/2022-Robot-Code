@@ -21,6 +21,7 @@ public:
     frc::Rotation2d GetRotation();
     void TestDrive();
     void Periodic() override;
+    void Reset();
 
 private:
     WPI_Pigeon2 m_IMU{frc::SPI::Port::kMXP};

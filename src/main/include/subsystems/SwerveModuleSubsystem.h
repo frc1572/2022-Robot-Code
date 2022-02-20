@@ -22,6 +22,7 @@ public:
     decltype(0_mps) GetMeasuredVelocity();
     void TestingVoltage();
     void Periodic() override;
+    void Reset();
 
 private:
     std::unique_ptr<WPI_TalonFX> m_throttleMotor;

@@ -23,6 +23,7 @@ public:
     RobotContainer();
 
     frc2::Command* GetAutonomousCommand();
+    void Reset();
 
 private:
     // frc::Joystick m_joystick{0};
