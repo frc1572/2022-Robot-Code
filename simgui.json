@@ -17,7 +17,12 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
-      "/LiveWindow/Ungrouped/frc2::SubsystemBase": "Subsystem"
+      "/LiveWindow/Ungrouped/SwerveModuleSubsystem(1, 2)": "Subsystem",
+      "/LiveWindow/Ungrouped/SwerveModuleSubsystem(4, 3)": "Subsystem",
+      "/LiveWindow/Ungrouped/SwerveModuleSubsystem(5, 6)": "Subsystem",
+      "/LiveWindow/Ungrouped/SwerveModuleSubsystem(8, 7)": "Subsystem",
+      "/LiveWindow/Ungrouped/frc2::SubsystemBase": "Subsystem",
+      "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
       "/LiveWindow/Ungrouped/Scheduler": {
@@ -29,11 +34,20 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/Field": {
+        "image": "2022-field.png",
+        "window": {
+          "visible": true
+        }
       }
     }
   },
   "NetworkTables": {
     "SmartDashboard": {
+      "Field": {
+        "open": true
+      },
       "open": true
     }
   },
@@ -46,7 +60,7 @@
               "autoFit": true
             }
           ],
-          "height": 445,
+          "height": 551,
           "series": [
             {
               "color": [
@@ -55,7 +69,16 @@
                 0.6901960968971252,
                 1.0
               ],
-              "id": "CANEncoder:Talon FX[0]/Integrated Sensor-velocity"
+              "id": "NT:/SmartDashboard/DriveTrain.MeasuredHeading"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/DriveTrain.MeasuredIMUYaw"
             }
           ]
         }

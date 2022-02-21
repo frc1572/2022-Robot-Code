@@ -16,7 +16,6 @@
 #include <units/angle.h>
 #include <wpi/array.h>
 
-#include "commands/DrivePathPlannerCommand.h"
 #include "Constants.h"
 #include "SwerveModuleSubsystem.h"
 
@@ -25,13 +24,12 @@ class DriveTrainSubsystem : public frc2::SubsystemBase
 public:
     DriveTrainSubsystem();
     void Drive(frc::ChassisSpeeds&& chassisSpeeds);
-    frc::Rotation2d GetRotation();
     frc::Pose2d GetPose();
     void TestDrive();
     void Periodic() override;
     void SimulationPeriodic() override;
     void Reset();
-    frc2::SequentialCommandGroup MakeDrivePathPlanerCommand(pathplanner::PathPlannerTrajectory trajectory);
+    frc2::SequentialCommandGroup MakeDrivePathPlannerCommand(pathplanner::PathPlannerTrajectory trajectory);
 
 private:
     WPI_Pigeon2 m_IMU{frc::SPI::Port::kMXP, "canivore"};
@@ -49,9 +47,8 @@ private:
 
     frc::PIDController m_translationController{4, 0.0, 0.0, Constants::LoopPeriod};
 
-    units::degree_t m_desiredHeading;
     frc::ProfiledPIDController<units::radians> m_headingController{
-        4, 0.0, 0.0, {360_deg_per_s, 360_deg_per_s_sq}, Constants::LoopPeriod};
+        4, 0.0, 0.0, {1440_deg_per_s, 1440_deg_per_s_sq}, Constants::LoopPeriod};
 
     frc::SwerveDriveOdometry<4> m_swerveOdometry{m_swerveKinematics, frc::Rotation2d(0_rad)};
 

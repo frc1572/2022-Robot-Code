@@ -95,7 +95,9 @@
     "xstddef": "cpp",
     "xstring": "cpp",
     "xtr1common": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "bitset": "cpp",
+    "source_location": "cpp"
   },
   "editor.formatOnSave": true,
   "[cpp]": {

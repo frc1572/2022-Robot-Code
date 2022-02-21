@@ -37,7 +37,7 @@ private:
     // FlywheelSubsystem m_flywheel;
 
     frc2::SequentialCommandGroup m_testAutoCommand =
-        m_drivetrain.MakeDrivePathPlanerCommand(pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
+        m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
 
     void ConfigureButtonBindings();
 };
