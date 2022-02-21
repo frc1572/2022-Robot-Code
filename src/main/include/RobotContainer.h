@@ -6,7 +6,9 @@
 
 #include <frc/Joystick.h>
 #include <frc2/command/Command.h>
+#include <pathplanner/lib/PathPlanner.h>
 
+#include "commands/DrivePathPlannerCommand.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
 
@@ -33,6 +35,9 @@ private:
     // The robot's subsystems and commands are defined here...
     DriveTrainSubsystem m_drivetrain;
     // FlywheelSubsystem m_flywheel;
+
+    DrivePathPlannerCommand m_testAutoCommand =
+        m_drivetrain.MakeDrivePathPlanerCommand(pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
 
     void ConfigureButtonBindings();
 };

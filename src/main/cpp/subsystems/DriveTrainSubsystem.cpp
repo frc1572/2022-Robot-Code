@@ -9,7 +9,7 @@
 DriveTrainSubsystem::DriveTrainSubsystem()
 {
     m_IMU.Reset();
-    m_headingController.EnableContinuousInput(0, 360);
+    m_headingController.EnableContinuousInput(0_deg, 360_deg);
     // Subsytem move constructor does not register, so we must do it by hand
     for (auto& module : m_swerveModules)
     {
@@ -20,8 +20,7 @@ DriveTrainSubsystem::DriveTrainSubsystem()
 void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 {
     m_desiredHeading += chassisSpeeds.omega * Constants::LoopPeriod;
-    auto headingOutput =
-        m_headingController.Calculate(GetRotation().Degrees().value(), m_desiredHeading.value()) * 1_deg_per_s;
+    auto headingOutput = m_headingController.Calculate(GetRotation().Degrees(), m_desiredHeading) * 1_deg_per_s;
     if (units::math::abs(headingOutput) < 5_deg_per_s)
     {
         headingOutput = 0_deg_per_s;
@@ -36,7 +35,7 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 
     frc::SmartDashboard::PutNumber("DriveTrain.MeasuredHeading", GetRotation().Degrees().value());
     frc::SmartDashboard::PutNumber("DriveTrain.DesiredHeading", m_desiredHeading.value());
-    frc::SmartDashboard::PutNumber("DriveTrain.HeadingError", m_headingController.GetPositionError());
+    frc::SmartDashboard::PutNumber("DriveTrain.HeadingError", m_headingController.GetPositionError().value());
 }
 
 frc::Rotation2d DriveTrainSubsystem::GetRotation()
@@ -90,4 +89,24 @@ void DriveTrainSubsystem::Reset()
     {
         module.Reset();
     }
+}
+
+DrivePathPlannerCommand DriveTrainSubsystem::MakeDrivePathPlanerCommand(pathplanner::PathPlannerTrajectory trajectory)
+{
+    return {
+        trajectory,
+        [this]() { return GetPose(); },
+        m_swerveKinematics,
+        m_translationController,
+        m_translationController,
+        m_headingController,
+        [this](std::array<frc::SwerveModuleState, 4> moduleStates)
+        {
+            for (unsigned int i = 0; i < m_swerveModules.size(); i++)
+            {
+                m_swerveModules[i].SetDesiredState(moduleStates[i]);
+            }
+        },
+        {this},
+    };
 }
