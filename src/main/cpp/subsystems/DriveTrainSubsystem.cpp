@@ -91,22 +91,29 @@ void DriveTrainSubsystem::Reset()
     }
 }
 
-DrivePathPlannerCommand DriveTrainSubsystem::MakeDrivePathPlanerCommand(pathplanner::PathPlannerTrajectory trajectory)
+frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlanerCommand(
+    pathplanner::PathPlannerTrajectory trajectory)
 {
-    return {
-        trajectory,
-        [this]() { return GetPose(); },
-        m_swerveKinematics,
-        m_translationController,
-        m_translationController,
-        m_headingController,
-        [this](std::array<frc::SwerveModuleState, 4> moduleStates)
-        {
-            for (unsigned int i = 0; i < m_swerveModules.size(); i++)
+    auto initialState = *trajectory.getState(0);
+    return DrivePathPlannerCommand(
+               trajectory,
+               [this]() { return GetPose(); },
+               m_swerveKinematics,
+               m_translationController,
+               m_translationController,
+               m_headingController,
+               [this](std::array<frc::SwerveModuleState, 4> moduleStates)
+               {
+                   for (unsigned int i = 0; i < m_swerveModules.size(); i++)
+                   {
+                       m_swerveModules[i].SetDesiredState(moduleStates[i]);
+                   }
+               },
+               {this})
+        .BeforeStarting(
+            [this, initialState]()
             {
-                m_swerveModules[i].SetDesiredState(moduleStates[i]);
-            }
-        },
-        {this},
-    };
+                m_IMU.SetYaw(initialState.holonomicRotation.Degrees().value());
+                m_swerveOdometry.ResetPosition(initialState.pose, initialState.holonomicRotation);
+            });
 }

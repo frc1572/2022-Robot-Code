@@ -10,6 +10,7 @@
 #include <frc/smartdashboard/Field2d.h>
 #include <frc/SPI.h>
 #include <frc/Timer.h>
+#include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SubsystemBase.h>
 #include <pathplanner/lib/PathPlanner.h>
 #include <units/angle.h>
@@ -30,7 +31,7 @@ public:
     void Periodic() override;
     void SimulationPeriodic() override;
     void Reset();
-    DrivePathPlannerCommand MakeDrivePathPlanerCommand(pathplanner::PathPlannerTrajectory trajectory);
+    frc2::SequentialCommandGroup MakeDrivePathPlanerCommand(pathplanner::PathPlannerTrajectory trajectory);
 
 private:
     WPI_Pigeon2 m_IMU{frc::SPI::Port::kMXP, "canivore"};
