@@ -13,8 +13,8 @@
 #include "CustomUnits.h"
 
 SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort, units::radian_t steeringOffset)
-  : m_throttleMotor(std::make_unique<WPI_TalonFX>(throttlePort)),
-    m_steeringMotor(std::make_unique<WPI_TalonFX>(steeringPort)), m_steeringoffset(steeringOffset)
+  : m_throttleMotor(std::make_unique<WPI_TalonFX>(throttlePort, "canivore")),
+    m_steeringMotor(std::make_unique<WPI_TalonFX>(steeringPort, "canivore")), m_steeringoffset(steeringOffset)
 {
     SetName(fmt::format("SwerveModuleSubsystem({}, {})", throttlePort, steeringPort));
 
@@ -101,6 +101,8 @@ void SwerveModuleSubsystem::Periodic()
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
+    // std::cout << "Module: " << m_throttleMotor->GetDeviceID() << m_steeringMotor->GetDeviceID()
+    //           << " Position: " << GetMeasuredRotation().Degrees().value() << std::endl;
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());

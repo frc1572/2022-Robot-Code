@@ -29,18 +29,18 @@ public:
     void Reset();
 
 private:
-    WPI_Pigeon2 m_IMU{frc::SPI::Port::kMXP, "canivore"};
+    WPI_Pigeon2 m_IMU{10, "canivore"};
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
-        SwerveModuleSubsystem{1, 2, 1142 / Constants::TicksPerRevolution::TalonFX},
-        SwerveModuleSubsystem{4, 3, 1125 / Constants::TicksPerRevolution::TalonFX},
-        SwerveModuleSubsystem{5, 6, 1142 / Constants::TicksPerRevolution::TalonFX},
-        SwerveModuleSubsystem{8, 7, 1273 / Constants::TicksPerRevolution::TalonFX}};
+        SwerveModuleSubsystem{1, 2, 1186 / Constants::TicksPerRevolution::TalonFX},
+        SwerveModuleSubsystem{4, 3, 848.887 / Constants::TicksPerRevolution::TalonFX},
+        SwerveModuleSubsystem{5, 6, -564.446 / Constants::TicksPerRevolution::TalonFX},
+        SwerveModuleSubsystem{8, 7, 894.198 / Constants::TicksPerRevolution::TalonFX}};
     frc::SwerveDriveKinematics<4> m_swerveKinematics{
-        frc::Translation2d{-11.75_in, 11.75_in},
-        frc::Translation2d{11.75_in, 11.75_in},
+        frc::Translation2d{-11.75_in, -11.75_in},
         frc::Translation2d{11.75_in, -11.75_in},
-        frc::Translation2d{-11.75_in, -11.75_in}};
+        frc::Translation2d{11.75_in, 11.75_in},
+        frc::Translation2d{-11.75_in, 11.75_in}};
 
     units::degree_t m_desiredHeading;
     frc::PIDController m_headingController{4, 0.0, 0.0, Constants::LoopPeriod};
