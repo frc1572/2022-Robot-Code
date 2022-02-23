@@ -2,10 +2,12 @@
 
 #include <Eigen/Core>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/button/JoystickButton.h>
 
 FlywheelSubsystem::FlywheelSubsystem()
 {
     m_leader.ConfigFactoryDefault();
+    m_feeder.ConfigFactoryDefault();
     // Disable Talon FX velocity filtering so that our Kalman filter can do the
     // work
     m_leader.ConfigVelocityMeasurementPeriod(SensorVelocityMeasPeriod::Period_1Ms);
@@ -22,6 +24,21 @@ void FlywheelSubsystem::Periodic()
     m_loop.Predict(Constants::LoopPeriod);
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
+
+    if (m_joy.GetRawButtonPressed(1) == true)
+    {
+        m_feeder.Set(ControlMode::PercentOutput, 0.50);
+    }
+    else if (m_joy.GetRawButtonReleased(1) == true)
+    {
+        m_feeder.Set(ControlMode::PercentOutput, 0.0);
+    }
+
+    if (m_loop.NextR(0) == 0)
+    {
+        m_leader.Set(ControlMode::PercentOutput, 0.0);
+        // m_leader.SetVoltage((voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks) * 0);
+    }
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
     frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));

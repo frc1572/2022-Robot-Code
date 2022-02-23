@@ -26,13 +26,13 @@ public:
     void Reset();
 
 private:
-    // frc::Joystick m_joystick{0};
-    frc::Joystick m_translationJoystick{0};
-    frc::Joystick m_steeringJoystick{1};
+    frc::Joystick m_joystick{1};
+    frc::Joystick m_translationJoystick{5};
+    frc::Joystick m_steeringJoystick{4};
 
     // The robot's subsystems and commands are defined here...
     DriveTrainSubsystem m_drivetrain;
-    // FlywheelSubsystem m_flywheel;
+    FlywheelSubsystem m_flywheel;
 
     void ConfigureButtonBindings();
 };

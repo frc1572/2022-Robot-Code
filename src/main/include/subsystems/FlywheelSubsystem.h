@@ -3,6 +3,7 @@
 #include <ctre/Phoenix.h>
 #include <frc/controller/LinearQuadraticRegulator.h>
 #include <frc/estimator/KalmanFilter.h>
+#include <frc/Servo.h>
 #include <frc/simulation/LinearSystemSim.h>
 #include <frc/system/LinearSystem.h>
 #include <frc/system/LinearSystemLoop.h>
@@ -12,6 +13,7 @@
 
 #include "Constants.h"
 #include "CustomUnits.h"
+#include "frc/Joystick.h"
 
 class FlywheelSubsystem : public frc2::SubsystemBase
 {
@@ -23,6 +25,8 @@ public:
 
 private:
     WPI_TalonFX m_leader{Constants::Flywheel::LeaderID};
+    WPI_TalonFX m_feeder{11};
+    frc::Joystick m_joy{1};
 
     // frc::LinearSystem<1, 1, 1> m_system = frc::LinearSystemId::FlywheelSystem(
     //     frc::DCMotor::Falcon500(),

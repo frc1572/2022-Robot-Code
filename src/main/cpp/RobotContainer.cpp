@@ -20,14 +20,13 @@ RobotContainer::RobotContainer()
 void RobotContainer::ConfigureButtonBindings()
 {
     // Configure your button bindings here
-    // frc2::JoystickButton(&m_joystick,
-    // 1).WhenPressed(FlywheelSpinupCommand(1000, m_flywheel));
-    // frc2::JoystickButton(&m_joystick,
-    // 2).WhenPressed(FlywheelSpinupCommand(2000, m_flywheel));
-    // frc2::JoystickButton(&m_joystick,
-    // 3).WhenPressed(FlywheelSpinupCommand(3000, m_flywheel));
-    // frc2::JoystickButton(&m_joystick,
-    // 4).WhenPressed(FlywheelSpinupCommand(4000, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 2).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(1000, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 6).WhenPressed(FlywheelSpinupCommand(2000, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 7).WhenPressed(FlywheelSpinupCommand(3000, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 8).WhenPressed(FlywheelSpinupCommand(6000, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 9).WhenPressed(FlywheelSpinupCommand(5000, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 10).WhenPressed(FlywheelSpinupCommand(4000, m_flywheel));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand()
@@ -36,6 +35,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand()
     return nullptr;
 }
 
-void RobotContainer::Reset() {
+void RobotContainer::Reset()
+{
     m_drivetrain.Reset();
 }
