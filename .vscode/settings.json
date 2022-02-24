@@ -80,7 +80,9 @@
     "typeinfo": "cpp",
     "core": "cpp",
     "*.inc": "cpp",
-    "numbers": "cpp"
+    "numbers": "cpp",
+    "bitset": "cpp",
+    "source_location": "cpp"
   },
   "editor.formatOnSave": true,
   "[cpp]": {
