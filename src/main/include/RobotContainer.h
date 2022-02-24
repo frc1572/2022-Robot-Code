@@ -7,6 +7,7 @@
 #include <frc/Joystick.h>
 #include <frc2/command/Command.h>
 
+#include "subsystems/ActuatorSubsystem.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
 
@@ -27,12 +28,13 @@ public:
 
 private:
     frc::Joystick m_joystick{1};
-    frc::Joystick m_translationJoystick{5};
-    frc::Joystick m_steeringJoystick{4};
+    frc::Joystick m_translationJoystick{3};
+    frc::Joystick m_steeringJoystick{2};
 
     // The robot's subsystems and commands are defined here...
     DriveTrainSubsystem m_drivetrain;
     FlywheelSubsystem m_flywheel;
+    ActuatorSubsystem m_actuators;
 
     void ConfigureButtonBindings();
 };

@@ -6,6 +6,7 @@
 
 #include <frc2/command/button/JoystickButton.h>
 
+#include "commands/ActuatorCommand.h"
 #include "commands/DriveTeleopCommand.h"
 #include "commands/FlywheelSpinupCommand.h"
 
@@ -13,6 +14,7 @@ RobotContainer::RobotContainer()
 {
     // Initialize all of your commands and subsystems here
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
+    m_actuators.SetDefaultCommand(ActuatorCommand(0.0, m_actuators));
     // Configure the button bindings
     ConfigureButtonBindings();
 }
@@ -27,6 +29,8 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton(&m_joystick, 8).WhenPressed(FlywheelSpinupCommand(6000, m_flywheel));
     frc2::JoystickButton(&m_joystick, 9).WhenPressed(FlywheelSpinupCommand(5000, m_flywheel));
     frc2::JoystickButton(&m_joystick, 10).WhenPressed(FlywheelSpinupCommand(4000, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 11).WhenPressed(ActuatorCommand(0.0, m_actuators));
+    frc2::JoystickButton(&m_joystick, 12).WhenPressed(ActuatorCommand(0.50, m_actuators));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand()

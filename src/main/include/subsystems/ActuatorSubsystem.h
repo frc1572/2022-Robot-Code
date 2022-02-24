@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ctre/Phoenix.h>
 #include <frc/Servo.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -8,12 +9,15 @@
 class ActuatorSubsystem : public frc2::SubsystemBase
 {
 public:
-    ActuatorSubsystem();
+    ActuatorSubsystem(/*int LeftActuatorPort, int RightActuatorPort*/);
     void Periodic() override;
-    void SetActutorPoistion();
+    void SetActuatorPosition(double TargetPosition);
+    // void SetActuatorPoistion();
 
 private:
-    frc::Servo m_left{1};
-    frc::Servo m_right{2};
-    frc::Joystick m_ActuatorJoystick{0};
+    // Working on makeing the system take in one port and create teo objects for servos
+    frc::Servo m_leftActuator{1};
+    frc::Servo m_rightActuator{2};
+    // std::unique_ptr<frc::Servo> m_leftActuator;
+    // std::unique_ptr<frc::Servo> m_rightActuator;
 };

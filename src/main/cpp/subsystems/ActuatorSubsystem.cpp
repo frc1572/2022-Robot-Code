@@ -4,19 +4,25 @@
 #include "frc/Servo.h"
 #include "frc/Timer.h"
 
-ActuatorSubsystem::ActuatorSubsystem()
+ActuatorSubsystem::ActuatorSubsystem(/*int LeftActuatorPort, int RightActuatorPort*/)
+/*: m_leftActuator(LeftActuatorPort), m_rightActuator(RightActuatorPort)))*/
 {
+    // Settings similar to config default and brake mode go here if needed for Actuators
 }
-void ActuatorSubsystem::SetActutorPoistion()
+// void ActuatorSubsystem::SetActuatorPoistion()
+//{
+//     // m_left.SetPosition(m_ActuatorJoystick.GetZ());
+//     // m_right.SetPosition(m_ActuatorJoystick.GetZ());
+// }
+
+void ActuatorSubsystem::SetActuatorPosition(double TargetPosition)
 {
-    // m_left.SetPosition(m_ActuatorJoystick.GetZ());
-    // m_left.SetPosition(m_ActuatorJoystick.GetZ());
+    m_leftActuator.SetPosition(TargetPosition);
+    m_rightActuator.SetPosition(TargetPosition);
 }
 
 void ActuatorSubsystem::Periodic()
 {
-    m_left.SetPosition(m_ActuatorJoystick.GetZ());
-    m_left.SetPosition(m_ActuatorJoystick.GetZ());
     //
 
     // The Sample code VVV (Will work on more, just ran out of time. Also I know the use of // on all the lines is

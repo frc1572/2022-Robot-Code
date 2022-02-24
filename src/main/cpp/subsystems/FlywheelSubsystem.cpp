@@ -4,6 +4,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/button/JoystickButton.h>
 
+#include "ctre/Phoenix.h"
+
 FlywheelSubsystem::FlywheelSubsystem()
 {
     m_leader.ConfigFactoryDefault();
@@ -12,6 +14,8 @@ FlywheelSubsystem::FlywheelSubsystem()
     // work
     m_leader.ConfigVelocityMeasurementPeriod(SensorVelocityMeasPeriod::Period_1Ms);
     m_leader.ConfigVelocityMeasurementWindow(1);
+
+    m_feeder.SetNeutralMode(Coast);
 
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
 }
@@ -24,15 +28,6 @@ void FlywheelSubsystem::Periodic()
     m_loop.Predict(Constants::LoopPeriod);
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
-
-    if (m_joy.GetRawButtonPressed(1) == true)
-    {
-        m_feeder.Set(ControlMode::PercentOutput, 0.50);
-    }
-    else if (m_joy.GetRawButtonReleased(1) == true)
-    {
-        m_feeder.Set(ControlMode::PercentOutput, 0.0);
-    }
 
     if (m_loop.NextR(0) == 0)
     {
@@ -65,4 +60,9 @@ void FlywheelSubsystem::SetSetpoint(rad_per_s_t setpoint)
     m_loop.SetNextR(Eigen::Vector<double, 1>(setpoint.to<double>()));
 
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", setpoint.to<double>());
+}
+
+void FlywheelSubsystem::StartFeeder(double FeedRpm)
+{
+    m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
 }
