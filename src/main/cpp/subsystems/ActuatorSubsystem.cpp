@@ -9,11 +9,6 @@ ActuatorSubsystem::ActuatorSubsystem(/*int LeftActuatorPort, int RightActuatorPo
 {
     // Settings similar to config default and brake mode go here if needed for Actuators
 }
-// void ActuatorSubsystem::SetActuatorPoistion()
-//{
-//     // m_left.SetPosition(m_ActuatorJoystick.GetZ());
-//     // m_right.SetPosition(m_ActuatorJoystick.GetZ());
-// }
 
 void ActuatorSubsystem::SetActuatorPosition(double TargetPosition)
 {

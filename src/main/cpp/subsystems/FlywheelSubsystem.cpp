@@ -16,7 +16,7 @@ FlywheelSubsystem::FlywheelSubsystem()
     m_leader.ConfigVelocityMeasurementWindow(1);
 
     m_feeder.SetNeutralMode(Coast);
-
+    // Set Feeder to coast and config Default
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
 }
 
@@ -66,3 +66,4 @@ void FlywheelSubsystem::StartFeeder(double FeedRpm)
 {
     m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
 }
+// Code for the StartFeeder^^   Could maybe add it too periodic eventually

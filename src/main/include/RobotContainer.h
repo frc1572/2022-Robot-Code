@@ -34,6 +34,7 @@ private:
     // The robot's subsystems and commands are defined here...
     DriveTrainSubsystem m_drivetrain;
     FlywheelSubsystem m_flywheel;
+    // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
     ActuatorSubsystem m_actuators;
 
     void ConfigureButtonBindings();

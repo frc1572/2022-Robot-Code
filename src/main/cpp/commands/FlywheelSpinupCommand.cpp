@@ -13,7 +13,9 @@ FlywheelSpinupCommand::FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flyw
 {
 }
 
-void FlywheelSpinupCommand::FeederSpinupCommand(double FeedRpm, FlywheelSubsystem& feeder) : m_feedRpm(FeedRpm)
+// Setting up the FeederSpinupCommand VVV
+FeederSpinupCommand::FeederSpinupCommand(double FeedRPM, FlywheelSubsystem& feeder)
+  : m_feederRPM(FeedRPM), m_feeder(feeder)
 {
     AddRequirements(&feeder);
 }
@@ -21,11 +23,20 @@ void FlywheelSpinupCommand::FeederSpinupCommand(double FeedRpm, FlywheelSubsyste
 void FlywheelSpinupCommand::Initialize()
 {
     m_flywheel.SetSetpoint(m_omega);
-    m_flywheel.StartFeeder(m_FeedRpm);
 }
 
 bool FlywheelSpinupCommand::IsFinished()
 {
     // return m_flywheel.IsSpunup();
+    return false;
+}
+
+// Feeder Command Initialize and IsFinished VVV
+void FeederSpinupCommand::Initialize()
+{
+    m_feeder.StartFeeder(m_feederRPM);
+}
+bool FeederSpinupCommand::IsFinished()
+{
     return false;
 }
