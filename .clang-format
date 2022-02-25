@@ -12,7 +12,7 @@ ConstructorInitializerIndentWidth: 2
 DeriveLineEnding: false
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '^<(ctre|Eigen|frc2?|fmt|networktables|units|wpi)/'
+  - Regex:           '^<(ctre|Eigen|frc2?|fmt|networktables|photonlib|units|wpi)/'
     Priority:        2
     CaseSensitive:   false
   - Regex:           '^<'
