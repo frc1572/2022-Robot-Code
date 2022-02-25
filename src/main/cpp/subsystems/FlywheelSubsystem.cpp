@@ -2,15 +2,21 @@
 
 #include <Eigen/Core>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/button/JoystickButton.h>
+
+#include "ctre/Phoenix.h"
 
 FlywheelSubsystem::FlywheelSubsystem()
 {
     m_leader.ConfigFactoryDefault();
+    m_feeder.ConfigFactoryDefault();
     // Disable Talon FX velocity filtering so that our Kalman filter can do the
     // work
     m_leader.ConfigVelocityMeasurementPeriod(SensorVelocityMeasPeriod::Period_1Ms);
     m_leader.ConfigVelocityMeasurementWindow(1);
 
+    m_feeder.SetNeutralMode(Coast);
+    // Set Feeder to coast and config Default
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
 }
 
@@ -22,6 +28,12 @@ void FlywheelSubsystem::Periodic()
     m_loop.Predict(Constants::LoopPeriod);
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
+
+    if (m_loop.NextR(0) == 0)
+    {
+        m_leader.Set(ControlMode::PercentOutput, 0.0);
+        // m_leader.SetVoltage((voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks) * 0);
+    }
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
     frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
@@ -49,3 +61,9 @@ void FlywheelSubsystem::SetSetpoint(rad_per_s_t setpoint)
 
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", setpoint.to<double>());
 }
+
+void FlywheelSubsystem::StartFeeder(double FeedRpm)
+{
+    m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
+}
+// Code for the StartFeeder^^   Could maybe add it too periodic eventually
