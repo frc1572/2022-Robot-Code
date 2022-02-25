@@ -14,5 +14,5 @@ void ActuatorCommand::Initialize()
 
 bool ActuatorCommand::IsFinished()
 {
-    return false;
+    return true;
 }

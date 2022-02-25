@@ -14,8 +14,8 @@ RobotContainer::RobotContainer()
 {
     // Initialize all of your commands and subsystems here
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
-    m_actuators.SetDefaultCommand(ActuatorCommand(0.0, m_actuators));
-    // Configure the button bindings
+    // m_actuators.SetDefaultCommand(ActuatorCommand(0.0, m_actuators));
+    //  Configure the button bindings
     ConfigureButtonBindings();
 }
 
@@ -37,7 +37,7 @@ void RobotContainer::ConfigureButtonBindings()
     */
     // Testing buttons for the actuators (as of now only goes from 0 to 50 and vice versa, still needs testing)
     // TODO: test on Z slider and add automation when limelight is set up
-    frc2::JoystickButton(&m_joystick, 1).WhenPressed(ActuatorCommand(0.0, m_actuators));
+    frc2::JoystickButton(&m_joystick, 1).WhenPressed(ActuatorCommand(0.1, m_actuators));
     frc2::JoystickButton(&m_joystick, 2).WhenPressed(ActuatorCommand(0.50, m_actuators));
 }
 

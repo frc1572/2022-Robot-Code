@@ -14,7 +14,7 @@ ActuatorSubsystem::ActuatorSubsystem(/*int LeftActuatorPort, int RightActuatorPo
 
 void ActuatorSubsystem::SetActuatorPosition(double TargetPosition)
 {
-    m_actuators.SetPosition(TargetPosition);
+    m_actuators.Set(TargetPosition);
     std::cout << "Setting Position to: " << TargetPosition << std::endl;
     // m_leftActuator.SetPosition(TargetPosition);
     // m_rightActuator.SetPosition(TargetPosition);
