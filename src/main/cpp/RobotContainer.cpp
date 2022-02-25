@@ -22,7 +22,8 @@ RobotContainer::RobotContainer()
 void RobotContainer::ConfigureButtonBindings()
 {
     // Configure your button bindings here
-    //Set Speeds for the Turret Shooter
+    // Set Speeds for the Turret Shooter
+    /*
     frc2::JoystickButton(&m_joystick, 2).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
     frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(1000, m_flywheel));
     frc2::JoystickButton(&m_joystick, 6).WhenPressed(FlywheelSpinupCommand(2000, m_flywheel));
@@ -33,10 +34,11 @@ void RobotContainer::ConfigureButtonBindings()
     // Testing Speeds bound to buttons for the feeder (using same subsystem as flywheel spin up so could have errors)
     frc2::JoystickButton(&m_joystick, 1).WhenPressed(FeederSpinupCommand(0.50, m_flywheel));
     frc2::JoystickButton(&m_joystick, 13).WhenPressed(FeederSpinupCommand(0.0, m_flywheel));
+    */
     // Testing buttons for the actuators (as of now only goes from 0 to 50 and vice versa, still needs testing)
-    //TODO: test on Z slider and add automation when limelight is set up
-    frc2::JoystickButton(&m_joystick, 11).WhenPressed(ActuatorCommand(0.0, m_actuators));
-    frc2::JoystickButton(&m_joystick, 12).WhenPressed(ActuatorCommand(0.50, m_actuators));
+    // TODO: test on Z slider and add automation when limelight is set up
+    frc2::JoystickButton(&m_joystick, 3).WhenPressed(ActuatorCommand(0.0, m_actuators));
+    frc2::JoystickButton(&m_joystick, 4).WhenPressed(ActuatorCommand(0.50, m_actuators));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand()
