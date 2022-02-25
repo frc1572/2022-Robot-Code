@@ -6,6 +6,8 @@
 
 #include <frc/Joystick.h>
 #include <frc2/command/Command.h>
+#include <frc2/command/SequentialCommandGroup.h>
+#include <pathplanner/lib/PathPlanner.h>
 
 #include "subsystems/ActuatorSubsystem.h"
 #include "subsystems/DriveTrainSubsystem.h"
@@ -36,6 +38,9 @@ private:
     FlywheelSubsystem m_flywheel;
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
     ActuatorSubsystem m_actuators;
+
+    frc2::SequentialCommandGroup m_testAutoCommand =
+        m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
 
     void ConfigureButtonBindings();
 };
