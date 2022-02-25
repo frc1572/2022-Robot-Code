@@ -1,5 +1,7 @@
 #include "subsystems/ActuatorSubsystem.h"
 
+#include <iostream>
+
 #include "frc/MathUtil.h"
 #include "frc/Servo.h"
 #include "frc/Timer.h"
@@ -13,6 +15,7 @@ ActuatorSubsystem::ActuatorSubsystem(/*int LeftActuatorPort, int RightActuatorPo
 void ActuatorSubsystem::SetActuatorPosition(double TargetPosition)
 {
     m_actuators.SetPosition(TargetPosition);
+    std::cout << "Setting Position to: " << TargetPosition << std::endl;
     // m_leftActuator.SetPosition(TargetPosition);
     // m_rightActuator.SetPosition(TargetPosition);
 }
