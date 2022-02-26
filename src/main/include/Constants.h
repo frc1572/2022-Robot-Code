@@ -13,7 +13,13 @@
 namespace Constants
 {
     constexpr auto LoopPeriod = 1_s / 100;
-
+    namespace Systemspeeds
+    {
+        constexpr double TurretFeederSpeed = 0.5;
+        constexpr double IntakeFeederSpeed = 0.5;
+        constexpr double IntakeSpeed = 0.5;
+        constexpr double HoodSpeed = 2250;
+    } // namespace Systemspeeds
     namespace Flywheel
     {
         constexpr int LeaderID = 12;
