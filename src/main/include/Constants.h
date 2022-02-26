@@ -18,6 +18,8 @@ namespace Constants
     {
         constexpr int LeaderID = 12;
         constexpr int FeederID = 11;
+        constexpr int IntakeID = 14;
+        constexpr int MainFeederID = 13;
         constexpr Ks_t Ks = 1_V;
         constexpr Kv_t<units::radian_t> Kv = 0.025_V / 1_rad_per_s;
         constexpr Ka_t<units::radian_t> Ka = 0.0025_V / 1_rad_per_s_sq;

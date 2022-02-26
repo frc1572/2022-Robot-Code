@@ -23,10 +23,18 @@ public:
     void SimulationPeriodic() override;
     void SetSetpoint(rad_per_s_t setpoint);
     void StartFeeder(double FeedRpm);
+    void StartIntake(double IntakeRpm);
+    void StartMainFeeder(double MainFeederRpm);
     // Added StartFeeder code^^^
 private:
     WPI_TalonFX m_leader{Constants::Flywheel::LeaderID};
     WPI_TalonFX m_feeder{Constants::Flywheel::FeederID};
+
+    // Temporary Location for the Main Robot Feeder and the Intake
+
+    WPI_TalonFX m_intake{Constants::Flywheel::IntakeID};
+    WPI_TalonFX m_mainFeeder{Constants::Flywheel::MainFeederID};
+
     // Added Feeder and port to constants ^^^
     //  frc::LinearSystem<1, 1, 1> m_system = frc::LinearSystemId::FlywheelSystem(
     //      frc::DCMotor::Falcon500(),

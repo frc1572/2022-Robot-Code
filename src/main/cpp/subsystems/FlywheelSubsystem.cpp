@@ -67,3 +67,15 @@ void FlywheelSubsystem::StartFeeder(double FeedRpm)
     m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
 }
 // Code for the StartFeeder^^   Could maybe add it too periodic eventually
+
+// Temp Code, will move later VVV (Just for testing the Main feeder and intake)
+
+void FlywheelSubsystem::StartMainFeeder(double MainFeederRpm)
+{
+    m_mainFeeder.Set(ControlMode::PercentOutput, MainFeederRpm);
+}
+
+void FlywheelSubsystem::StartIntake(double IntakeRpm)
+{
+    m_intake.Set(ControlMode::PercentOutput, IntakeRpm);
+}
