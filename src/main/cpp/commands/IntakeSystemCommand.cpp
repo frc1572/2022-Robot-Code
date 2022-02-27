@@ -4,12 +4,14 @@ IntakeFeederSpinupCommand::IntakeFeederSpinupCommand(double IntakeFeederRPM, Int
   : m_intakeFeederRPM(IntakeFeederRPM), m_intakeFeeder(intakeFeeder)
 {
     AddRequirements(&intakeFeeder);
+    SetName("IntakeFeederSpinupCommand");
 }
 
 IntakeSpinupCommand::IntakeSpinupCommand(double IntakeRPM, IntakeSystemSubsystem& intake)
   : m_intakeRPM(IntakeRPM), m_intake(intake)
 {
     AddRequirements(&intake);
+    SetName("IntakeSpinupCommand");
 }
 
 void IntakeFeederSpinupCommand::Initialize()

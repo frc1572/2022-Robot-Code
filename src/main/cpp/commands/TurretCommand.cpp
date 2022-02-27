@@ -6,6 +6,7 @@ TurretCommand::TurretCommand(double PlannedTurretAngle, TurretSubsystem& turret)
   : m_plannedTurretAngle(PlannedTurretAngle), m_turret(turret)
 {
     AddRequirements(&m_turret);
+    SetName("TurretCommand");
 }
 
 void TurretCommand::Execute()

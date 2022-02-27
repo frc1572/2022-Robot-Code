@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <ctre/Phoenix.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
@@ -29,7 +31,8 @@ public:
     void Periodic() override;
     void SimulationPeriodic() override;
     void Reset();
-    frc2::SequentialCommandGroup MakeDrivePathPlannerCommand(pathplanner::PathPlannerTrajectory trajectory);
+    frc2::SequentialCommandGroup MakeDrivePathPlannerCommand(
+        std::string name, pathplanner::PathPlannerTrajectory trajectory);
 
 private:
     WPI_Pigeon2 m_IMU{10, "canivore"};

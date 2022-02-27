@@ -21,6 +21,7 @@
       "/LiveWindow/Ungrouped/SwerveModuleSubsystem(4, 3)": "Subsystem",
       "/LiveWindow/Ungrouped/SwerveModuleSubsystem(5, 6)": "Subsystem",
       "/LiveWindow/Ungrouped/SwerveModuleSubsystem(8, 7)": "Subsystem",
+      "/LiveWindow/Ungrouped/VisionSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/frc2::SubsystemBase": "Subsystem",
       "/SmartDashboard/Field": "Field2d"
     },

@@ -6,6 +6,7 @@ ActuatorCommand::ActuatorCommand(double ActuatorPosition, ActuatorSubsystem& Act
   : m_actuatorPosition(ActuatorPosition), m_actuators(Actuators)
 {
     AddRequirements(&Actuators);
+    SetName("ActuatorCommand");
 }
 
 void ActuatorCommand::Initialize()

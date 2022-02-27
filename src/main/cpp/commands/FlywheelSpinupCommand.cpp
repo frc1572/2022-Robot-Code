@@ -6,6 +6,7 @@ FlywheelSpinupCommand::FlywheelSpinupCommand(rad_per_s_t omega, FlywheelSubsyste
   : m_omega(omega), m_flywheel(flywheel)
 {
     AddRequirements(&flywheel);
+    SetName("FlywheelSpinupCommand");
 }
 
 FlywheelSpinupCommand::FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flywheel)
@@ -18,6 +19,7 @@ FeederSpinupCommand::FeederSpinupCommand(double FeedRPM, FlywheelSubsystem& feed
   : m_feederRPM(FeedRPM), m_feeder(feeder)
 {
     AddRequirements(&feeder);
+    SetName("FeederSpinupCommand");
 }
 
 void FlywheelSpinupCommand::Initialize()

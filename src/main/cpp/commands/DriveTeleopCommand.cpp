@@ -10,6 +10,7 @@ DriveTeleopCommand::DriveTeleopCommand(
   : m_drivetrain(drivetrain), m_translationJoystick(translationJoystick), m_steeringJoystick(steeringJoystick)
 {
     AddRequirements(&m_drivetrain);
+    SetName("DriveTeleopCommand");
 }
 void DriveTeleopCommand::Execute()
 {

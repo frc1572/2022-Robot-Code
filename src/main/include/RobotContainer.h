@@ -46,7 +46,7 @@ private:
     VisionSubsystem m_vision{35.3498_in, 102.6_in, 32_deg};
 
     frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
-        pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
+        "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
     IntakeSystemSubsystem m_intakeSystem;
     TurretSubsystem m_turretSystem;
 

@@ -6,8 +6,10 @@
 
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/Command.h>
 #include <frc2/command/CommandScheduler.h>
 #include <networktables/NetworkTableInstance.h>
+#include <spdlog/spdlog.h>
 
 #include "Constants.h"
 #include "helper/spdlog.h"
@@ -18,7 +20,12 @@ Robot::Robot()
 
 void Robot::RobotInit()
 {
-    frc2::CommandScheduler::GetInstance().SetPeriod(Constants::LoopPeriod);
+    auto& scheduler = frc2::CommandScheduler::GetInstance();
+    scheduler.SetPeriod(Constants::LoopPeriod);
+    scheduler.OnCommandInitialize([](const frc2::Command& cmd) { spdlog::info("INITIALIZE: {}", cmd.GetName()); });
+    // scheduler.OnCommandExecute([](const frc2::Command& cmd) { spdlog::info("EXECUTE: {}", cmd.GetName()); });
+    scheduler.OnCommandFinish([](const frc2::Command& cmd) { spdlog::info("FINISH: {}", cmd.GetName()); });
+    scheduler.OnCommandInterrupt([](const frc2::Command& cmd) { spdlog::info("INTERRUPT: {}", cmd.GetName()); });
 }
 
 /**
