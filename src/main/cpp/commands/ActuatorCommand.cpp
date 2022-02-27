@@ -1,6 +1,6 @@
 #include "commands/ActuatorCommand.h"
 
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 ActuatorCommand::ActuatorCommand(double ActuatorPosition, ActuatorSubsystem& Actuators)
   : m_actuatorPosition(ActuatorPosition), m_actuators(Actuators)
@@ -16,6 +16,6 @@ void ActuatorCommand::Initialize()
 
 bool ActuatorCommand::IsFinished()
 {
-    std::cout << ">>>>>IsFinished Command Ran<<<<<" << std::endl;
+    spdlog::info(">>>>>IsFinished Command Ran<<<<<");
     return true;
 }

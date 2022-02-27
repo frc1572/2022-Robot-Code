@@ -1,6 +1,5 @@
 #include "subsystems/SwerveModuleSubsystem.h"
 
-#include <iostream>
 #include <memory>
 
 #include <Eigen/Core>
@@ -8,6 +7,7 @@
 #include <frc/MathUtil.h>
 #include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <spdlog/spdlog.h>
 #include <wpi/numbers>
 
 #include "CustomUnits.h"
@@ -31,7 +31,7 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     m_steeringMotor->ConfigClosedloopRamp(0.05);
     m_steeringMotor->Config_kP(0, 0.2);
     m_steeringMotor->Config_kD(0, 0.005);
-    std::cout << throttlePort << ", " << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
+    spdlog::info("{}, {}", throttlePort, m_steeringMotor->GetSelectedSensorPosition());
 }
 
 frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::SwerveModuleState state)
@@ -101,8 +101,6 @@ void SwerveModuleSubsystem::Periodic()
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
-    // std::cout << "Module: " << m_throttleMotor->GetDeviceID() << m_steeringMotor->GetDeviceID()
-    //           << " Position: " << GetMeasuredRotation().Degrees().value() << std::endl;
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());

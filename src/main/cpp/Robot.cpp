@@ -10,6 +10,7 @@
 #include <networktables/NetworkTableInstance.h>
 
 #include "Constants.h"
+#include "helper/spdlog.h"
 
 Robot::Robot()
 {
@@ -100,6 +101,7 @@ void Robot::TestPeriodic()
 #ifndef RUNNING_FRC_TESTS
 int main()
 {
+    setupSpdlog();
     return frc::StartRobot<Robot>();
 }
 #endif

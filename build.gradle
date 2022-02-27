@@ -62,6 +62,19 @@ model {
                 exportedHeaders {
                     srcDir 'src/main/include'
                 }
+
+                source {
+                    srcDir 'third_party/spdlog-1.9.2/src'
+                    include '**/*.cpp'
+                }
+                exportedHeaders {
+                    srcDir 'third_party/spdlog-1.9.2/include'
+                }
+            }
+
+            binaries.all {
+                cppCompiler.define 'SPDLOG_COMPILED_LIB'
+                cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
             }
 
             // Set deploy task to deploy this component
