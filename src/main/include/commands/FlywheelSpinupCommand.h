@@ -19,7 +19,6 @@ private:
     FlywheelSubsystem& m_flywheel;
 };
 
-// Created another class for feederspinupcommand, >>>Not sure if this works or is and effecient way to do it<<<
 class FeederSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, FeederSpinupCommand>
 {
 public:

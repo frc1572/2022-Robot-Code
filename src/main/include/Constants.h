@@ -13,7 +13,13 @@
 namespace Constants
 {
     constexpr auto LoopPeriod = 1_s / 100;
-
+    namespace Systemspeeds
+    {
+        constexpr double TurretFeederSpeed = 0.5;
+        constexpr double IntakeFeederSpeed = 0.5;
+        constexpr double IntakeSpeed = 0.25;
+        constexpr double HoodSpeed = 2250;
+    } // namespace Systemspeeds
     namespace Flywheel
     {
         constexpr int LeaderID = 12;
@@ -44,7 +50,8 @@ namespace Constants
     namespace Turret
     {
         constexpr int TurretPort = 9;
-        constexpr double TurretGearing = 0.0;
+        constexpr double TurretGearing = 70.0;
+        // double Turretposition;
         constexpr Ks_t TurretKs = 0.0_V;
         constexpr Kv_t<units::radian_t> TurretKv = 0.0_V / 1_rad_per_s;
         constexpr Ka_t<units::radian_t> TurretKa = 0.0_V / 1_rad_per_s_sq;
@@ -60,4 +67,9 @@ namespace Constants
     {
         constexpr auto TalonFX = 100_ms;
     } // namespace VelocityFactor
+    namespace IntakeSystem
+    {
+        constexpr int IntakeID = 14;
+        constexpr int MainFeederID = 13;
+    } // namespace IntakeSystem
 } // namespace Constants

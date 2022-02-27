@@ -14,6 +14,8 @@
 #include "subsystems/ActuatorSubsystem.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
+#include "subsystems/IntakeSystemSubsystem.h"
+#include "subsystems/TurretSubsystem.h"
 #include "subsystems/VisionSubsystem.h"
 
 /**
@@ -45,6 +47,8 @@ private:
 
     frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
         pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
+    IntakeSystemSubsystem m_intakeSystem;
+    TurretSubsystem m_turretSystem;
 
     void ConfigureButtonBindings();
 };
