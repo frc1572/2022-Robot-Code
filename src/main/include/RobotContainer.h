@@ -8,10 +8,13 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <pathplanner/lib/PathPlanner.h>
+#include <units/angle.h>
+#include <units/length.h>
 
 #include "subsystems/ActuatorSubsystem.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
+#include "subsystems/VisionSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -38,9 +41,10 @@ private:
     FlywheelSubsystem m_flywheel;
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
     ActuatorSubsystem m_actuators;
+    VisionSubsystem m_vision{35.3498_in, 102.6_in, 32_deg};
 
-    frc2::SequentialCommandGroup m_testAutoCommand =
-        m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
+    frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
+        pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
 
     void ConfigureButtonBindings();
 };
