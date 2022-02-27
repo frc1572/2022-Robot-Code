@@ -15,9 +15,11 @@ public:
     // void SetActuatorPoistion();
 
 private:
-    // Working on makeing the system take in one port and create teo objects for servos
-    frc::Servo m_leftActuator{1};
-    frc::Servo m_rightActuator{2};
-    // std::unique_ptr<frc::Servo> m_leftActuator;
-    // std::unique_ptr<frc::Servo> m_rightActuator;
+    // Working on makeing the system take in one port and create teo objects for servos <<< Using one physical port to
+    // controll both actuators
+    frc::Servo m_actuators{0};
+    // frc::Servo m_leftActuator{1};
+    // frc::Servo m_rightActuator{2};
+    //  std::unique_ptr<frc::Servo> m_leftActuator;
+    //  std::unique_ptr<frc::Servo> m_rightActuator;
 };
