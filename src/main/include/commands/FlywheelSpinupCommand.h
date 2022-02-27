@@ -19,7 +19,6 @@ private:
     FlywheelSubsystem& m_flywheel;
 };
 
-// Created another class for feederspinupcommand, >>>Not sure if this works or is and effecient way to do it<<<
 class FeederSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, FeederSpinupCommand>
 {
 public:
@@ -30,28 +29,4 @@ public:
 private:
     double m_feederRPM;
     FlywheelSubsystem& m_feeder;
-};
-
-class MainFeederSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, MainFeederSpinupCommand>
-{
-public:
-    MainFeederSpinupCommand(double MainFeederRPM, FlywheelSubsystem& mainFeeder);
-    void Initialize() override;
-    bool IsFinished() override;
-
-private:
-    double m_mainFeederRPM;
-    FlywheelSubsystem& m_mainFeeder;
-};
-
-class IntakeSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, IntakeSpinupCommand>
-{
-public:
-    IntakeSpinupCommand(double IntakeRPM, FlywheelSubsystem& intake);
-    void Initialize() override;
-    bool IsFinished() override;
-
-private:
-    double m_intakeRPM;
-    FlywheelSubsystem& m_intake;
 };

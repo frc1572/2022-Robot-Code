@@ -10,10 +10,12 @@
 class TurretCommand : public frc2::CommandHelper<frc2::CommandBase, TurretCommand>
 {
 public:
-    TurretCommand(TurretSubsystem& Turret, frc::Joystick& TurretJoystick);
+    TurretCommand(double PlannedTurretAngle, TurretSubsystem& turret);
+    // void Initialize() override;
     void Execute() override;
+    bool IsFinished() override;
 
 private:
+    double m_plannedTurretAngle;
     TurretSubsystem& m_turret;
-    frc::Joystick& m_turretJoystick;
 };

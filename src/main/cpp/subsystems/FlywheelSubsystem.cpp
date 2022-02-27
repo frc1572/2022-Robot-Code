@@ -14,8 +14,9 @@ FlywheelSubsystem::FlywheelSubsystem()
     // work
     m_leader.ConfigVelocityMeasurementPeriod(SensorVelocityMeasPeriod::Period_1Ms);
     m_leader.ConfigVelocityMeasurementWindow(1);
+    m_leader.SetNeutralMode(Coast);
 
-    m_feeder.SetNeutralMode(Coast);
+    m_feeder.SetNeutralMode(Brake);
     // Set Feeder to coast and config Default
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
 }
@@ -69,13 +70,3 @@ void FlywheelSubsystem::StartFeeder(double FeedRpm)
 // Code for the StartFeeder^^   Could maybe add it too periodic eventually
 
 // Temp Code, will move later VVV (Just for testing the Main feeder and intake)
-
-void FlywheelSubsystem::StartMainFeeder(double MainFeederRpm)
-{
-    m_mainFeeder.Set(ControlMode::PercentOutput, MainFeederRpm);
-}
-
-void FlywheelSubsystem::StartIntake(double IntakeRpm)
-{
-    m_intake.Set(ControlMode::PercentOutput, IntakeRpm);
-}

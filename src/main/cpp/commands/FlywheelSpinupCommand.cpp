@@ -20,18 +20,6 @@ FeederSpinupCommand::FeederSpinupCommand(double FeedRPM, FlywheelSubsystem& feed
     AddRequirements(&feeder);
 }
 
-MainFeederSpinupCommand::MainFeederSpinupCommand(double MainFeederRPM, FlywheelSubsystem& mainFeeder)
-  : m_mainFeederRPM(MainFeederRPM), m_mainFeeder(mainFeeder)
-{
-    AddRequirements(&mainFeeder);
-}
-
-IntakeSpinupCommand::IntakeSpinupCommand(double IntakeRPM, FlywheelSubsystem& intake)
-  : m_intakeRPM(IntakeRPM), m_intake(intake)
-{
-    AddRequirements(&intake);
-}
-
 void FlywheelSpinupCommand::Initialize()
 {
     m_flywheel.SetSetpoint(m_omega);
@@ -49,24 +37,6 @@ void FeederSpinupCommand::Initialize()
     m_feeder.StartFeeder(m_feederRPM);
 }
 bool FeederSpinupCommand::IsFinished()
-{
-    return false;
-}
-
-void MainFeederSpinupCommand::Initialize()
-{
-    m_mainFeeder.StartMainFeeder(m_mainFeederRPM);
-}
-bool MainFeederSpinupCommand::IsFinished()
-{
-    return false;
-}
-
-void IntakeSpinupCommand::Initialize()
-{
-    m_intake.StartIntake(m_intakeRPM);
-}
-bool IntakeSpinupCommand::IsFinished()
 {
     return false;
 }

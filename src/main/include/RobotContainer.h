@@ -10,6 +10,8 @@
 #include "subsystems/ActuatorSubsystem.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
+#include "subsystems/IntakeSystemSubsystem.h"
+#include "subsystems/TurretSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -36,6 +38,8 @@ private:
     FlywheelSubsystem m_flywheel;
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
     ActuatorSubsystem m_actuators;
+    IntakeSystemSubsystem m_intakeSystem;
+    TurretSubsystem m_turretSystem;
 
     void ConfigureButtonBindings();
 };
