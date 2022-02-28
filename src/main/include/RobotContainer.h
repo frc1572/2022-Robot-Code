@@ -47,6 +47,10 @@ private:
 
     frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
         "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
+    frc2::SequentialCommandGroup m_tuningRotationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
+        "tuningRotationCommand", pathplanner::PathPlanner::loadPath("tuningRotation", 8_mps, 2_mps_sq));
+    frc2::SequentialCommandGroup m_tuningTranslationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
+        "tuningTranslationCommand", pathplanner::PathPlanner::loadPath("tuningTranslation", 8_mps, 2_mps_sq));
     IntakeSystemSubsystem m_intakeSystem;
     TurretSubsystem m_turretSystem;
 

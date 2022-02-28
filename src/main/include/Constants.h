@@ -52,9 +52,9 @@ namespace Constants
         constexpr int TurretPort = 9;
         constexpr double TurretGearing = 70.0;
         // double Turretposition;
-        constexpr Ks_t TurretKs = 0.0_V;
-        constexpr Kv_t<units::radian_t> TurretKv = 0.0_V / 1_rad_per_s;
-        constexpr Ka_t<units::radian_t> TurretKa = 0.0_V / 1_rad_per_s_sq;
+        constexpr Ks_t TurretKs = 0.67361_V;
+        constexpr Kv_t<units::radian_t> TurretKv = 1.2113_V / 1_rad_per_s;
+        constexpr Ka_t<units::radian_t> TurretKa = 0.030709_V / 1_rad_per_s_sq;
         constexpr auto TurretMaxVelocity = 1 * 360_deg_per_s;
     } // namespace Turret
 

@@ -122,5 +122,6 @@ frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlannerCommand(
                         {initialState.pose.Translation(), initialState.holonomicRotation}, m_IMU.GetRotation2d());
                 });
     cmd.SetName(name);
+    frc::SmartDashboard::PutData(&cmd);
     return cmd;
 }

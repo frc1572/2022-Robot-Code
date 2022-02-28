@@ -23,7 +23,10 @@
       "/LiveWindow/Ungrouped/SwerveModuleSubsystem(8, 7)": "Subsystem",
       "/LiveWindow/Ungrouped/VisionSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/frc2::SubsystemBase": "Subsystem",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/testAutoCommmand": "Command",
+      "/SmartDashboard/tuningRotationCommand": "Command",
+      "/SmartDashboard/tuningTranslationCommand": "Command"
     },
     "windows": {
       "/LiveWindow/Ungrouped/Scheduler": {
@@ -38,6 +41,21 @@
       },
       "/SmartDashboard/Field": {
         "image": "2022-field.png",
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/testAutoCommmand": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/tuningRotationCommand": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/tuningTranslationCommand": {
         "window": {
           "visible": true
         }
