@@ -23,7 +23,7 @@ public:
     void Periodic() override;
 
 private:
-    photonlib::PhotonCamera m_camera{"gloworm"};
+    photonlib::PhotonCamera m_camera{"limelight"};
     units::meter_t m_cameraHeight;
     units::meter_t m_targetHeight;
     units::degree_t m_cameraPitch;
