@@ -2,6 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <frc/controller/LinearPlantInversionFeedforward.h>
+#include <frc/geometry/Rotation2d.h>
 #include <frc/system/LinearSystem.h>
 #include <frc/system/plant/LinearSystemId.h>
 #include <frc2/command/SubsystemBase.h>
@@ -15,7 +16,7 @@ public:
     TurretSubsystem();
     // void GetCurrent();
     frc::Rotation2d GetMeasuredPosition();
-    void SetDesiredPosition(double desiredPosition);
+    void SetDesiredPosition(frc::Rotation2d desiredPosition);
     // void AddDesiredPosition(units::radian_t positionOffset);
     // void Periodic() override;
 

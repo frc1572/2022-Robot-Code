@@ -2,7 +2,7 @@
 
 #include <frc2/command/button/JoystickButton.h>
 
-TurretCommand::TurretCommand(double PlannedTurretAngle, TurretSubsystem& turret, VisionSubsystem& limelight)
+TurretCommand::TurretCommand(frc::Rotation2d PlannedTurretAngle, TurretSubsystem& turret, VisionSubsystem& limelight)
   : m_plannedTurretAngle(PlannedTurretAngle), m_turret(turret), m_limelight(limelight)
 {
     AddRequirements(&m_turret);

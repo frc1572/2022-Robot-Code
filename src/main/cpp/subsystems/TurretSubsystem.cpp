@@ -27,10 +27,9 @@ frc::Rotation2d TurretSubsystem::GetMeasuredPosition()
         Constants::Turret::TurretGearing};
 }
 
-void TurretSubsystem::SetDesiredPosition(double desiredPosition)
+void TurretSubsystem::SetDesiredPosition(frc::Rotation2d desiredPosition)
 {
-    auto desiredDegrees = desiredPosition * 1_deg;
-    auto turretOffsetAngle = desiredDegrees + m_turretOffset / Constants::Turret::TurretGearing;
+    auto turretOffsetAngle = desiredPosition.Radians() + m_turretOffset / Constants::Turret::TurretGearing;
     double turretFeedForward = m_turretFeedForward.Calculate(Eigen::Vector2d(turretOffsetAngle.value(), 0.0))[0];
 
     m_turret.Set(
