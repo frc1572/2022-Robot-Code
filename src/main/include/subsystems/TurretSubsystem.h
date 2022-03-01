@@ -21,9 +21,10 @@ public:
 
 private:
     WPI_TalonFX m_turret{Constants::Turret::TurretPort};
-    /*
+
+    units::radian_t m_turretOffset = 0_rad;
+
     const frc::LinearSystem<2, 1, 1> m_turretSystem = frc::LinearSystemId::IdentifyPositionSystem<units::radian>(
         Constants::Turret::TurretKv, Constants::Turret::TurretKa);
     frc::LinearPlantInversionFeedforward<2, 1> m_turretFeedForward{m_turretSystem, Constants::LoopPeriod};
-    */
 };
