@@ -1,7 +1,15 @@
 #include "commands/TurretCommand.h"
 
+<<<<<<< Updated upstream
 TurretCommand::TurretCommand(TurretSubsystem& Turret, frc::Joystick& TurretJoystick)
   : m_turret(Turret), m_turretJoystick(TurretJoystick)
+=======
+#include <frc2/command/button/JoystickButton.h>
+
+TurretCommand::TurretCommand(
+    frc::Rotation2d PlannedTurretAngle, TurretSubsystem& turret /*, VisionSubsystem& limelight*/)
+  : m_plannedTurretAngle(PlannedTurretAngle), m_turret(turret), // m_limelight(limelight)
+>>>>>>> Stashed changes
 {
     AddRequirements(&m_turret);
 };
