@@ -8,13 +8,14 @@
 
 #include "Constants.h"
 #include "ctre/Phoenix.h"
+#include "helper/spdlog.h"
 
 TurretSubsystem::TurretSubsystem()
 {
     m_turret.ConfigFactoryDefault();
     m_turret.SetNeutralMode(Coast);
     m_turret.SetInverted(true);
-    m_turret.Config_kP(0, 0.15);
+    m_turret.Config_kP(0, 0.05);
     m_turret.Config_kD(0, 0.005);
 
     SetName(fmt::format("TurretSubsystem({})", m_turret.GetDeviceID()));
@@ -38,6 +39,7 @@ frc::Rotation2d TurretSubsystem::GetMeasuredPosition()
 void TurretSubsystem::SetDesiredPosition(frc::Rotation2d desiredPosition)
 {
     m_desiredPosition = desiredPosition;
+    std::cout << "SetDesiredPosition: Running" << std::endl;
 }
 
 void TurretSubsystem::Periodic()
@@ -53,6 +55,8 @@ void TurretSubsystem::Periodic()
         (turretFeedForward * 1_V + Constants::Turret::TurretKs * wpi::sgn(turretFeedForward)) / 12.0_V);
 
     frc::SmartDashboard::PutNumber(fmt::format("{}.RawPosition", GetName()), m_turret.GetSelectedSensorPosition());
+    std::cout << "Periodic: Running" << std::endl;
+    std::cout << m_desiredPosition.Degrees().value() << std::endl;
 }
 
 /*

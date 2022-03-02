@@ -77,7 +77,7 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton(&m_joystick, 4).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turretSystem));
     frc2::JoystickButton(&m_joystick, 3).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turretSystem));
 
-    frc2::JoystickButton(&m_joystick, 1).WhenHeld(VisionTurretCommand(m_turretSystem, m_vision));
+    frc2::JoystickButton(&m_joystick, 1).WhileHeld(VisionTurretCommand(m_turretSystem, m_vision));
     /*
     frc2::JoystickButton(&m_joystick, 4).WhenHeld(TurretCommand(0.1, m_turretSystem));
     frc2::JoystickButton(&m_joystick, 3).WhenHeld(TurretCommand(-0.1, m_turretSystem));

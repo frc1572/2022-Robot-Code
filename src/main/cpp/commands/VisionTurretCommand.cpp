@@ -5,6 +5,7 @@
 VisionTurretCommand::VisionTurretCommand(TurretSubsystem& turret, VisionSubsystem& limelight)
   : m_turret(turret), m_limelight(limelight)
 {
+    AddRequirements(&m_turret);
 }
 
 void VisionTurretCommand::Execute()
