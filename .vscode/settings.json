@@ -97,7 +97,17 @@
     "xtr1common": "cpp",
     "xutility": "cpp",
     "bitset": "cpp",
-    "source_location": "cpp"
+    "source_location": "cpp",
+    "locale": "cpp",
+    "regex": "cpp",
+    "stack": "cpp",
+    "variant": "cpp",
+    "xlocbuf": "cpp",
+    "xlocmes": "cpp",
+    "xlocmon": "cpp",
+    "xloctime": "cpp",
+    "xmemory0": "cpp",
+    "xtree": "cpp"
   },
   "editor.formatOnSave": true,
   "[cpp]": {

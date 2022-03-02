@@ -42,6 +42,7 @@ private:
     DriveTrainSubsystem m_drivetrain;
     FlywheelSubsystem m_flywheel;
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
+    TurretSubsystem m_turretSystem;
     ActuatorSubsystem m_actuators;
     VisionSubsystem m_vision{35.3498_in, 102.6_in, 32_deg};
 
@@ -52,7 +53,6 @@ private:
     frc2::SequentialCommandGroup m_tuningTranslationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
         "tuningTranslationCommand", pathplanner::PathPlanner::loadPath("tuningTranslation", 8_mps, 2_mps_sq));
     IntakeSystemSubsystem m_intakeSystem;
-    TurretSubsystem m_turretSystem;
 
     void ConfigureButtonBindings();
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <frc/geometry/Rotation2d.h>
 #include <units/acceleration.h>
 #include <units/angle.h>
 #include <units/angular_acceleration.h>
