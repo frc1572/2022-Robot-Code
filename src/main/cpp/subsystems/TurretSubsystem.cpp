@@ -55,8 +55,8 @@ void TurretSubsystem::Periodic()
         (turretFeedForward * 1_V + Constants::Turret::TurretKs * wpi::sgn(turretFeedForward)) / 12.0_V);
 
     frc::SmartDashboard::PutNumber(fmt::format("{}.RawPosition", GetName()), m_turret.GetSelectedSensorPosition());
-    std::cout << "Periodic: Running" << std::endl;
-    std::cout << m_desiredPosition.Degrees().value() << std::endl;
+    // std::cout << "Periodic: Running" << std::endl;
+    // std::cout << m_desiredPosition.Degrees().value() << std::endl;
 }
 
 /*

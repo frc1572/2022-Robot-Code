@@ -19,7 +19,7 @@ public:
     };
 
     VisionSubsystem(units::meter_t cameraHeight, units::meter_t targetHeight, units::degree_t cameraPitch);
-    std::optional<TargetInfo> GetLatestResult();
+    std::optional<TargetInfo> PopLatestResult();
     void Periodic() override;
 
 private:

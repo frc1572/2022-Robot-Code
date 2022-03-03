@@ -23,6 +23,7 @@ DriveTrainSubsystem::DriveTrainSubsystem()
 
 void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
 {
+    m_desiredChassisSpeeds = chassisSpeeds;
     auto moduleStates = DriveTrainSubsystem::m_swerveKinematics.ToSwerveModuleStates(chassisSpeeds);
     for (unsigned int i = 0; i < m_swerveModules.size(); i++)
     {
@@ -30,17 +31,42 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
     }
 }
 
-frc::Pose2d DriveTrainSubsystem::GetPose()
+frc::ChassisSpeeds DriveTrainSubsystem::GetDesiredChassisSpeeds()
 {
-    // TODO: use a kalman filter to estimate pose instead of odometry
-    m_swerveOdometry.UpdateWithTime(
-        frc::Timer::GetFPGATimestamp(),
-        m_IMU.GetRotation2d(),
+    return m_desiredChassisSpeeds;
+}
+
+frc::ChassisSpeeds DriveTrainSubsystem::GetMeasuredChassisSpeeds()
+{
+    return m_swerveKinematics.ToChassisSpeeds(
         m_swerveModules[0].GetMeasuredState(),
         m_swerveModules[1].GetMeasuredState(),
         m_swerveModules[2].GetMeasuredState(),
         m_swerveModules[3].GetMeasuredState());
-    return m_swerveOdometry.GetPose();
+}
+
+frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
+{
+    return m_IMU.GetRotation2d();
+}
+
+frc::Pose2d DriveTrainSubsystem::GetPose()
+{
+    // TODO: use a kalman filter to estimate pose instead of odometry
+    // m_swerveOdometry.UpdateWithTime(
+    //     frc::Timer::GetFPGATimestamp(),
+    //     GetMeasuredRotation(),
+    //     m_swerveModules[0].GetMeasuredState(),
+    //     m_swerveModules[1].GetMeasuredState(),
+    //     m_swerveModules[2].GetMeasuredState(),
+    //     m_swerveModules[3].GetMeasuredState());
+    // return m_swerveOdometry.GetPose();
+    return m_pose;
+}
+
+void DriveTrainSubsystem::SetPose(frc::Pose2d pose)
+{
+    m_pose = pose;
 }
 
 void DriveTrainSubsystem::TestDrive()
@@ -60,12 +86,7 @@ void DriveTrainSubsystem::Periodic()
 
 void DriveTrainSubsystem::SimulationPeriodic()
 {
-    auto chassisSpeeds = m_swerveKinematics.ToChassisSpeeds(
-        m_swerveModules[0].GetMeasuredState(),
-        m_swerveModules[1].GetMeasuredState(),
-        m_swerveModules[2].GetMeasuredState(),
-        m_swerveModules[3].GetMeasuredState());
-
+    auto chassisSpeeds = GetMeasuredChassisSpeeds();
     auto imuSim = m_IMU.GetSimCollection();
     imuSim.AddHeading(units::degree_t(chassisSpeeds.omega * Constants::LoopPeriod).value());
 }

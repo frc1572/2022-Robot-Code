@@ -6,6 +6,7 @@
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/geometry/Pose2d.h>
+#include <frc/geometry/Rotation2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
@@ -26,7 +27,11 @@ class DriveTrainSubsystem : public frc2::SubsystemBase
 public:
     DriveTrainSubsystem();
     void Drive(frc::ChassisSpeeds&& chassisSpeeds);
+    frc::ChassisSpeeds GetDesiredChassisSpeeds();
+    frc::ChassisSpeeds GetMeasuredChassisSpeeds();
+    frc::Rotation2d GetMeasuredRotation();
     frc::Pose2d GetPose();
+    void SetPose(frc::Pose2d pose);
     void TestDrive();
     void Periodic() override;
     void SimulationPeriodic() override;
@@ -36,6 +41,9 @@ public:
 
 private:
     WPI_Pigeon2 m_IMU{10, "canivore"};
+
+    frc::ChassisSpeeds m_desiredChassisSpeeds;
+    frc::Pose2d m_pose;
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
         SwerveModuleSubsystem{1, 2, 1186 / Constants::TicksPerRevolution::TalonFX},

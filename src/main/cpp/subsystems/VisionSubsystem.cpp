@@ -14,9 +14,11 @@ VisionSubsystem::VisionSubsystem(units::meter_t cameraHeight, units::meter_t tar
     m_camera.SetPipelineIndex(0);
 }
 
-std::optional<VisionSubsystem::TargetInfo> VisionSubsystem::GetLatestResult()
+std::optional<VisionSubsystem::TargetInfo> VisionSubsystem::PopLatestResult()
 {
-    return m_latestResult;
+    auto result = m_latestResult;
+    m_latestResult = std::nullopt;
+    return result;
 }
 
 void VisionSubsystem::Periodic()

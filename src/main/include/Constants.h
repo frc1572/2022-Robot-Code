@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc/geometry/Rotation2d.h>
+#include <frc/geometry/Translation2d.h>
 #include <units/acceleration.h>
 #include <units/angle.h>
 #include <units/angular_acceleration.h>
@@ -14,6 +15,9 @@
 namespace Constants
 {
     constexpr auto LoopPeriod = 1_s / 100;
+    const frc::Translation2d GoalTranslation{15_ft, 0_ft};
+    // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
+
     namespace Systemspeeds
     {
         constexpr double TurretFeederSpeed = 0.5;

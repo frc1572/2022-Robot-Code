@@ -11,6 +11,7 @@
 #include <units/angle.h>
 #include <units/length.h>
 
+#include "commands/PoseEstimatorCommand.h"
 #include "subsystems/ActuatorSubsystem.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
@@ -45,6 +46,8 @@ private:
     TurretSubsystem m_turretSystem;
     ActuatorSubsystem m_actuators;
     VisionSubsystem m_vision{35.3498_in, 102.6_in, 32_deg};
+
+    PoseEstimatorCommand m_poseEstimatorCommand{m_drivetrain, m_turretSystem, m_vision};
 
     frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
         "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));

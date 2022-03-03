@@ -7,11 +7,11 @@
 #include <frc2/command/button/JoystickButton.h>
 
 #include "commands/ActuatorCommand.h"
+#include "commands/AutoTurretCommand.h"
 #include "commands/DriveTeleopCommand.h"
 #include "commands/FlywheelSpinupCommand.h"
 #include "commands/IntakeSystemCommand.h"
 #include "commands/TurretCommand.h"
-#include "commands/VisionTurretCommand.h"
 #include "Constants.h"
 #include "frc2/command/button/POVButton.h"
 
@@ -19,9 +19,9 @@ RobotContainer::RobotContainer()
 {
     // Initialize all of your commands and subsystems here
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
-    // m_vision.SetDefaultCommand(VisionTurretCommand(m_turretSystem, m_vision));
+    m_turretSystem.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turretSystem));
     //  m_actuators.SetDefaultCommand(ActuatorCommand(0.0, m_actuators));
-    //  Configure the button bindings
+    m_poseEstimatorCommand.Schedule();
     ConfigureButtonBindings();
 }
 
@@ -77,7 +77,7 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton(&m_joystick, 4).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turretSystem));
     frc2::JoystickButton(&m_joystick, 3).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turretSystem));
 
-    frc2::JoystickButton(&m_joystick, 1).WhileHeld(VisionTurretCommand(m_turretSystem, m_vision));
+    // frc2::JoystickButton(&m_joystick, 1).WhileHeld(VisionTurretCommand(m_turretSystem, m_vision));
     /*
     frc2::JoystickButton(&m_joystick, 4).WhenHeld(TurretCommand(0.1, m_turretSystem));
     frc2::JoystickButton(&m_joystick, 3).WhenHeld(TurretCommand(-0.1, m_turretSystem));
