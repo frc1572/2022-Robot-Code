@@ -34,14 +34,14 @@ PoseEstimatorCommand::PoseEstimatorCommand(
 
 void PoseEstimatorCommand::Execute()
 {
-    auto desiredChassisSpeeds = m_drivetrain.GetDesiredChassisSpeeds();
+    auto chassisSpeeds = m_drivetrain.GetMeasuredChassisSpeeds();
     auto measuredAngle = m_drivetrain.GetMeasuredRotation();
 
     auto fieldRelativeSpeeds =
-        frc::Translation2d(desiredChassisSpeeds.vx * 1_s, desiredChassisSpeeds.vy * 1_s).RotateBy(measuredAngle);
+        frc::Translation2d(chassisSpeeds.vx * 1_s, chassisSpeeds.vy * 1_s).RotateBy(measuredAngle);
 
     Eigen::Vector<double, 3> u{
-        fieldRelativeSpeeds.X().value(), fieldRelativeSpeeds.Y().value(), desiredChassisSpeeds.omega.value()};
+        fieldRelativeSpeeds.X().value(), fieldRelativeSpeeds.Y().value(), chassisSpeeds.omega.value()};
     Eigen::Vector<double, 1> localY{measuredAngle.Radians().value()};
 
     m_latencyCompensator.AddObserverState(m_observer, u, localY, frc::Timer::GetFPGATimestamp());
