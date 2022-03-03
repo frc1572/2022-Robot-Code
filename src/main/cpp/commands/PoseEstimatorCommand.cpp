@@ -65,7 +65,7 @@ void PoseEstimatorCommand::Execute()
                     auto goalOffset = goalTranslation - x.block<2, 1>(0, 0);
                     double distance = goalOffset.norm();
                     double yaw = frc::InputModulus(
-                        atan2(goalOffset[0], goalOffset[1]) - m_turret.GetMeasuredPosition().Radians().value() -
+                        atan2(goalOffset[1], goalOffset[0]) - m_turret.GetMeasuredPosition().Radians().value() -
                             m_drivetrain.GetMeasuredRotation().Radians().value(),
                         -wpi::numbers::pi,
                         wpi::numbers::pi);
