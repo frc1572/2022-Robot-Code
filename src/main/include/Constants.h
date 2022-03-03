@@ -19,6 +19,7 @@ namespace Constants
     const frc::Rotation2d MeasuredRotationOffset = 90_deg;
     // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
     constexpr auto CameraRotationRadius = 8.7333_in;
+    constexpr auto MinimumFFVoltage = 0.1_V;
 
     namespace Systemspeeds
     {
