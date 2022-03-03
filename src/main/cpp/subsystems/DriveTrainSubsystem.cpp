@@ -13,8 +13,11 @@
 DriveTrainSubsystem::DriveTrainSubsystem()
 {
     m_IMU.Reset();
+    m_IMU.ConfigFactoryDefault();
     m_headingController.EnableContinuousInput(-180_deg, 180_deg);
+    m_IMU.SetYaw(0);
     // Subsytem move constructor does not register, so we must do it by hand
+
     for (auto& module : m_swerveModules)
     {
         module.Register();
@@ -47,7 +50,7 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetMeasuredChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
-    return m_IMU.GetRotation2d();
+    return m_IMU.GetRotation2d() + Constants::MeasuredRotationOffset;
 }
 
 frc::Pose2d DriveTrainSubsystem::GetPose()

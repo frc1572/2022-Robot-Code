@@ -14,4 +14,6 @@ void AutoTurretCommand::Execute()
     auto angleOffst =
         frc::Rotation2d(units::math::atan2(goalOffset.Y(), goalOffset.X())) - m_drivetrain.GetMeasuredRotation();
     m_turret.SetDesiredPosition(angleOffst);
+    std::cout << "GoalOffset x: " << goalOffset.X().value() << "   GoalOffset y: " << goalOffset.Y().value()
+              << "   DriveTrain Rotation: " << m_drivetrain.GetMeasuredRotation().Degrees().value() << std::endl;
 }

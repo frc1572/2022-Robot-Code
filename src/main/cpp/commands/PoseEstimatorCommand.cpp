@@ -117,7 +117,7 @@ void PoseEstimatorCommand::Execute()
                         atan2(goalOffset[1], goalOffset[0]) - x[3] - x[2], -wpi::numbers::pi, wpi::numbers::pi);
                     return Eigen::Vector<double, 2>{distance, yaw};
                 },
-                frc::MakeCovMatrix<2>({0.25, 0.02}),
+                frc::MakeCovMatrix<2>({0.25, 0.2}),
                 [](const Eigen::Matrix<double, 2, 2 * 4 + 1>& sigmas, const Eigen::Vector<double, 2 * 4 + 1>& Wm)
                 {
                     Eigen::Vector<double, 2> ret = sigmas * Wm;
