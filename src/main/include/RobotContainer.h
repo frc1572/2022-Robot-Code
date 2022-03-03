@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <frc/geometry/Pose2d.h>
+#include <frc/geometry/Translation2d.h>
 #include <frc/Joystick.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/SequentialCommandGroup.h>
@@ -45,7 +47,17 @@ private:
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
     TurretSubsystem m_turretSystem;
     ActuatorSubsystem m_actuators;
-    VisionSubsystem m_vision{35.3498_in, 102.6_in, 32_deg};
+    VisionSubsystem m_vision{
+        35.3498_in,
+        102.6_in,
+        32_deg,
+        [this]()
+        {
+            auto dtPose = m_drivetrain.GetPose();
+            auto turretRotation = m_turretSystem.GetMeasuredPosition();
+            auto cameraOffset = frc::Translation2d{Constants::CameraRotationRadius, 0_m}.RotateBy(turretRotation);
+            return frc::Pose2d{dtPose.Translation() + cameraOffset, dtPose.Rotation() + turretRotation};
+        }};
 
     PoseEstimatorCommand m_poseEstimatorCommand{m_drivetrain, m_turretSystem, m_vision};
 

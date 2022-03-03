@@ -19,7 +19,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
     m_observer(
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return u; },
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return x.block<2, 1>(2, 0); },
-        {1.0, 1.0, 2.0, 2.0},
+        {1.0, 1.0, 2.0, 4.0},
         {0.0005, 0.0005},
         [](const Eigen::Matrix<double, 4, 2 * 4 + 1>& sigmas, const Eigen::Vector<double, 2 * 4 + 1>& Wm)
         {
@@ -101,7 +101,6 @@ void PoseEstimatorCommand::Execute()
     if (auto targetInfo = m_vision.PopLatestResult())
     {
         Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
-        auto visionTimestamp = frc::Timer::GetFPGATimestamp() - targetInfo->latency;
         auto correctFn = [this](const Eigen::Vector<double, 4>& u, const Eigen::Vector<double, 2>& y)
         {
             m_observer.Correct<2>(
@@ -109,12 +108,17 @@ void PoseEstimatorCommand::Execute()
                 y,
                 [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u)
                 {
+                    Eigen::Vector<double, 2> cameraOffset{
+                        units::meter_t{Constants::CameraRotationRadius}.value() * cos(x[3]),
+                        units::meter_t{Constants::CameraRotationRadius}.value() * sin(x[3])};
+                    auto cameraTranslation = x.block<2, 1>(0, 0) + cameraOffset;
+                    auto cameraRotation = x.block<2, 1>(2, 0).sum();
                     Eigen::Vector<double, 2> goalTranslation{
                         Constants::GoalTranslation.X().value(), Constants::GoalTranslation.Y().value()};
-                    auto goalOffset = goalTranslation - x.block<2, 1>(0, 0);
+                    auto goalOffset = goalTranslation - cameraTranslation;
                     double distance = goalOffset.norm();
                     double yaw = frc::InputModulus(
-                        atan2(goalOffset[1], goalOffset[0]) - x[3] - x[2], -wpi::numbers::pi, wpi::numbers::pi);
+                        atan2(goalOffset[1], goalOffset[0]) - cameraRotation, -wpi::numbers::pi, wpi::numbers::pi);
                     return Eigen::Vector<double, 2>{distance, yaw};
                 },
                 frc::MakeCovMatrix<2>({0.25, 0.2}),
@@ -160,7 +164,7 @@ void PoseEstimatorCommand::Execute()
                 });
         };
         m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
-            &m_observer, Constants::LoopPeriod, visionMeasurement, correctFn, visionTimestamp);
+            &m_observer, Constants::LoopPeriod, visionMeasurement, correctFn, targetInfo->timestamp);
     }
 
     auto pose = frc::Pose2d(
