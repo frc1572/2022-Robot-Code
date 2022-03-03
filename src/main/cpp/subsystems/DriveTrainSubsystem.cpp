@@ -50,7 +50,7 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetMeasuredChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
-    return m_IMU.GetRotation2d() + Constants::MeasuredRotationOffset;
+    return m_IMU.GetRotation2d();
 }
 
 frc::Pose2d DriveTrainSubsystem::GetPose()
@@ -104,7 +104,7 @@ void DriveTrainSubsystem::Reset()
 }
 
 frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlannerCommand(
-    std::string name, pathplanner::PathPlannerTrajectory trajectory)
+    std::string name, pathplanner::PathPlannerTrajectory trajectory, std::function<void(frc::Pose2d)> resetPose)
 {
     auto initialState = *trajectory.getState(0);
 
@@ -114,37 +114,34 @@ frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlannerCommand(
         wpilibStates.push_back({state.time, state.velocity, state.acceleration, state.pose, state.curvature});
     }
 
-    auto cmd =
-        frc2::SwerveControllerCommand<4>(
-            frc::Trajectory(wpilibStates),
-            [this]() { return GetPose(); },
-            m_swerveKinematics,
-            m_translationController,
-            m_translationController,
-            m_headingController,
-            [trajectory, timer = frc::Timer()]() mutable
-            {
-                if (timer.HasElapsed(trajectory.getTotalTime()))
-                {
-                    timer.Reset();
-                }
-                timer.Start();
-                return trajectory.sample(timer.Get()).holonomicRotation;
-            },
-            [this](std::array<frc::SwerveModuleState, 4> moduleStates)
-            {
-                for (unsigned int i = 0; i < m_swerveModules.size(); i++)
-                {
-                    m_swerveModules[i].SetDesiredState(moduleStates[i]);
-                }
-            },
-            {this})
-            .BeforeStarting(
-                [this, initialState]()
-                {
-                    m_swerveOdometry.ResetPosition(
-                        {initialState.pose.Translation(), initialState.holonomicRotation}, m_IMU.GetRotation2d());
-                });
+    auto cmd = frc2::SwerveControllerCommand<4>(
+                   frc::Trajectory(wpilibStates),
+                   [this]() { return GetPose(); },
+                   m_swerveKinematics,
+                   m_translationController,
+                   m_translationController,
+                   m_headingController,
+                   [trajectory, timer = frc::Timer()]() mutable
+                   {
+                       if (timer.HasElapsed(trajectory.getTotalTime()))
+                       {
+                           timer.Reset();
+                       }
+                       timer.Start();
+                       return trajectory.sample(timer.Get()).holonomicRotation;
+                   },
+                   [this](std::array<frc::SwerveModuleState, 4> moduleStates)
+                   {
+                       for (unsigned int i = 0; i < m_swerveModules.size(); i++)
+                       {
+                           m_swerveModules[i].SetDesiredState(moduleStates[i]);
+                       }
+                   },
+                   {this})
+                   .BeforeStarting(
+                       [initialState, resetPose]() {
+                           resetPose({initialState.pose.Translation(), initialState.holonomicRotation});
+                       });
     cmd.SetName(name);
     frc::SmartDashboard::PutData(&cmd);
     return cmd;

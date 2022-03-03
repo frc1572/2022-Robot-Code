@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/Joystick.h>
@@ -45,7 +47,7 @@ private:
     DriveTrainSubsystem m_drivetrain;
     FlywheelSubsystem m_flywheel;
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
-    TurretSubsystem m_turretSystem;
+    TurretSubsystem m_turret;
     ActuatorSubsystem m_actuators;
     VisionSubsystem m_vision{
         35.3498_in,
@@ -54,19 +56,24 @@ private:
         [this]()
         {
             auto dtPose = m_drivetrain.GetPose();
-            auto turretRotation = m_turretSystem.GetMeasuredPosition();
+            auto turretRotation = m_turret.GetMeasuredRotation();
             auto cameraOffset = frc::Translation2d{Constants::CameraRotationRadius, 0_m}.RotateBy(turretRotation);
             return frc::Pose2d{dtPose.Translation() + cameraOffset, dtPose.Rotation() + turretRotation};
         }};
 
-    PoseEstimatorCommand m_poseEstimatorCommand{m_drivetrain, m_turretSystem, m_vision};
+    PoseEstimatorCommand m_poseEstimatorCommand{m_drivetrain, m_turret, m_vision};
+
+    std::function<void(frc::Pose2d)> resetPose = [this](frc::Pose2d pose)
+    { m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation()); };
 
     frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
-        "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq));
+        "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 8_mps, 2_mps_sq), resetPose);
     frc2::SequentialCommandGroup m_tuningRotationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
-        "tuningRotationCommand", pathplanner::PathPlanner::loadPath("tuningRotation", 8_mps, 2_mps_sq));
+        "tuningRotationCommand", pathplanner::PathPlanner::loadPath("tuningRotation", 8_mps, 2_mps_sq), resetPose);
     frc2::SequentialCommandGroup m_tuningTranslationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
-        "tuningTranslationCommand", pathplanner::PathPlanner::loadPath("tuningTranslation", 8_mps, 2_mps_sq));
+        "tuningTranslationCommand",
+        pathplanner::PathPlanner::loadPath("tuningTranslation", 8_mps, 2_mps_sq),
+        resetPose);
     IntakeSystemSubsystem m_intakeSystem;
 
     void ConfigureButtonBindings();

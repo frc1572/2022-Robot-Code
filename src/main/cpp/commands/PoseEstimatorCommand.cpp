@@ -2,9 +2,6 @@
 
 #include <Eigen/Core>
 #include <frc/estimator/AngleStatistics.h>
-#include <frc/geometry/Pose2d.h>
-#include <frc/geometry/Rotation2d.h>
-#include <frc/geometry/Translation2d.h>
 #include <frc/Timer.h>
 #include <spdlog/spdlog.h>
 #include <units/angle.h>
@@ -76,22 +73,24 @@ PoseEstimatorCommand::PoseEstimatorCommand(
 {
     AddRequirements(&m_vision);
     SetName("PoseEstimatorCommand");
+    Reset({}, {});
 }
 
 void PoseEstimatorCommand::Execute()
 {
     auto chassisSpeeds = m_drivetrain.GetMeasuredChassisSpeeds();
-    auto measuredAngle = m_drivetrain.GetMeasuredRotation();
+    auto drivetrainMeasuredAngle = m_drivetrain.GetMeasuredRotation() + m_drivetrainRotationOffset;
+    auto turretMeasuredAngle = m_turret.GetMeasuredRotation() + m_turretRotationOffset;
 
     auto fieldRelativeSpeeds =
-        frc::Translation2d(chassisSpeeds.vx * 1_s, chassisSpeeds.vy * 1_s).RotateBy(measuredAngle);
+        frc::Translation2d(chassisSpeeds.vx * 1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
 
     Eigen::Vector<double, 4> u{
         fieldRelativeSpeeds.X().value(),
         fieldRelativeSpeeds.Y().value(),
         chassisSpeeds.omega.value(),
         m_turret.GetMeasuredVelocity().value()};
-    Eigen::Vector<double, 2> localY{measuredAngle.Radians().value(), m_turret.GetMeasuredPosition().Radians().value()};
+    Eigen::Vector<double, 2> localY{drivetrainMeasuredAngle.Radians().value(), turretMeasuredAngle.Radians().value()};
 
     m_latencyCompensator.AddObserverState(m_observer, u, localY, frc::Timer::GetFPGATimestamp());
 
@@ -167,13 +166,26 @@ void PoseEstimatorCommand::Execute()
             &m_observer, Constants::LoopPeriod, visionMeasurement, correctFn, targetInfo->timestamp);
     }
 
-    auto pose = frc::Pose2d(
-        m_observer.Xhat(0) * 1_m, m_observer.Xhat(1) * 1_m, frc::Rotation2d(units::radian_t(m_observer.Xhat(2))));
-
-    m_drivetrain.SetPose(pose);
+    m_drivetrain.SetPose(GetPose());
 }
 
 bool PoseEstimatorCommand::RunsWhenDisabled() const
 {
     return true;
+}
+
+frc::Pose2d PoseEstimatorCommand::GetPose()
+{
+    return {m_observer.Xhat(0) * 1_m, m_observer.Xhat(1) * 1_m, frc::Rotation2d(units::radian_t(m_observer.Xhat(2)))};
+}
+
+void PoseEstimatorCommand::Reset(frc::Pose2d currentPose, frc::Rotation2d currentTurretRotation)
+{
+    m_observer.SetXhat(
+        {currentPose.X().value(),
+         currentPose.Y().value(),
+         currentPose.Rotation().Radians().value(),
+         currentTurretRotation.Radians().value()});
+    m_drivetrainRotationOffset = currentPose.Rotation() - m_drivetrain.GetMeasuredRotation();
+    m_turretRotationOffset = currentTurretRotation - m_turret.GetMeasuredRotation();
 }

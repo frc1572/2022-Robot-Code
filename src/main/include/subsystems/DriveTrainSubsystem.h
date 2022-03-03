@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <string>
 
 #include <ctre/Phoenix.h>
@@ -37,7 +38,7 @@ public:
     void SimulationPeriodic() override;
     void Reset();
     frc2::SequentialCommandGroup MakeDrivePathPlannerCommand(
-        std::string name, pathplanner::PathPlannerTrajectory trajectory);
+        std::string name, pathplanner::PathPlannerTrajectory trajectory, std::function<void(frc::Pose2d)> resetPose);
 
 private:
     WPI_Pigeon2 m_IMU{10, "canivore"};

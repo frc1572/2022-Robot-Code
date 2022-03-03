@@ -17,7 +17,7 @@ class TurretSubsystem : public frc2::SubsystemBase
 public:
     TurretSubsystem();
     // void GetCurrent();
-    frc::Rotation2d GetMeasuredPosition();
+    frc::Rotation2d GetMeasuredRotation();
     void SetDesiredPosition(frc::Rotation2d desiredPosition);
     decltype(1_rad_per_s) GetMeasuredVelocity();
     void Periodic() override;

@@ -23,16 +23,8 @@ TurretSubsystem::TurretSubsystem()
     m_turret.Config_kD(0, 0.005);
     SetName(fmt::format("TurretSubsystem({})", m_turret.GetDeviceID()));
 }
-/*
-frc::Rotation2d TurretSubsystem::GetMeasuredPosition()
-{
-    return {
-        (m_turret.GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX) *
-        Constants::Turret::TurretGearing};
-}
-*/
 
-frc::Rotation2d TurretSubsystem::GetMeasuredPosition()
+frc::Rotation2d TurretSubsystem::GetMeasuredRotation()
 {
     return {
         m_turret.GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX /
@@ -70,7 +62,7 @@ void TurretSubsystem::Periodic()
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.DesiredRotationDegrees", GetName()), units::degree_t(turretOffsetAngle).value());
     frc::SmartDashboard::PutNumber(
-        fmt::format("{}.MeasuredRotationDegrees", GetName()), GetMeasuredPosition().Degrees().value());
+        fmt::format("{}.MeasuredRotationDegrees", GetName()), GetMeasuredRotation().Degrees().value());
 }
 
 void TurretSubsystem::SimulationPeriodic()

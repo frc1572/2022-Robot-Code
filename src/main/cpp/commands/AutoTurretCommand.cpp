@@ -6,6 +6,7 @@ AutoTurretCommand::AutoTurretCommand(DriveTrainSubsystem& drivetrain, TurretSubs
   : m_drivetrain(drivetrain), m_turret(turret)
 {
     AddRequirements(&m_turret);
+    SetName("AutoTurretCommand");
 }
 
 void AutoTurretCommand::Execute()

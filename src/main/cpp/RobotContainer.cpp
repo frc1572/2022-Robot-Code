@@ -19,7 +19,7 @@ RobotContainer::RobotContainer()
 {
     // Initialize all of your commands and subsystems here
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
-    m_turretSystem.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turretSystem));
+    m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret));
     //  m_actuators.SetDefaultCommand(ActuatorCommand(0.0, m_actuators));
     m_poseEstimatorCommand.Schedule();
     ConfigureButtonBindings();
@@ -72,17 +72,17 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton(&m_joystick, 16)
         .WhenPressed(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel));
 
-    frc2::JoystickButton(&m_joystick, 4).WhenPressed(TurretCommand(frc::Rotation2d(90_deg), m_turretSystem));
-    frc2::JoystickButton(&m_joystick, 3).WhenPressed(TurretCommand(frc::Rotation2d(-90_deg), m_turretSystem));
-    frc2::JoystickButton(&m_joystick, 4).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turretSystem));
-    frc2::JoystickButton(&m_joystick, 3).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turretSystem));
+    frc2::JoystickButton(&m_joystick, 4).WhenPressed(TurretCommand(frc::Rotation2d(90_deg), m_turret));
+    frc2::JoystickButton(&m_joystick, 3).WhenPressed(TurretCommand(frc::Rotation2d(-90_deg), m_turret));
+    frc2::JoystickButton(&m_joystick, 4).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turret));
+    frc2::JoystickButton(&m_joystick, 3).WhenReleased(TurretCommand(frc::Rotation2d(0_deg), m_turret));
 
-    // frc2::JoystickButton(&m_joystick, 1).WhileHeld(VisionTurretCommand(m_turretSystem, m_vision));
+    // frc2::JoystickButton(&m_joystick, 1).WhileHeld(VisionTurretCommand(m_turret, m_vision));
     /*
-    frc2::JoystickButton(&m_joystick, 4).WhenHeld(TurretCommand(0.1, m_turretSystem));
-    frc2::JoystickButton(&m_joystick, 3).WhenHeld(TurretCommand(-0.1, m_turretSystem));
-    frc2::JoystickButton(&m_joystick, 4).WhenReleased(TurretCommand(0, m_turretSystem));
-    frc2::JoystickButton(&m_joystick, 3).WhenReleased(TurretCommand(0, m_turretSystem));
+    frc2::JoystickButton(&m_joystick, 4).WhenHeld(TurretCommand(0.1, m_turret));
+    frc2::JoystickButton(&m_joystick, 3).WhenHeld(TurretCommand(-0.1, m_turret));
+    frc2::JoystickButton(&m_joystick, 4).WhenReleased(TurretCommand(0, m_turret));
+    frc2::JoystickButton(&m_joystick, 3).WhenReleased(TurretCommand(0, m_turret));
     */
 }
 
