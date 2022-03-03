@@ -42,6 +42,12 @@ void TurretSubsystem::SetDesiredPosition(frc::Rotation2d desiredPosition)
     std::cout << "SetDesiredPosition: Running" << std::endl;
 }
 
+decltype(1_rad_per_s) TurretSubsystem::GetMeasuredVelocity()
+{
+    return m_turret.GetSelectedSensorVelocity() / Constants::TicksPerRevolution::TalonFX /
+        Constants::VelocityFactor::TalonFX / Constants::Turret::TurretGearing;
+}
+
 void TurretSubsystem::Periodic()
 {
     auto turretOffsetAngle = m_desiredPosition.Radians() + m_turretOffset / Constants::Turret::TurretGearing;

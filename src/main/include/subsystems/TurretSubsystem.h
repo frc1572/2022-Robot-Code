@@ -7,6 +7,7 @@
 #include <frc/system/plant/LinearSystemId.h>
 #include <frc2/command/SubsystemBase.h>
 #include <units/angle.h>
+#include <units/angular_velocity.h>
 
 #include "Constants.h"
 
@@ -17,6 +18,7 @@ public:
     // void GetCurrent();
     frc::Rotation2d GetMeasuredPosition();
     void SetDesiredPosition(frc::Rotation2d desiredPosition);
+    decltype(1_rad_per_s) GetMeasuredVelocity();
     void Periodic() override;
     // void AddDesiredPosition(units::radian_t positionOffset);
     // void Periodic() override;

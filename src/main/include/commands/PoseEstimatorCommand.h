@@ -21,6 +21,6 @@ private:
     TurretSubsystem& m_turret;
     VisionSubsystem& m_vision;
 
-    frc::UnscentedKalmanFilter<3, 3, 1> m_observer;
-    frc::KalmanFilterLatencyCompensator<3, 3, 1, frc::UnscentedKalmanFilter<3, 3, 1>> m_latencyCompensator;
+    frc::UnscentedKalmanFilter<4, 4, 2> m_observer;
+    frc::KalmanFilterLatencyCompensator<4, 4, 2, frc::UnscentedKalmanFilter<4, 4, 2>> m_latencyCompensator;
 };
