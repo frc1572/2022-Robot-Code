@@ -54,19 +54,18 @@ decltype(1_rad_per_s) TurretSubsystem::GetMeasuredVelocity()
 void TurretSubsystem::Periodic()
 {
     auto turretOffsetAngle = m_desiredPosition.Radians() + m_turretOffset / Constants::Turret::TurretGearing;
-    double turretFeedForward = m_turretFeedForward.Calculate(Eigen::Vector2d(turretOffsetAngle.value(), 0.0))[0];
-    // spdlog::info(
-    //     "turret ff {} - {}, {}",
-    //     turretFeedForward,
-    //     turretOffsetAngle.value(),
-    //     units::radian_t{turretOffsetAngle}.value());
+    auto turretFeedForward =
+        units::volt_t{m_turretFeedForward.Calculate(Eigen::Vector2d(turretOffsetAngle.value(), 0.0))[0]};
+    if (units::math::abs(turretFeedForward) < Constants::MinimumFFVoltage)
+    {
+        turretFeedForward = 0_V;
+    }
 
     m_turret.Set(
         ControlMode::Position,
-        turretOffsetAngle * Constants::Turret::TurretGearing *
-            Constants::TicksPerRevolution::TalonFX, DemandType::DemandType_ArbitraryFeedForward,
-                                                        (turretFeedForward * 1_V /*+ Constants::Turret::TurretKs *
-                                                        wpi::sgn(turretFeedForward)*/) / 12.0_V);
+        turretOffsetAngle * Constants::Turret::TurretGearing * Constants::TicksPerRevolution::TalonFX,
+        DemandType::DemandType_ArbitraryFeedForward,
+        (turretFeedForward + Constants::Turret::TurretKs * wpi::sgn(turretFeedForward)) / 12.0_V);
 
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.DesiredRotationDegrees", GetName()), units::degree_t(turretOffsetAngle).value());

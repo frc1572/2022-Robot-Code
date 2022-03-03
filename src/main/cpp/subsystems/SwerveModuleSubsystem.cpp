@@ -85,21 +85,30 @@ void SwerveModuleSubsystem::Periodic()
     auto optimizedState = OptimizeStateContinuous(m_desiredState);
     auto offsetAngle = optimizedState.angle.Radians() + m_steeringoffset / Constants::SwerveModule::SteeringGearing;
 
-    double throttlefeedforward =
-        m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0];
-    double steeringfeedforward = m_steeringFeedforward.Calculate(Eigen::Vector2d(offsetAngle.value(), 0.0))[0];
+    auto throttlefeedforward =
+        units::volt_t{m_throttleFeedforward.Calculate(Eigen::Vector<double, 1>(optimizedState.speed.value()))[0]};
+    if (units::math::abs(throttlefeedforward) < Constants::MinimumFFVoltage)
+    {
+        throttlefeedforward = 0_V;
+    }
+    auto steeringfeedforward =
+        units::volt_t{m_steeringFeedforward.Calculate(Eigen::Vector2d(offsetAngle.value(), 0.0))[0]};
+    if (units::math::abs(steeringfeedforward) < Constants::MinimumFFVoltage)
+    {
+        steeringfeedforward = 0_V;
+    }
 
     m_throttleMotor->Set(
         ControlMode::Velocity,
         optimizedState.speed / Constants::SwerveModule::RolloutRatio * Constants::SwerveModule::ThrottleGearing *
             Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
-        (throttlefeedforward * 1_V + Constants::SwerveModule::ThrottleKs * wpi::sgn(throttlefeedforward)) / 12.0_V);
+        (throttlefeedforward + Constants::SwerveModule::ThrottleKs * wpi::sgn(throttlefeedforward)) / 12.0_V);
     m_steeringMotor->Set(
         ControlMode::Position,
         offsetAngle * Constants::SwerveModule::SteeringGearing * Constants::TicksPerRevolution::TalonFX,
         DemandType::DemandType_ArbitraryFeedForward,
-        (steeringfeedforward * 1_V + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
+        (steeringfeedforward + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
