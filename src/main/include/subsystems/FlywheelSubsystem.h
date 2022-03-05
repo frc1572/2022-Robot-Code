@@ -25,8 +25,8 @@ public:
     void StartFeeder(double FeedRpm);
 
 private:
-    WPI_TalonFX m_leader{Constants::Flywheel::LeaderID};
-    WPI_TalonFX m_feeder{Constants::Flywheel::FeederID};
+    WPI_TalonFX m_leader{Constants::Flywheel::LeaderID, "canivore"};
+    WPI_TalonFX m_feeder{Constants::Flywheel::FeederID, "canivore"};
 
     // Added Feeder and port to constants ^^^
     //  frc::LinearSystem<1, 1, 1> m_system = frc::LinearSystemId::FlywheelSystem(

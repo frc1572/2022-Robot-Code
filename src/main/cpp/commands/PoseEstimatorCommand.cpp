@@ -1,5 +1,7 @@
 #include "commands/PoseEstimatorCommand.h"
 
+#include <iostream>
+
 #include <Eigen/Core>
 #include <frc/estimator/AngleStatistics.h>
 #include <frc/Timer.h>
@@ -16,7 +18,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
     m_observer(
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return u; },
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return x.block<2, 1>(2, 0); },
-        {1.0, 1.0, 2.0, 4.0},
+        {1.0, 1.0, 20.0, 4.0},
         {0.0005, 0.0005},
         [](const Eigen::Matrix<double, 4, 2 * 4 + 1>& sigmas, const Eigen::Vector<double, 2 * 4 + 1>& Wm)
         {
@@ -83,15 +85,14 @@ void PoseEstimatorCommand::Execute()
     auto turretMeasuredAngle = m_turret.GetMeasuredRotation() + m_turretRotationOffset;
 
     auto fieldRelativeSpeeds =
-        frc::Translation2d(chassisSpeeds.vx * 1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
-
+        frc::Translation2d(chassisSpeeds.vx * -1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
     Eigen::Vector<double, 4> u{
         fieldRelativeSpeeds.X().value(),
         fieldRelativeSpeeds.Y().value(),
         chassisSpeeds.omega.value(),
         m_turret.GetMeasuredVelocity().value()};
     Eigen::Vector<double, 2> localY{drivetrainMeasuredAngle.Radians().value(), turretMeasuredAngle.Radians().value()};
-
+    std::cout << " FRS: " << fieldRelativeSpeeds.X().value() << std::endl;
     m_latencyCompensator.AddObserverState(m_observer, u, localY, frc::Timer::GetFPGATimestamp());
 
     m_observer.Predict(u, Constants::LoopPeriod);

@@ -14,6 +14,6 @@ public:
     void StartIntakeFeeder(double IntakeFeederRpm);
 
 private:
-    WPI_TalonFX m_intake{Constants::IntakeSystem::IntakeID};
-    WPI_TalonFX m_intakeFeeder{Constants::IntakeSystem::MainFeederID};
+    WPI_TalonFX m_intake{Constants::IntakeSystem::IntakeID, "canivore"};
+    WPI_TalonFX m_intakeFeeder{Constants::IntakeSystem::MainFeederID, "canivore"};
 };

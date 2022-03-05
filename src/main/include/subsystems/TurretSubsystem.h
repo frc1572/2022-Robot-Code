@@ -24,9 +24,9 @@ public:
     void SimulationPeriodic() override;
 
 private:
-    WPI_TalonFX m_turret{Constants::Turret::TurretPort};
+    WPI_TalonFX m_turret{Constants::Turret::TurretPort, "canivore"};
 
-    units::radian_t m_turretOffset = 0_deg; // 1_deg;
+    units::radian_t m_turretOffset = 0_deg;
     frc::Rotation2d m_desiredPosition;
 
     const frc::LinearSystem<2, 1, 1> m_turretSystem = frc::LinearSystemId::IdentifyPositionSystem<units::radian>(
