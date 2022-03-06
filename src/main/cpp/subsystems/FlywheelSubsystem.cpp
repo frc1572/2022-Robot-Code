@@ -33,7 +33,6 @@ void FlywheelSubsystem::Periodic()
     if (m_loop.NextR(0) == 0)
     {
         m_leader.Set(ControlMode::PercentOutput, 0.0);
-        // m_leader.SetVoltage((voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks) * 0);
     }
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
@@ -67,6 +66,3 @@ void FlywheelSubsystem::StartFeeder(double FeedRpm)
 {
     m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
 }
-// Code for the StartFeeder^^   Could maybe add it too periodic eventually
-
-// Temp Code, will move later VVV (Just for testing the Main feeder and intake)

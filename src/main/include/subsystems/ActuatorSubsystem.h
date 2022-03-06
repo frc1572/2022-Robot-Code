@@ -9,15 +9,10 @@
 class ActuatorSubsystem : public frc2::SubsystemBase
 {
 public:
-    ActuatorSubsystem(/*int LeftActuatorPort, int RightActuatorPort*/);
+    ActuatorSubsystem();
     void Periodic() override;
     void SetActuatorPosition(double TargetPosition);
-    // void SetActuatorPoistion();
 
 private:
-    // Working on makeing the system take in one port and create teo objects for servos
-    frc::Servo m_leftActuator{1};
-    frc::Servo m_rightActuator{2};
-    // std::unique_ptr<frc::Servo> m_leftActuator;
-    // std::unique_ptr<frc::Servo> m_rightActuator;
+    frc::Servo m_actuators{1};
 };

@@ -11,7 +11,6 @@ ActuatorCommand::ActuatorCommand(double ActuatorPosition, ActuatorSubsystem& Act
 
 void ActuatorCommand::Initialize()
 {
-    // Command for Actuators
     m_actuators.SetActuatorPosition(m_actuatorPosition);
 }
 

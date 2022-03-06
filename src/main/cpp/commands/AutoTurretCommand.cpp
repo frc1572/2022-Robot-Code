@@ -17,12 +17,4 @@ void AutoTurretCommand::Execute()
 
     // sdplog::info("{}", angleOffset.Degrees().value());
     m_turret.SetDesiredPosition(angleOffset);
-
-    /*
-    auto goalOffset = Constants::GoalTranslation - m_drivetrain.GetPose().Translation();
-    auto angleOffset =
-        frc::Rotation2d(units::math::atan2(goalOffset.Y(), goalOffset.X())) - m_drivetrain.GetMeasuredRotation();
-    // spdlog::info("{}", angleOffset.Degrees().value());
-    m_turret.SetDesiredPosition(angleOffset);
-    */
 }

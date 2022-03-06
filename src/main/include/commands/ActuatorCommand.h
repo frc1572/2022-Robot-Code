@@ -16,5 +16,4 @@ public:
 private:
     ActuatorSubsystem& m_actuators;
     double m_actuatorPosition;
-    // frc::Joystick& m_joystick;
 };

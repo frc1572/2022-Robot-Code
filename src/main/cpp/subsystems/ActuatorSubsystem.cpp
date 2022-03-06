@@ -4,16 +4,13 @@
 #include "frc/Servo.h"
 #include "frc/Timer.h"
 
-ActuatorSubsystem::ActuatorSubsystem(/*int LeftActuatorPort, int RightActuatorPort*/)
-/*: m_leftActuator(LeftActuatorPort), m_rightActuator(RightActuatorPort)))*/
+ActuatorSubsystem::ActuatorSubsystem()
 {
-    // Settings similar to config default and brake mode go here if needed for Actuators
 }
 
 void ActuatorSubsystem::SetActuatorPosition(double TargetPosition)
 {
-    m_leftActuator.SetPosition(TargetPosition);
-    m_rightActuator.SetPosition(TargetPosition);
+    m_actuators.SetPosition(TargetPosition);
 }
 
 void ActuatorSubsystem::Periodic()

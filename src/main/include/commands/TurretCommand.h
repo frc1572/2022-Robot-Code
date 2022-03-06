@@ -18,5 +18,4 @@ public:
 private:
     frc::Rotation2d m_plannedTurretAngle;
     TurretSubsystem& m_turret;
-    // VisionSubsystem& m_limelight;
 };

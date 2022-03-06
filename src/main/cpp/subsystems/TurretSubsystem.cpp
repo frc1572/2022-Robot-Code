@@ -34,7 +34,6 @@ frc::Rotation2d TurretSubsystem::GetMeasuredRotation()
 void TurretSubsystem::SetDesiredPosition(frc::Rotation2d desiredPosition)
 {
     m_desiredPosition = desiredPosition;
-    // std::cout << "SetDesiredPosition: Running" << std::endl;
 }
 
 decltype(1_rad_per_s) TurretSubsystem::GetMeasuredVelocity()
@@ -75,10 +74,3 @@ void TurretSubsystem::SimulationPeriodic()
         m_turretSim.GetOutput(0) * 1_rad * Constants::Turret::TurretGearing * Constants::TicksPerRevolution::TalonFX;
     turretMotorSim.SetIntegratedSensorRawPosition(turretPositionTicks);
 }
-
-/*
-void TurretSubsystem::GetCurrent()
-{
-    return m_turret.GetStatorCurrent();
-}
-*/

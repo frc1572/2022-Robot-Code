@@ -14,15 +14,6 @@ void TurretCommand::Execute()
     // Constants::Turret::Turretposition * 1.0
 }
 
-/*
-void TurretCommand::Execute()
-{
-    m_turret.SetDesiredPosition(m_plannedTurretAngle);
-    // TODO: Add deadband
-    // m_turret.AddDesiredPosition(.GetX() * Constants::Turret::TurretMaxVelocity * Constants::LoopPeriod);
-}
-*/
-
 bool TurretCommand::IsFinished()
 {
     return true;

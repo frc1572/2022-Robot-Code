@@ -14,7 +14,6 @@ FlywheelSpinupCommand::FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flyw
 {
 }
 
-// Setting up the FeederSpinupCommand VVV
 FeederSpinupCommand::FeederSpinupCommand(double FeedRPM, FlywheelSubsystem& feeder)
   : m_feederRPM(FeedRPM), m_feeder(feeder)
 {
@@ -29,11 +28,9 @@ void FlywheelSpinupCommand::Initialize()
 
 bool FlywheelSpinupCommand::IsFinished()
 {
-    // return m_flywheel.IsSpunup();
     return false;
 }
 
-// Feeder Command Initialize and IsFinished VVV
 void FeederSpinupCommand::Initialize()
 {
     m_feeder.StartFeeder(m_feederRPM);
