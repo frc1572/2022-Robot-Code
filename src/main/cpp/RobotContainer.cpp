@@ -45,8 +45,7 @@ void RobotContainer::ConfigureButtonBindings()
     // frc2::JoystickButton(&m_joystick, 3).WhenPressed(FeederSpinupCommand(0.0, m_flywheel));
     frc2::JoystickButton(&m_joystick, 2)
         .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed * -1, m_intakeSystem));
-    frc2::JoystickButton(&m_joystick, 2)
-        .WhenHeld(IntakeSpinupCommand(Constants::Systemspeeds::IntakeSpeed * -1, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 2).WhenHeld(IntakeSpinupCommand(-0.25, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeFeederSpinupCommand(0, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeSpinupCommand(0, m_intakeSystem));
     // Actuator Set Positions  (Right Top 3 buttons, Left .25, Middle .5, Right .75)
@@ -57,7 +56,7 @@ void RobotContainer::ConfigureButtonBindings()
     // Main Robot Feeder on and off buttons Left side of controller middle top and bottom buttons    (former off 9)
     frc2::JoystickButton(&m_joystick, 4).WhenReleased(IntakeFeederSpinupCommand(0.0, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 4)
-        .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeSpeed, m_intakeSystem));
+        .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
 
     // Intake on and off buttons Left side of controller right top and bottom buttons    (former off 8)
     frc2::JoystickButton(&m_joystick, 1).WhenReleased(IntakeSpinupCommand(0.0, m_intakeSystem));

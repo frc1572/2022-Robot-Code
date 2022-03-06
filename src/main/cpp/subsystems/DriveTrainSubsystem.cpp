@@ -50,7 +50,7 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetMeasuredChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
-    return m_IMU.GetRotation2d();
+    return m_IMU.GetRotation2d() * -1;
 }
 
 frc::Pose2d DriveTrainSubsystem::GetPose()
