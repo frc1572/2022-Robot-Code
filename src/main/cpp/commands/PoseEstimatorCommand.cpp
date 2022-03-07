@@ -75,7 +75,7 @@ void PoseEstimatorCommand::Execute()
                         atan2(goalOffset[1], goalOffset[0]) - cameraRotation, -wpi::numbers::pi, wpi::numbers::pi);
                     return Eigen::Vector<double, 2>{distance, yaw};
                 },
-                frc::MakeCovMatrix<2>({2.5, 0.2}),
+                frc::MakeCovMatrix<2>({0.25, 0.2}),
                 AngleMean<2, 4>({1}),
                 AngleResidual<2>({1}),
                 AngleResidual<4>({2, 3}),
