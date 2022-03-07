@@ -44,7 +44,7 @@ void VisionSubsystem::Periodic()
     {
         auto bestTarget = result.GetBestTarget();
         auto distance = photonlib::PhotonUtils::CalculateDistanceToTarget(
-            m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch()))  - Constants::TurrentRingSize;
+            m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch())) + Constants::TurrentRingSize;
         auto yaw = frc::Rotation2d(units::degree_t(-bestTarget.GetYaw()));
         auto latency = result.GetLatency();
         m_latestResult = {distance, yaw, frc::Timer::GetFPGATimestamp() - latency};
