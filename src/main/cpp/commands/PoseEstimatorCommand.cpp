@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include <Eigen/Core>
-#include <frc/estimator/AngleStatistics.h>
 #include <frc/Timer.h>
 #include <spdlog/spdlog.h>
 #include <units/angle.h>
@@ -11,6 +10,7 @@
 #include <wpi/numbers>
 
 #include "Constants.h"
+#include "helper/AngleStatistics.h"
 
 PoseEstimatorCommand::PoseEstimatorCommand(
     DriveTrainSubsystem& drivetrain, TurretSubsystem& turret, VisionSubsystem& vision)
@@ -20,57 +20,11 @@ PoseEstimatorCommand::PoseEstimatorCommand(
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return x.block<2, 1>(2, 0); },
         {1.0, 1.0, 20.0, 4.0},
         {0.0005, 0.0005},
-        [](const Eigen::Matrix<double, 4, 2 * 4 + 1>& sigmas, const Eigen::Vector<double, 2 * 4 + 1>& Wm)
-        {
-            Eigen::Vector<double, 4> ret = sigmas * Wm;
-            for (int idx : {2, 3})
-            {
-                double sumSin = sigmas.row(idx).unaryExpr([](auto it) { return std::sin(it); }).sum();
-                double sumCos = sigmas.row(idx).unaryExpr([](auto it) { return std::cos(it); }).sum();
-                ret[idx] = std::atan2(sumSin, sumCos);
-            }
-            return ret;
-        },
-        [](const Eigen::Matrix<double, 2, 2 * 4 + 1>& sigmas, const Eigen::Vector<double, 2 * 4 + 1>& Wm)
-        {
-            Eigen::Vector<double, 2> ret = sigmas * Wm;
-            for (int idx : {0, 1})
-            {
-                double sumSin = sigmas.row(idx).unaryExpr([](auto it) { return std::sin(it); }).sum();
-                double sumCos = sigmas.row(idx).unaryExpr([](auto it) { return std::cos(it); }).sum();
-                ret[idx] = std::atan2(sumSin, sumCos);
-            }
-            return ret;
-        },
-        [](const Eigen::Vector<double, 4>& a, const Eigen::Vector<double, 4>& b)
-        {
-            Eigen::Vector<double, 4> ret = a - b;
-            for (int idx : {2, 3})
-            {
-                ret[idx] = frc::AngleModulus(units::radian_t{ret[idx]}).value();
-            }
-            return ret;
-        },
-        [](const Eigen::Vector<double, 2>& a, const Eigen::Vector<double, 2>& b)
-        {
-            Eigen::Vector<double, 2> ret = a - b;
-            for (int idx : {0, 1})
-            {
-                ret[idx] = frc::AngleModulus(units::radian_t{ret[idx]}).value();
-            }
-            return ret;
-        },
-        [](const Eigen::Vector<double, 4>& a, const Eigen::Vector<double, 4>& b)
-        {
-            Eigen::Vector<double, 4> ret = a + b;
-            for (int idx : {2, 3})
-            {
-                {
-                    ret[idx] = frc::InputModulus(ret[idx], -wpi::numbers::pi, wpi::numbers::pi);
-                }
-            }
-            return ret;
-        },
+        AngleMean<4, 4>({2, 3}),
+        AngleMean<2, 4>({0, 1}),
+        AngleResidual<4>({2, 3}),
+        AngleResidual<2>({0, 1}),
+        AngleAdd<4>({2, 3}),
         Constants::LoopPeriod)
 {
     AddRequirements(&m_vision);
@@ -109,8 +63,8 @@ void PoseEstimatorCommand::Execute()
                 [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u)
                 {
                     Eigen::Vector<double, 2> cameraOffset{
-                        units::meter_t{Constants::CameraRotationRadius}.value() * cos(x[3]),
-                        units::meter_t{Constants::CameraRotationRadius}.value() * sin(x[3])};
+                        units::meter_t{Constants::CameraRotationRadius}.value() * std::cos(x[3]),
+                        units::meter_t{Constants::CameraRotationRadius}.value() * std::sin(x[3])};
                     auto cameraTranslation = x.block<2, 1>(0, 0) + cameraOffset;
                     auto cameraRotation = x.block<2, 1>(2, 0).sum();
                     Eigen::Vector<double, 2> goalTranslation{
@@ -121,47 +75,11 @@ void PoseEstimatorCommand::Execute()
                         atan2(goalOffset[1], goalOffset[0]) - cameraRotation, -wpi::numbers::pi, wpi::numbers::pi);
                     return Eigen::Vector<double, 2>{distance, yaw};
                 },
-                frc::MakeCovMatrix<2>({0.25, 0.2}),
-                [](const Eigen::Matrix<double, 2, 2 * 4 + 1>& sigmas, const Eigen::Vector<double, 2 * 4 + 1>& Wm)
-                {
-                    Eigen::Vector<double, 2> ret = sigmas * Wm;
-                    for (int idx : {0, 1})
-                    {
-                        double sumSin = sigmas.row(idx).unaryExpr([](auto it) { return std::sin(it); }).sum();
-                        double sumCos = sigmas.row(idx).unaryExpr([](auto it) { return std::cos(it); }).sum();
-                        ret[idx] = std::atan2(sumSin, sumCos);
-                    }
-                    return ret;
-                },
-                [](const Eigen::Vector<double, 2>& a, const Eigen::Vector<double, 2>& b)
-                {
-                    Eigen::Vector<double, 2> ret = a - b;
-                    for (int idx : {0, 1})
-                    {
-                        ret[idx] = frc::AngleModulus(units::radian_t{ret[idx]}).value();
-                    }
-                    return ret;
-                },
-                [](const Eigen::Vector<double, 4>& a, const Eigen::Vector<double, 4>& b)
-                {
-                    Eigen::Vector<double, 4> ret = a - b;
-                    for (int idx : {2, 3})
-                    {
-                        ret[idx] = frc::AngleModulus(units::radian_t{ret[idx]}).value();
-                    }
-                    return ret;
-                },
-                [](const Eigen::Vector<double, 4>& a, const Eigen::Vector<double, 4>& b)
-                {
-                    Eigen::Vector<double, 4> ret = a + b;
-                    for (int idx : {2, 3})
-                    {
-                        {
-                            ret[idx] = frc::InputModulus(ret[idx], -wpi::numbers::pi, wpi::numbers::pi);
-                        }
-                    }
-                    return ret;
-                });
+                frc::MakeCovMatrix<2>({2.5, 0.2}),
+                AngleMean<2, 4>({1}),
+                AngleResidual<2>({1}),
+                AngleResidual<4>({2, 3}),
+                AngleAdd<4>({2, 3}));
         };
         m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
             &m_observer, Constants::LoopPeriod, visionMeasurement, correctFn, targetInfo->timestamp);

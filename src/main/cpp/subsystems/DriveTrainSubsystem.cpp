@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <frc/MathUtil.h>
+#include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Timer.h>
 #include <frc/trajectory/Trajectory.h>
@@ -50,7 +51,7 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetMeasuredChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
-    return m_IMU.GetRotation2d() * -1;
+    return m_IMU.GetRotation2d() * (frc::RobotBase::IsReal() ? -1.0 : 1.0);
 }
 
 frc::Pose2d DriveTrainSubsystem::GetPose()
