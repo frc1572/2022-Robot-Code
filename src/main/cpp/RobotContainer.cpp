@@ -7,6 +7,7 @@
 #include <frc2/command/button/JoystickButton.h>
 
 #include "commands/ActuatorCommand.h"
+#include "commands/AutoFlywheelCommand.h"
 #include "commands/AutoTurretCommand.h"
 #include "commands/DriveTeleopCommand.h"
 #include "commands/FlywheelSpinupCommand.h"
@@ -18,6 +19,7 @@
 RobotContainer::RobotContainer()
 {
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
+    m_flywheel.SetDefaultCommand(AutoFlywheelCommand(m_drivetrain, m_flywheel));
     m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret));
     m_poseEstimatorCommand.Schedule();
     ConfigureButtonBindings();

@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 
+#include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Timer.h>
 #include <photonlib/PhotonUtils.h>
@@ -44,7 +45,8 @@ void VisionSubsystem::Periodic()
     {
         auto bestTarget = result.GetBestTarget();
         auto distance = photonlib::PhotonUtils::CalculateDistanceToTarget(
-            m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch())) + Constants::TurrentRingSize;
+                            m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch())) +
+            (frc::RobotBase::IsReal() ? Constants::UpperHubRadius : decltype(Constants::UpperHubRadius){0});
         auto yaw = frc::Rotation2d(units::degree_t(-bestTarget.GetYaw()));
         auto latency = result.GetLatency();
         m_latestResult = {distance, yaw, frc::Timer::GetFPGATimestamp() - latency};
