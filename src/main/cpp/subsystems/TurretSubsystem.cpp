@@ -17,10 +17,11 @@ TurretSubsystem::TurretSubsystem()
     m_turret.SetNeutralMode(NeutralMode::Brake);
     if (frc::RobotBase::IsReal())
     {
-        m_turret.SetInverted(true);
+        m_turret.SetInverted(false);
     }
     m_turret.Config_kP(0, 0.05);
     m_turret.Config_kD(0, 0.005);
+    m_turret.ConfigClosedLoopPeakOutput(0, .75);
     SetName(fmt::format("TurretSubsystem({})", m_turret.GetDeviceID()));
 }
 

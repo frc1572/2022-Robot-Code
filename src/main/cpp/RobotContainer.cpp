@@ -27,8 +27,8 @@ void RobotContainer::ConfigureButtonBindings()
 {
     // Hood Shooter Held ON
     frc2::JoystickButton(&m_joystick, 6)
-        .WhenHeld(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
-    frc2::JoystickButton(&m_joystick, 6).WhenReleased(FlywheelSpinupCommand(0, m_flywheel));
+        .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 3).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
 
     // Turret Feededr Hold ON
     frc2::JoystickButton(&m_joystick, 5)
@@ -43,8 +43,8 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeSpinupCommand(0, m_intakeSystem));
 
     // Actuator Testiong Set Positions
-    frc2::JoystickButton(&m_joystick, 3).WhenPressed(ActuatorCommand(0.25, m_actuators));
-    frc2::JoystickButton(&m_joystick, 50).WhenPressed(ActuatorCommand(0.50, m_actuators));
+    frc2::JoystickButton(&m_joystick, 9).WhenPressed(ActuatorCommand(0.25, m_actuators));
+    frc2::JoystickButton(&m_joystick, 10).WhenPressed(ActuatorCommand(0.50, m_actuators));
     frc2::JoystickButton(&m_joystick, 60).WhenPressed(ActuatorCommand(0.75, m_actuators));
 
     // Main Robot Feeder Hold On
