@@ -14,5 +14,6 @@ public:
     void SetActuatorPosition(double TargetPosition);
 
 private:
-    frc::Servo m_actuators{1};
+    frc::Servo m_actuatorLeft{3};
+    frc::Servo m_actuatorRight{4};
 };

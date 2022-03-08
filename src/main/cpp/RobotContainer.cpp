@@ -19,7 +19,7 @@
 RobotContainer::RobotContainer()
 {
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
-    m_flywheel.SetDefaultCommand(AutoFlywheelCommand(m_drivetrain, m_flywheel));
+    // m_flywheel.SetDefaultCommand(AutoFlywheelCommand(m_drivetrain, m_flywheel));
     m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret));
     m_poseEstimatorCommand.Schedule();
     ConfigureButtonBindings();
@@ -27,7 +27,7 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureButtonBindings()
 {
-    // Hood Shooter Held ON
+    // Hood Shooter Toggle ON
     frc2::JoystickButton(&m_joystick, 6)
         .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
     frc2::JoystickButton(&m_joystick, 3).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));

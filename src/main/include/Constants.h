@@ -23,14 +23,14 @@ namespace Constants
 
     namespace Systemspeeds
     {
-        constexpr double TurretFeederSpeed = 0.5;
+        constexpr double TurretFeederSpeed = 0.7;
         constexpr double IntakeFeederSpeed = 0.5;
         constexpr double IntakeSpeed = 0.2;
-        constexpr double HoodSpeed = 3000;
+        constexpr double HoodSpeed = 4500;
     } // namespace Systemspeeds
     namespace Flywheel
     {
-        constexpr int LeaderID = 12;
+        constexpr int LeaderID = 14;
         constexpr int FeederID = 11;
         constexpr Ks_t Ks = 1_V;
         constexpr Kv_t<units::radian_t> Kv = 0.025_V / 1_rad_per_s;
@@ -77,7 +77,7 @@ namespace Constants
     } // namespace VelocityFactor
     namespace IntakeSystem
     {
-        constexpr int IntakeID = 14;
+        constexpr int IntakeID = 12; // 14
         constexpr int MainFeederID = 13;
     } // namespace IntakeSystem
 } // namespace Constants

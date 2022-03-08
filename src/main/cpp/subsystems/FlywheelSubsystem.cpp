@@ -16,6 +16,8 @@ FlywheelSubsystem::FlywheelSubsystem()
     m_leader.ConfigVelocityMeasurementWindow(1);
     m_leader.SetNeutralMode(Coast);
 
+    m_leader.ConfigClosedLoopPeakOutput(0, .4);
+
     m_feeder.SetNeutralMode(Brake);
     // Set Feeder to coast and config Default
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
@@ -29,7 +31,7 @@ void FlywheelSubsystem::Periodic()
     m_loop.Predict(Constants::LoopPeriod);
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
-
+    // m_leader.Set(ControlMode::Velocity, 1500);
     if (m_loop.NextR(0) == 0)
     {
         m_leader.Set(ControlMode::PercentOutput, 0.0);

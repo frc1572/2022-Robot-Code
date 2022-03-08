@@ -10,7 +10,8 @@ ActuatorSubsystem::ActuatorSubsystem()
 
 void ActuatorSubsystem::SetActuatorPosition(double TargetPosition)
 {
-    m_actuators.SetPosition(TargetPosition);
+    m_actuatorLeft.SetPosition(TargetPosition);
+    m_actuatorRight.SetPosition(TargetPosition);
 }
 
 void ActuatorSubsystem::Periodic()
