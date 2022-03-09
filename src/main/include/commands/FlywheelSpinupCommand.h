@@ -30,3 +30,17 @@ private:
     double m_feederRPM;
     FlywheelSubsystem& m_feeder;
 };
+
+/*
+class TestSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, TestSpinupCommand>
+{
+public:
+    TestSpinupCommand(double TestRPM, FlywheelSubsystem& Test);
+    void Initialize() override;
+    bool IsFinished() override;
+
+private:
+    double m_testRPM;
+    FlywheelSubsystem& m_test;
+};
+*/

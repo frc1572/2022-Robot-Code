@@ -19,7 +19,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return u; },
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return x.block<2, 1>(2, 0); },
         {1.0, 1.0, 20.0, 4.0},
-        {0.0005, 0.0005},
+        {0.0005, 0.0000},
         AngleMean<4, 4>({2, 3}),
         AngleMean<2, 4>({0, 1}),
         AngleResidual<4>({2, 3}),

@@ -12,11 +12,18 @@ FlywheelSubsystem::FlywheelSubsystem()
     m_feeder.ConfigFactoryDefault();
     // Disable Talon FX velocity filtering so that our Kalman filter can do the
     // work
+    m_follower.ConfigFactoryDefault();
+    m_follower.Follow(m_leader);
+    m_follower.SetNeutralMode(Coast);
+    m_follower.SetInverted(true);
+
     m_leader.ConfigVelocityMeasurementPeriod(SensorVelocityMeasPeriod::Period_1Ms);
     m_leader.ConfigVelocityMeasurementWindow(1);
     m_leader.SetNeutralMode(Coast);
 
-    m_leader.ConfigClosedLoopPeakOutput(0, .4);
+    // m_TestMotorController.SetNeutralMode(Coast);
+
+    // m_leader.ConfigClosedLoopPeakOutput(0, .4);
 
     m_feeder.SetNeutralMode(Brake);
     // Set Feeder to coast and config Default
@@ -39,6 +46,8 @@ void FlywheelSubsystem::Periodic()
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
     frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
+    frc::SmartDashboard::PutNumber("Current Draw: ", m_leader.GetStatorCurrent());
+    frc::SmartDashboard::PutNumber("Voltage Draw: ", m_leader.GetMotorOutputVoltage());
 }
 
 void FlywheelSubsystem::SimulationPeriodic()
@@ -68,3 +77,10 @@ void FlywheelSubsystem::StartFeeder(double FeedRpm)
 {
     m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
 }
+
+/*
+void FlywheelSubsystem::TempHoodShooterTest(double TestRPM)
+{
+    m_TestMotorController.Set(ControlMode::PercentOutput, TestRPM);
+}
+*/

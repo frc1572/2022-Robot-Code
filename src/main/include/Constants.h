@@ -15,7 +15,7 @@
 namespace Constants
 {
     constexpr auto LoopPeriod = 1_s / 100;
-    const frc::Translation2d GoalTranslation{15_ft, 0_ft};
+    const frc::Translation2d GoalTranslation{12_ft, 0_ft};
     constexpr auto UpperHubRadius = 26.69_in;
     // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
     constexpr auto CameraRotationRadius = 8.7333_in;
@@ -25,12 +25,13 @@ namespace Constants
     {
         constexpr double TurretFeederSpeed = 0.7;
         constexpr double IntakeFeederSpeed = 0.5;
-        constexpr double IntakeSpeed = 0.2;
-        constexpr double HoodSpeed = 4500;
+        constexpr double IntakeSpeed = .45;
+        constexpr double HoodSpeed = 2000;
     } // namespace Systemspeeds
     namespace Flywheel
     {
-        constexpr int LeaderID = 14;
+        constexpr int LeaderID = 12;
+        constexpr int FollowerID = 15;
         constexpr int FeederID = 11;
         constexpr Ks_t Ks = 1_V;
         constexpr Kv_t<units::radian_t> Kv = 0.025_V / 1_rad_per_s;
@@ -77,7 +78,7 @@ namespace Constants
     } // namespace VelocityFactor
     namespace IntakeSystem
     {
-        constexpr int IntakeID = 12; // 14
+        constexpr int IntakeID = 14;
         constexpr int MainFeederID = 13;
     } // namespace IntakeSystem
 } // namespace Constants
