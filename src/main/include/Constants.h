@@ -26,7 +26,7 @@ namespace Constants
         constexpr double TurretFeederSpeed = 0.7;
         constexpr double IntakeFeederSpeed = 0.5;
         constexpr double IntakeSpeed = .35;
-        constexpr double HoodSpeed = 1000;
+        constexpr double HoodSpeed = 2000;
     } // namespace Systemspeeds
     namespace Flywheel
     {

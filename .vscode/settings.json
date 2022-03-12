@@ -107,7 +107,8 @@
     "xlocmon": "cpp",
     "xloctime": "cpp",
     "xmemory0": "cpp",
-    "xtree": "cpp"
+    "xtree": "cpp",
+    "xthread": "cpp"
   },
   "editor.formatOnSave": true,
   "[cpp]": {
