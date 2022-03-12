@@ -13,7 +13,7 @@ FlywheelSubsystem::FlywheelSubsystem()
     // Disable Talon FX velocity filtering so that our Kalman filter can do the
     // work
     m_follower.ConfigFactoryDefault();
-    m_follower.Follow(m_leader);
+    // m_follower.Follow(m_leader);
     m_follower.SetNeutralMode(Coast);
     m_follower.SetInverted(true);
 
@@ -38,16 +38,20 @@ void FlywheelSubsystem::Periodic()
     m_loop.Predict(Constants::LoopPeriod);
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
+    m_follower.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
     // m_leader.Set(ControlMode::Velocity, 1500);
     if (m_loop.NextR(0) == 0)
     {
         m_leader.Set(ControlMode::PercentOutput, 0.0);
+        m_follower.Set(ControlMode::PercentOutput, 0.0);
     }
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
     frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
-    frc::SmartDashboard::PutNumber("Current Draw: ", m_leader.GetStatorCurrent());
-    frc::SmartDashboard::PutNumber("Voltage Draw: ", m_leader.GetMotorOutputVoltage());
+    frc::SmartDashboard::PutNumber("Leader Current Draw: ", m_leader.GetStatorCurrent());
+    frc::SmartDashboard::PutNumber("Leader Voltage Draw: ", m_leader.GetMotorOutputVoltage());
+    frc::SmartDashboard::PutNumber("Follower Current Draw: ", m_follower.GetStatorCurrent());
+    frc::SmartDashboard::PutNumber("Follower Voltage Draw: ", m_follower.GetMotorOutputVoltage());
 }
 
 void FlywheelSubsystem::SimulationPeriodic()

@@ -1,6 +1,7 @@
 #include "commands/DriveTeleopCommand.h"
 
 #include <cmath>
+#include <iostream>
 
 #include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -32,4 +33,5 @@ void DriveTeleopCommand::Execute()
     auto distance = (Constants::GoalTranslation.Norm() - m_drivetrain.GetPose().Translation().Norm());
 
     frc::SmartDashboard::PutNumber("Distance: ", distance.value());
+    std::cout << "Translation Y Value: " << translationY << std::endl;
 }
