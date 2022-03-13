@@ -13,7 +13,7 @@ void AutoTurretCommand::Execute()
 {
     auto pose = m_drivetrain.GetPose();
     auto goalOffset = Constants::GoalTranslation - pose.Translation();
-    auto angleOffset = frc::Rotation2d(units::math::atan2(goalOffset.Y() * -1, goalOffset.X())) - pose.Rotation();
+    auto angleOffset = frc::Rotation2d(units::math::atan2(goalOffset.Y(), goalOffset.X())) - pose.Rotation();
 
     // sdplog::info("{}", angleOffset.Degrees().value());
     m_turret.SetDesiredPosition(angleOffset);

@@ -39,20 +39,3 @@ bool FeederSpinupCommand::IsFinished()
 {
     return false;
 }
-/*
-TestSpinupCommand::TestSpinupCommand(double TestRPM, FlywheelSubsystem& Test) : m_testRPM(TestRPM), m_test(Test)
-{
-    AddRequirements(&Test);
-    SetName("TestSpinupCommand");
-}
-
-void TestSpinupCommand::Initialize()
-{
-    m_test.TempHoodShooterTest(m_testRPM);
-}
-
-bool TestSpinupCommand::IsFinished()
-{
-    return false;
-}
-*/

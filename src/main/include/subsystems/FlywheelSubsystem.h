@@ -23,15 +23,11 @@ public:
     void SimulationPeriodic() override;
     void SetSetpoint(rad_per_s_t setpoint);
     void StartFeeder(double FeedRpm);
-    // void TempHoodShooterTest(double TestRPM);
 
 private:
-    WPI_TalonFX m_leader{12, "canivore"};
+    WPI_TalonFX m_leader{Constants::Flywheel::LeaderID, "canivore"};
     WPI_TalonFX m_follower{Constants::Flywheel::FollowerID, "canivore"};
     WPI_TalonFX m_feeder{Constants::Flywheel::FeederID, "canivore"};
-
-    // WPI_TalonFX m_TestMotorController{Constants::Flywheel::LeaderID, "canivore"};
-
     frc::LinearSystem<1, 1, 1> m_plant =
         frc::LinearSystemId::IdentifyVelocitySystem<units::radians>(Constants::Flywheel::Kv, Constants::Flywheel::Ka);
 

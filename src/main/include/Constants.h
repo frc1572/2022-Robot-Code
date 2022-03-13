@@ -15,7 +15,7 @@
 namespace Constants
 {
     constexpr auto LoopPeriod = 1_s / 100;
-    const frc::Translation2d GoalTranslation{12_ft, 0_ft};
+    const frc::Translation2d GoalTranslation{5_ft, 0_ft};
     constexpr auto UpperHubRadius = 26.69_in;
     // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
     constexpr auto CameraRotationRadius = 8.7333_in;
@@ -25,8 +25,8 @@ namespace Constants
     {
         constexpr double TurretFeederSpeed = 0.7;
         constexpr double IntakeFeederSpeed = 0.5;
-        constexpr double IntakeSpeed = .35;
-        constexpr double HoodSpeed = 2000;
+        constexpr double IntakeSpeed = 0.3;
+        constexpr double HoodSpeed = 1000;
     } // namespace Systemspeeds
     namespace Flywheel
     {
@@ -52,7 +52,7 @@ namespace Constants
         const double SteeringGearing = 72.0 / 14.0 * 24.0 / 8.0;
         constexpr auto WheelDiameter = 3.25_in;
         constexpr auto RolloutRatio = WheelDiameter / 2_rad;
-        constexpr auto ThrottleMaxVelocity = 12_fps; // adjusted for driver, nominally 17 ft/s
+        constexpr auto ThrottleMaxVelocity = 10_fps; // adjusted for driver, nominally 17 ft/s
         constexpr auto SteeringMaxVelocity = 1 * 360_deg_per_s;
     } // namespace SwerveModule
 
@@ -78,7 +78,7 @@ namespace Constants
     } // namespace VelocityFactor
     namespace IntakeSystem
     {
-        constexpr int IntakeID = 14;
+        constexpr int IntakeID = 14; // 14
         constexpr int MainFeederID = 13;
     } // namespace IntakeSystem
 } // namespace Constants

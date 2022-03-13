@@ -1,6 +1,5 @@
 #include "subsystems/SwerveModuleSubsystem.h"
 
-#include <iostream>
 #include <memory>
 
 #include <Eigen/Core>
@@ -23,7 +22,7 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     m_throttleMotor->SetNeutralMode(NeutralMode::Brake);
     if (frc::RobotBase::IsReal())
     {
-        m_throttleMotor->SetInverted(false);
+        m_throttleMotor->SetInverted(true);
     }
 
     m_steeringMotor->ConfigFactoryDefault();
@@ -111,13 +110,6 @@ void SwerveModuleSubsystem::Periodic()
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
-    // std::cout << "Desired State Speed: " << m_desiredState.speed.value() << std::endl;
-    // std::cout << "Optimised State Speed: " << optimizedState.speed.value() << std::endl;
-
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.OutputVoltage", GetName()), m_throttleMotor->GetMotorOutputVoltage());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.RawThrottlePosition", GetName()), m_throttleMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());

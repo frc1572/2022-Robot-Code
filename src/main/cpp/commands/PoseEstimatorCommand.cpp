@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <Eigen/Core>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Timer.h>
 #include <spdlog/spdlog.h>
 #include <units/angle.h>
@@ -35,8 +36,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
 void PoseEstimatorCommand::Execute()
 {
     auto chassisSpeeds = m_drivetrain.GetMeasuredChassisSpeeds();
-
-    auto drivetrainMeasuredAngle = (m_drivetrain.GetMeasuredRotation() * -1) + m_drivetrainRotationOffset;
+    auto drivetrainMeasuredAngle = m_drivetrain.GetMeasuredRotation() + m_drivetrainRotationOffset;
     auto turretMeasuredAngle = m_turret.GetMeasuredRotation() + m_turretRotationOffset;
 
     auto fieldRelativeSpeeds =
@@ -52,8 +52,7 @@ void PoseEstimatorCommand::Execute()
 
     m_observer.Predict(u, Constants::LoopPeriod);
     m_observer.Correct(u, localY);
-    std::cout << "Chassis speed Pose Estimator: " << chassisSpeeds.vy.value() << std::endl;
-    std::cout << "Field Relative Speeds Pose Estimator: " << fieldRelativeSpeeds.Y().value() << std::endl;
+
     if (auto targetInfo = m_vision.PopLatestResult())
     {
         Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
@@ -88,6 +87,13 @@ void PoseEstimatorCommand::Execute()
     }
 
     m_drivetrain.SetPose(GetPose());
+    frc::SmartDashboard::PutNumber("CH X: ", chassisSpeeds.vx.value());
+    frc::SmartDashboard::PutNumber("CH Y: ", chassisSpeeds.vy.value());
+    frc::SmartDashboard::PutNumber("CH Omega: ", chassisSpeeds.omega.value());
+    frc::SmartDashboard::PutNumber("FR X: ", fieldRelativeSpeeds.X().value());
+    frc::SmartDashboard::PutNumber("FR Y: ", fieldRelativeSpeeds.Y().value());
+    std::cout << "CS x: " << chassisSpeeds.vx.value() << "  CS Y: " << chassisSpeeds.vy.value()
+              << "  CS Omega: " << chassisSpeeds.omega.value() << std::endl;
 }
 
 bool PoseEstimatorCommand::RunsWhenDisabled() const
@@ -107,6 +113,6 @@ void PoseEstimatorCommand::Reset(frc::Pose2d currentPose, frc::Rotation2d curren
          currentPose.Y().value(),
          currentPose.Rotation().Radians().value(),
          currentTurretRotation.Radians().value()});
-    m_drivetrainRotationOffset = currentPose.Rotation() - (m_drivetrain.GetMeasuredRotation() * -1);
+    m_drivetrainRotationOffset = currentPose.Rotation() - m_drivetrain.GetMeasuredRotation();
     m_turretRotationOffset = currentTurretRotation - m_turret.GetMeasuredRotation();
 }

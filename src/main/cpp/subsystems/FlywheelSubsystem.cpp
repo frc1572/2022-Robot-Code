@@ -12,20 +12,19 @@ FlywheelSubsystem::FlywheelSubsystem()
     m_feeder.ConfigFactoryDefault();
     // Disable Talon FX velocity filtering so that our Kalman filter can do the
     // work
-    m_follower.ConfigFactoryDefault();
-    // m_follower.Follow(m_leader);
-    m_follower.SetNeutralMode(Coast);
-    m_follower.SetInverted(true);
 
     m_leader.ConfigVelocityMeasurementPeriod(SensorVelocityMeasPeriod::Period_1Ms);
     m_leader.ConfigVelocityMeasurementWindow(1);
     m_leader.SetNeutralMode(Coast);
 
-    // m_TestMotorController.SetNeutralMode(Coast);
-
-    // m_leader.ConfigClosedLoopPeakOutput(0, .4);
+    m_leader.ConfigClosedLoopPeakOutput(0, .4);
 
     m_feeder.SetNeutralMode(Brake);
+
+    m_follower.ConfigFactoryDefault();
+    m_follower.SetNeutralMode(Coast);
+    m_follower.Follow(m_leader);
+    m_follower.SetInverted(true);
     // Set Feeder to coast and config Default
     frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
 }
@@ -39,6 +38,7 @@ void FlywheelSubsystem::Periodic()
     auto voltage = m_loop.U(0);
     m_leader.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
     m_follower.SetVoltage(voltage * 1_V + wpi::sgn(voltage) * Constants::Flywheel::Ks);
+
     // m_leader.Set(ControlMode::Velocity, 1500);
     if (m_loop.NextR(0) == 0)
     {
@@ -48,10 +48,6 @@ void FlywheelSubsystem::Periodic()
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
     frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
-    frc::SmartDashboard::PutNumber("Leader Current Draw: ", m_leader.GetStatorCurrent());
-    frc::SmartDashboard::PutNumber("Leader Voltage Draw: ", m_leader.GetMotorOutputVoltage());
-    frc::SmartDashboard::PutNumber("Follower Current Draw: ", m_follower.GetStatorCurrent());
-    frc::SmartDashboard::PutNumber("Follower Voltage Draw: ", m_follower.GetMotorOutputVoltage());
 }
 
 void FlywheelSubsystem::SimulationPeriodic()
@@ -81,10 +77,3 @@ void FlywheelSubsystem::StartFeeder(double FeedRpm)
 {
     m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
 }
-
-/*
-void FlywheelSubsystem::TempHoodShooterTest(double TestRPM)
-{
-    m_TestMotorController.Set(ControlMode::PercentOutput, TestRPM);
-}
-*/

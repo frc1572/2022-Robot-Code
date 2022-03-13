@@ -1,6 +1,5 @@
 #include "subsystems/DriveTrainSubsystem.h"
 
-#include <iostream>
 #include <vector>
 
 #include <frc/MathUtil.h>
@@ -33,10 +32,7 @@ void DriveTrainSubsystem::Drive(frc::ChassisSpeeds&& chassisSpeeds)
     for (unsigned int i = 0; i < m_swerveModules.size(); i++)
     {
         m_swerveModules[i].SetDesiredState(moduleStates[i]);
-        // std::cout << "Swerve State Vaules: " << moduleStates[i].speed.value() << std::endl;
     }
-    std::cout << "DriveTrain CS X: " << chassisSpeeds.vx.value() << "DriveTrain CS Y" << chassisSpeeds.vy.value()
-              << std::endl;
 }
 
 frc::ChassisSpeeds DriveTrainSubsystem::GetDesiredChassisSpeeds()
@@ -55,7 +51,7 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetMeasuredChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
-    return m_IMU.GetRotation2d() * (frc::RobotBase::IsReal() ? -1.0 : 1.0);
+    return m_IMU.GetRotation2d();
 }
 
 frc::Pose2d DriveTrainSubsystem::GetPose()
