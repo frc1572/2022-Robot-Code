@@ -40,14 +40,14 @@ void PoseEstimatorCommand::Execute()
     auto turretMeasuredAngle = m_turret.GetMeasuredRotation() + m_turretRotationOffset;
 
     auto fieldRelativeSpeeds =
-        frc::Translation2d(chassisSpeeds.vx * 1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
+        frc::Translation2d(chassisSpeeds.vx * -1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
     Eigen::Vector<double, 4> u{
         fieldRelativeSpeeds.X().value(),
         fieldRelativeSpeeds.Y().value(),
         chassisSpeeds.omega.value(),
         m_turret.GetMeasuredVelocity().value()};
     Eigen::Vector<double, 2> localY{drivetrainMeasuredAngle.Radians().value(), turretMeasuredAngle.Radians().value()};
-    std::cout << " FRS: " << fieldRelativeSpeeds.X().value() << std::endl;
+
     m_latencyCompensator.AddObserverState(m_observer, u, localY, frc::Timer::GetFPGATimestamp());
 
     m_observer.Predict(u, Constants::LoopPeriod);
@@ -92,8 +92,6 @@ void PoseEstimatorCommand::Execute()
     frc::SmartDashboard::PutNumber("CH Omega: ", chassisSpeeds.omega.value());
     frc::SmartDashboard::PutNumber("FR X: ", fieldRelativeSpeeds.X().value());
     frc::SmartDashboard::PutNumber("FR Y: ", fieldRelativeSpeeds.Y().value());
-    std::cout << "CS x: " << chassisSpeeds.vx.value() << "  CS Y: " << chassisSpeeds.vy.value()
-              << "  CS Omega: " << chassisSpeeds.omega.value() << std::endl;
 }
 
 bool PoseEstimatorCommand::RunsWhenDisabled() const
