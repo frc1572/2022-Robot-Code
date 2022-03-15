@@ -30,6 +30,7 @@ public:
     void Drive(frc::ChassisSpeeds&& chassisSpeeds);
     frc::ChassisSpeeds GetDesiredChassisSpeeds();
     frc::ChassisSpeeds GetMeasuredChassisSpeeds();
+    frc::ChassisSpeeds GetInvertedChassisSpeeds();
     frc::Rotation2d GetMeasuredRotation();
     frc::Pose2d GetPose();
     void SetPose(frc::Pose2d pose);

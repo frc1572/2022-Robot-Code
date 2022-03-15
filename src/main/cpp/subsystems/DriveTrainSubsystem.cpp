@@ -49,6 +49,10 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetMeasuredChassisSpeeds()
         m_swerveModules[3].GetMeasuredState());
 }
 
+frc::ChassisSpeeds DriveTrainSubsystem::GetInvertedChassisSpeeds()
+{
+}
+
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
     return m_IMU.GetRotation2d();

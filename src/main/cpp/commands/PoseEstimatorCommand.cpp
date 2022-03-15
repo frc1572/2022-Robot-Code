@@ -40,7 +40,7 @@ void PoseEstimatorCommand::Execute()
     auto turretMeasuredAngle = m_turret.GetMeasuredRotation() + m_turretRotationOffset;
 
     auto fieldRelativeSpeeds =
-        frc::Translation2d(chassisSpeeds.vx * -1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
+        frc::Translation2d(chassisSpeeds.vx * 1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
     Eigen::Vector<double, 4> u{
         fieldRelativeSpeeds.X().value(),
         fieldRelativeSpeeds.Y().value(),
