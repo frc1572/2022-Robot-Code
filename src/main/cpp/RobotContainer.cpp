@@ -45,11 +45,9 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeFeederSpinupCommand(0, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeSpinupCommand(0, m_intakeSystem));
 
-    // frc2::JoystickButton(&m_joystick, 1)
-    //   .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
+    // Intake Reverse
     frc2::JoystickButton(&m_joystick, 1)
         .WhenHeld(IntakeSpinupCommand(-Constants::Systemspeeds::IntakeSpeed, m_intakeSystem));
-    // frc2::JoystickButton(&m_joystick, 1).WhenReleased(IntakeFeederSpinupCommand(0, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 1).WhenReleased(IntakeSpinupCommand(0, m_intakeSystem));
 
     // Actuator Testiong Set Positions

@@ -27,6 +27,7 @@ namespace Constants
         constexpr double IntakeFeederSpeed = 0.5;
         constexpr double IntakeSpeed = 0.3;
         constexpr double HoodSpeed = 1000;
+        constexpr double WinchOutput = 0.0;
     } // namespace Systemspeeds
     namespace Flywheel
     {
@@ -81,4 +82,11 @@ namespace Constants
         constexpr int IntakeID = 14; // 14
         constexpr int MainFeederID = 13;
     } // namespace IntakeSystem
+    namespace Climb
+    {
+        constexpr int WinchID = 00;
+        constexpr int TriggerReleaseID = 00;
+        constexpr int TriggerHoldPosition = 0.0;
+        constexpr int TriggerReleasePosition = 0.0;
+    }
 } // namespace Constants

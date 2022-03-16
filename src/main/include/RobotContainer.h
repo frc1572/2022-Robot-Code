@@ -23,6 +23,7 @@
 #include "subsystems/IntakeSystemSubsystem.h"
 #include "subsystems/TurretSubsystem.h"
 #include "subsystems/VisionSubsystem.h"
+#include "subsystems/ClimbSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -48,6 +49,7 @@ private:
     DriveTrainSubsystem m_drivetrain;
     FlywheelSubsystem m_flywheel;
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
+    ClimbSubsystem m_climb;
     IntakeSystemSubsystem m_intakeSystem;
     TurretSubsystem m_turret;
     ActuatorSubsystem m_actuators;
