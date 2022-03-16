@@ -11,6 +11,7 @@
 #include <units/angular_velocity.h>
 
 #include "Constants.h"
+#include "CustomUnits.h"
 
 class TurretSubsystem : public frc2::SubsystemBase
 {
@@ -18,7 +19,7 @@ public:
     TurretSubsystem();
     // void GetCurrent();
     frc::Rotation2d GetMeasuredRotation();
-    void SetDesiredPosition(frc::Rotation2d desiredPosition);
+    void SetDesiredPosition(frc::Rotation2d desiredPosition, rad_per_s_t desiredVelocity = {});
     decltype(1_rad_per_s) GetMeasuredVelocity();
     void Periodic() override;
     void SimulationPeriodic() override;
@@ -28,6 +29,7 @@ private:
 
     units::radian_t m_turretOffset = 0_deg;
     frc::Rotation2d m_desiredPosition;
+    rad_per_s_t m_desiredVelocity;
 
     const frc::LinearSystem<2, 1, 1> m_turretSystem = frc::LinearSystemId::IdentifyPositionSystem<units::radian>(
         Constants::Turret::TurretKv, Constants::Turret::TurretKa);

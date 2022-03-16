@@ -32,9 +32,10 @@ frc::Rotation2d TurretSubsystem::GetMeasuredRotation()
         Constants::Turret::TurretGearing};
 }
 
-void TurretSubsystem::SetDesiredPosition(frc::Rotation2d desiredPosition)
+void TurretSubsystem::SetDesiredPosition(frc::Rotation2d desiredPosition, rad_per_s_t desiredVelocity)
 {
     m_desiredPosition = desiredPosition;
+    m_desiredVelocity = desiredVelocity;
 }
 
 decltype(1_rad_per_s) TurretSubsystem::GetMeasuredVelocity()
@@ -46,8 +47,8 @@ decltype(1_rad_per_s) TurretSubsystem::GetMeasuredVelocity()
 void TurretSubsystem::Periodic()
 {
     auto turretOffsetAngle = m_desiredPosition.Radians() + m_turretOffset / Constants::Turret::TurretGearing;
-    auto turretFeedForward =
-        units::volt_t{m_turretFeedForward.Calculate(Eigen::Vector2d(turretOffsetAngle.value(), 0.0))[0]};
+    auto turretFeedForward = units::volt_t{
+        m_turretFeedForward.Calculate(Eigen::Vector2d(turretOffsetAngle.value(), m_desiredVelocity.value()))[0]};
     if (units::math::abs(turretFeedForward) < Constants::MinimumFFVoltage)
     {
         turretFeedForward = 0_V;
