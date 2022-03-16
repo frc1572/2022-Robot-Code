@@ -15,7 +15,7 @@
 namespace Constants
 {
     constexpr auto LoopPeriod = 1_s / 100;
-    const frc::Translation2d GoalTranslation{27_ft, 13.5_ft};
+    const frc::Translation2d GoalTranslation{2_ft, 0_ft}; // 27, 13.5
     constexpr auto UpperHubRadius = 26.69_in;
     // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
     constexpr auto CameraRotationRadius = 8.7333_in;

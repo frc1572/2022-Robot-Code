@@ -28,7 +28,7 @@ void DriveTeleopCommand::Execute()
         -translationX * Constants::SwerveModule::ThrottleMaxVelocity,
         -translationY * Constants::SwerveModule::ThrottleMaxVelocity,
         -steeringX * Constants::SwerveModule::SteeringMaxVelocity,
-        -m_drivetrain.GetMeasuredRotation()));
+        m_drivetrain.GetMeasuredRotation()));
     auto distance = (Constants::GoalTranslation.Norm() - m_drivetrain.GetPose().Translation().Norm());
 
     frc::SmartDashboard::PutNumber("Distance: ", distance.value());

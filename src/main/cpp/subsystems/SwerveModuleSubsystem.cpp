@@ -117,8 +117,8 @@ void SwerveModuleSubsystem::Periodic()
         DemandType::DemandType_ArbitraryFeedForward,
         (steeringfeedforward + Constants::SwerveModule::SteeringKs * wpi::sgn(steeringfeedforward)) / 12.0_V);
 
-    std::cout << "Raw Steering Motor Position: " << m_steeringMotor->GetDeviceID() << ": "
-              << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
+    // std::cout << "Raw Steering Motor Position: " << m_steeringMotor->GetDeviceID() << ": "
+    //         << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
     frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
