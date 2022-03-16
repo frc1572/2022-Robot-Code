@@ -15,11 +15,11 @@
 namespace Constants
 {
     constexpr auto LoopPeriod = 1_s / 100;
-    const frc::Translation2d GoalTranslation{2_ft, 0_ft}; // 27, 13.5
+    const frc::Translation2d GoalTranslation{6_ft, 0_ft}; // 27, 13.5
     constexpr auto UpperHubRadius = 26.69_in;
     // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
     constexpr auto CameraRotationRadius = 8.7333_in;
-    constexpr auto MinimumFFVoltage = 0.1_V;
+    constexpr auto MinimumFFVoltage = 1.0_V;
 
     namespace Systemspeeds
     {
@@ -48,7 +48,6 @@ namespace Constants
         constexpr Ks_t SteeringKs = 0.7027_V;
         constexpr Kv_t<units::radian_t> SteeringKv = 0.26826_V / 1_rad_per_s;
         constexpr Ka_t<units::radian_t> SteeringKa = 0.0008629_V / 1_rad_per_s_sq; // TODO: transcription error
-
         const double ThrottleGearing = 6.54;
         const double SteeringGearing = 72.0 / 14.0 * 24.0 / 8.0;
         constexpr auto WheelDiameter = 3.25_in;
@@ -84,9 +83,9 @@ namespace Constants
     } // namespace IntakeSystem
     namespace Climb
     {
-        constexpr int WinchID = 00;
-        constexpr int TriggerReleaseID = 00;
+        constexpr int WinchID = 22;
+        constexpr int TriggerReleaseID = 4;
         constexpr int TriggerHoldPosition = 0.0;
         constexpr int TriggerReleasePosition = 0.0;
-    }
+    } // namespace Climb
 } // namespace Constants

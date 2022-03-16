@@ -1,42 +1,44 @@
+/*
 #include "commands/ClimbCommand.h"
+
 #include <frc/smartdashboard/SmartDashboard.h>
 
-TriggerCommand::TriggerCommand(ClimbSubsystem& Climb) : m_climb(Climb){
+TriggerCommand::TriggerCommand(ClimbSubsystem& Climb) : m_climb(Climb)
+{
     AddRequirements(&Climb);
     SetName("Trigger");
 }
 
-bool TriggerCommand::TriggerReleased() {
-    if (m_climb.GetTriggerPosition() != Constants::Climb::TriggerHoldPosition) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-void TriggerCommand::Execute() {
+void TriggerCommand::Execute()
+{
     m_climb.TriggerRelease();
 }
 
-bool TriggerCommand::IsFinished() {
+bool TriggerCommand::IsFinished()
+{
     return true;
 }
 
-WinchCommand::WinchCommand(ClimbSubsystem& Climb) : m_climb(Climb){
+WinchCommand::WinchCommand(ClimbSubsystem& Climb) : m_climb(Climb)
+{
     AddRequirements(&Climb);
     SetName("Winch");
 }
 
-void WinchCommand::Execute() {
-    if (TriggerCommand::TriggerReleased() == true) {
+void WinchCommand::Execute()
+{
+    if (m_climb.TriggerReleased() == true)
+    {
         m_climb.WinchPull(Constants::Systemspeeds::WinchOutput);
     }
-    else {
+    else
+    {
         m_climb.WinchPull(0);
     }
 }
 
-bool WinchCommand::IsFinished() {
+bool WinchCommand::IsFinished()
+{
     return false;
 }
+*/
