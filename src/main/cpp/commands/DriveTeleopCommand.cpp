@@ -25,7 +25,7 @@ void DriveTeleopCommand::Execute()
     double steeringX = frc::ApplyDeadband(m_steeringJoystick.GetX(), 0.05);
 
     m_drivetrain.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-        translationX * Constants::SwerveModule::ThrottleMaxVelocity,
+        -translationX * Constants::SwerveModule::ThrottleMaxVelocity,
         -translationY * Constants::SwerveModule::ThrottleMaxVelocity,
         -steeringX * Constants::SwerveModule::SteeringMaxVelocity,
         -m_drivetrain.GetMeasuredRotation()));

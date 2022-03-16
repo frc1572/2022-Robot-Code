@@ -48,15 +48,15 @@ private:
     frc::Pose2d m_pose;
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
-        SwerveModuleSubsystem{1, 2, 1545 / Constants::TicksPerRevolution::TalonFX},
-        SwerveModuleSubsystem{4, 3, 1586 / Constants::TicksPerRevolution::TalonFX},
-        SwerveModuleSubsystem{5, 6, 1594 / Constants::TicksPerRevolution::TalonFX},
-        SwerveModuleSubsystem{8, 7, 1833 / Constants::TicksPerRevolution::TalonFX}};
+        SwerveModuleSubsystem{1, 2, -1143 / Constants::TicksPerRevolution::TalonFX},
+        SwerveModuleSubsystem{4, 3, -1415 / Constants::TicksPerRevolution::TalonFX},
+        SwerveModuleSubsystem{5, 6, -410 / Constants::TicksPerRevolution::TalonFX},
+        SwerveModuleSubsystem{8, 7, -1559 / Constants::TicksPerRevolution::TalonFX}};
     frc::SwerveDriveKinematics<4> m_swerveKinematics{
-        frc::Translation2d{-11.75_in, -11.75_in},
-        frc::Translation2d{11.75_in, -11.75_in},
+        frc::Translation2d{-11.75_in, 11.75_in},
         frc::Translation2d{11.75_in, 11.75_in},
-        frc::Translation2d{-11.75_in, 11.75_in}};
+        frc::Translation2d{11.75_in, -11.75_in},
+        frc::Translation2d{-11.75_in, -11.75_in}};
 
     frc::PIDController m_translationController{4, 0.0, 0.0, Constants::LoopPeriod};
 
