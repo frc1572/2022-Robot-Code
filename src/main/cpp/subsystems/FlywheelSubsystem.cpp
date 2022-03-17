@@ -26,7 +26,7 @@ FlywheelSubsystem::FlywheelSubsystem()
     m_follower.Follow(m_leader);
     m_follower.SetInverted(true);
     // Set Feeder to coast and config Default
-    frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
+    // frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
 }
 
 void FlywheelSubsystem::Periodic()
@@ -46,8 +46,8 @@ void FlywheelSubsystem::Periodic()
         m_follower.Set(ControlMode::PercentOutput, 0.0);
     }
 
-    frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
-    frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
+    // frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
+    // frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
 }
 
 void FlywheelSubsystem::SimulationPeriodic()
@@ -70,7 +70,7 @@ void FlywheelSubsystem::SetSetpoint(rad_per_s_t setpoint)
 {
     m_loop.SetNextR(Eigen::Vector<double, 1>(setpoint.to<double>()));
 
-    frc::SmartDashboard::PutNumber("Flywheel.Setpoint", setpoint.to<double>());
+    // frc::SmartDashboard::PutNumber("Flywheel.Setpoint", setpoint.to<double>());
 }
 
 void FlywheelSubsystem::StartFeeder(double FeedRpm)

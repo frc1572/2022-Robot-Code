@@ -51,7 +51,7 @@ void VisionSubsystem::Periodic()
         auto latency = result.GetLatency();
         m_latestResult = {distance, yaw, frc::Timer::GetFPGATimestamp() - latency};
         frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", true);
-        frc::SmartDashboard::PutNumber("VisionSubsystem.GoalDistanceMeters", distance.value());
+        // frc::SmartDashboard::PutNumber("VisionSubsystem.GoalDistanceMeters", distance.value());
         frc::SmartDashboard::PutNumber("VisionSubsystem.GoalYawDegrees", yaw.Degrees().value());
         frc::SmartDashboard::PutNumber("VisionSubsystem.LatencySeconds", latency.value());
     }

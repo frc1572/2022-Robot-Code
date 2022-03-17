@@ -89,7 +89,7 @@ void DriveTrainSubsystem::Periodic()
     auto pose = GetPose();
     m_field.SetRobotPose(pose);
     frc::SmartDashboard::PutData("Field", &m_field);
-    frc::SmartDashboard::PutNumber("DriveTrain.MeasuredIMUYaw", m_IMU.GetRotation2d().Degrees().value());
+    // frc::SmartDashboard::PutNumber("DriveTrain.MeasuredIMUYaw", m_IMU.GetRotation2d().Degrees().value());
 }
 
 void DriveTrainSubsystem::SimulationPeriodic()

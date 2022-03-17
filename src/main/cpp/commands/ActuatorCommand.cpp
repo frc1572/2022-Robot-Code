@@ -16,6 +16,6 @@ void ActuatorCommand::Initialize()
 
 bool ActuatorCommand::IsFinished()
 {
-    spdlog::info(">>>>>IsFinished Command Ran<<<<<");
+    // spdlog::info(">>>>>IsFinished Command Ran<<<<<");
     return true;
 }

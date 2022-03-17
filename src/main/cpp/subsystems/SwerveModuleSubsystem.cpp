@@ -38,7 +38,7 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     {
         m_steeringMotor->SetInverted(true);
     }
-    spdlog::info("{}, {}", throttlePort, m_steeringMotor->GetSelectedSensorPosition());
+    // spdlog::info("{}, {}", throttlePort, m_steeringMotor->GetSelectedSensorPosition());
 }
 
 frc::SwerveModuleState SwerveModuleSubsystem::OptimizeStateContinuous(frc::SwerveModuleState state)
@@ -119,15 +119,15 @@ void SwerveModuleSubsystem::Periodic()
 
     // std::cout << "Raw Steering Motor Position: " << m_steeringMotor->GetDeviceID() << ": "
     //         << m_steeringMotor->GetSelectedSensorPosition() << std::endl;
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
-    frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()), optimizedState.speed.value());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.DesiredSteeringPosition", GetName()), optimizedState.angle.Radians().value());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
-    frc::SmartDashboard::PutNumber(
-        fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
+    // frc::SmartDashboard::PutNumber(
+    //    fmt::format("{}.RawPosition", GetName()), m_steeringMotor->GetSelectedSensorPosition());
+    // frc::SmartDashboard::PutNumber(fmt::format("{}.DesiredThrottleVelocity", GetName()),
+    // optimizedState.speed.value()); frc::SmartDashboard::PutNumber(
+    //    fmt::format("{}.DesiredSteeringPosition", GetName()), optimizedState.angle.Radians().value());
+    // frc::SmartDashboard::PutNumber(
+    //    fmt::format("{}.MeasuredThrottleVelocity", GetName()), GetMeasuredVelocity().value());
+    // frc::SmartDashboard::PutNumber(
+    //    fmt::format("{}.MeasuredSteeringPosition", GetName()), GetMeasuredRotation().Radians().value());
 }
 
 void SwerveModuleSubsystem::SimulationPeriodic()

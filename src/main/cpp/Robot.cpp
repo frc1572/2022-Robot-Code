@@ -12,10 +12,12 @@
 #include <spdlog/spdlog.h>
 
 #include "Constants.h"
+#include "frc/livewindow/LiveWindow.h"
 #include "helper/spdlog.h"
 
 Robot::Robot()
 {
+    frc::TimedRobot(Constants::LoopPeriod);
 }
 
 void Robot::RobotInit()
@@ -26,6 +28,7 @@ void Robot::RobotInit()
     // scheduler.OnCommandExecute([](const frc2::Command& cmd) { spdlog::info("EXECUTE: {}", cmd.GetName()); });
     scheduler.OnCommandFinish([](const frc2::Command& cmd) { spdlog::info("FINISH: {}", cmd.GetName()); });
     scheduler.OnCommandInterrupt([](const frc2::Command& cmd) { spdlog::info("INTERRUPT: {}", cmd.GetName()); });
+    frc::LiveWindow::DisableAllTelemetry();
 }
 
 /**

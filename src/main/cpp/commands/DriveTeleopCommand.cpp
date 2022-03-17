@@ -31,5 +31,5 @@ void DriveTeleopCommand::Execute()
         m_drivetrain.GetMeasuredRotation()));
     auto distance = (Constants::GoalTranslation.Norm() - m_drivetrain.GetPose().Translation().Norm());
 
-    frc::SmartDashboard::PutNumber("Distance: ", distance.value());
+    // frc::SmartDashboard::PutNumber("Distance: ", distance.value());
 }
