@@ -18,7 +18,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
     m_observer(
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return u; },
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return x.block<2, 1>(2, 0); },
-        {0.1, 0.1, 2.0, 4.0},
+        {1.0, 1.0, 2.0, 4.0},
         {0.0000, 0.0000},
         AngleMean<4, 4>({2, 3}),
         AngleMean<2, 4>({0, 1}),
@@ -49,7 +49,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
                 u,
                 y,
                 m_visionMeasurementFn,
-                frc::MakeCovMatrix<2>({0.05, 0.01}),
+                frc::MakeCovMatrix<2>({0.0, 0.0}),
                 AngleMean<2, 4>({1}),
                 AngleResidual<2>({1}),
                 AngleResidual<4>({2, 3}),
@@ -83,6 +83,7 @@ void PoseEstimatorCommand::Execute()
 
     if (auto targetInfo = m_vision.PopLatestResult())
     {
+        std::cout << "Popped Latest result! " << std::endl;
         Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
         m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
             &m_observer, Constants::LoopPeriod, visionMeasurement, m_visionCorrectionFn, targetInfo->timestamp);

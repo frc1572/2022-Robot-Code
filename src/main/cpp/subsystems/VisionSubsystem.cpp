@@ -43,6 +43,7 @@ void VisionSubsystem::Periodic()
     }
     else
     {
+        std::cout << "Hitting the Vision Else Branch! " << std::endl;
         auto bestTarget = result.GetBestTarget();
         auto distance = photonlib::PhotonUtils::CalculateDistanceToTarget(
                             m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch())) +

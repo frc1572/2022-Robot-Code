@@ -15,9 +15,8 @@
 #include "frc/livewindow/LiveWindow.h"
 #include "helper/spdlog.h"
 
-Robot::Robot()
+Robot::Robot() : frc::TimedRobot(Constants::LoopPeriod)
 {
-    frc::TimedRobot(Constants::LoopPeriod);
 }
 
 void Robot::RobotInit()

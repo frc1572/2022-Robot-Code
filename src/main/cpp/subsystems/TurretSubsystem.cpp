@@ -19,8 +19,8 @@ TurretSubsystem::TurretSubsystem()
     {
         m_turret.SetInverted(true);
     }
-    m_turret.Config_kP(0, 0.005);
-    m_turret.Config_kD(0, 0.000);
+    m_turret.Config_kP(0, 0.05);
+    m_turret.Config_kD(0, 0.0075);
     // m_turret.ConfigClosedLoopPeakOutput(0, .75);
     SetName(fmt::format("TurretSubsystem({})", m_turret.GetDeviceID()));
 }
@@ -56,9 +56,9 @@ void TurretSubsystem::Periodic()
 
     m_turret.Set(
         ControlMode::Position,
-        turretOffsetAngle * Constants::Turret::TurretGearing * Constants::TicksPerRevolution::TalonFX,
+        turretOffsetAngle * Constants::Turret::TurretGearing * Constants::TicksPerRevolution::TalonFX /*,
         DemandType::DemandType_ArbitraryFeedForward,
-        (turretFeedForward + Constants::Turret::TurretKs * wpi::sgn(turretFeedForward)) / 12.0_V);
+        (turretFeedForward + Constants::Turret::TurretKs * wpi::sgn(turretFeedForward)) / 12.0_V*/);
 
     frc::SmartDashboard::PutNumber(
         fmt::format("{}.DesiredRotationDegrees", GetName()), units::degree_t(turretOffsetAngle).value());
