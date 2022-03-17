@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include <Eigen/Core>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Timer.h>
 #include <spdlog/spdlog.h>
@@ -26,7 +25,36 @@ PoseEstimatorCommand::PoseEstimatorCommand(
         AngleResidual<4>({2, 3}),
         AngleResidual<2>({0, 1}),
         AngleAdd<4>({2, 3}),
-        Constants::LoopPeriod)
+        Constants::LoopPeriod),
+    m_visionMeasurementFn(
+        [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u)
+        {
+            Eigen::Vector<double, 2> cameraOffset{
+                units::meter_t{Constants::CameraRotationRadius}.value() * std::cos(x[3]),
+                units::meter_t{Constants::CameraRotationRadius}.value() * std::sin(x[3])};
+            auto cameraTranslation = x.block<2, 1>(0, 0) + cameraOffset;
+            auto cameraRotation = x.block<2, 1>(2, 0).sum();
+            Eigen::Vector<double, 2> goalTranslation{
+                Constants::GoalTranslation.X().value(), Constants::GoalTranslation.Y().value()};
+            auto goalOffset = goalTranslation - cameraTranslation;
+            double distance = goalOffset.norm();
+            double yaw = frc::InputModulus(
+                atan2(goalOffset[1], goalOffset[0]) - cameraRotation, -wpi::numbers::pi, wpi::numbers::pi);
+            return Eigen::Vector<double, 2>{distance, yaw};
+        }),
+    m_visionCorrectionFn(
+        [this](const Eigen::Vector<double, 4>& u, const Eigen::Vector<double, 2>& y)
+        {
+            m_observer.Correct<2>(
+                u,
+                y,
+                m_visionMeasurementFn,
+                frc::MakeCovMatrix<2>({0.1, 0.05}),
+                AngleMean<2, 4>({1}),
+                AngleResidual<2>({1}),
+                AngleResidual<4>({2, 3}),
+                AngleAdd<4>({2, 3}));
+        })
 {
     AddRequirements(&m_vision);
     SetName("PoseEstimatorCommand");
@@ -56,34 +84,8 @@ void PoseEstimatorCommand::Execute()
     if (auto targetInfo = m_vision.PopLatestResult())
     {
         Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
-        auto correctFn = [this](const Eigen::Vector<double, 4>& u, const Eigen::Vector<double, 2>& y)
-        {
-            m_observer.Correct<2>(
-                u,
-                y,
-                [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u)
-                {
-                    Eigen::Vector<double, 2> cameraOffset{
-                        units::meter_t{Constants::CameraRotationRadius}.value() * std::cos(x[3]),
-                        units::meter_t{Constants::CameraRotationRadius}.value() * std::sin(x[3])};
-                    auto cameraTranslation = x.block<2, 1>(0, 0) + cameraOffset;
-                    auto cameraRotation = x.block<2, 1>(2, 0).sum();
-                    Eigen::Vector<double, 2> goalTranslation{
-                        Constants::GoalTranslation.X().value(), Constants::GoalTranslation.Y().value()};
-                    auto goalOffset = goalTranslation - cameraTranslation;
-                    double distance = goalOffset.norm();
-                    double yaw = frc::InputModulus(
-                        atan2(goalOffset[1], goalOffset[0]) - cameraRotation, -wpi::numbers::pi, wpi::numbers::pi);
-                    return Eigen::Vector<double, 2>{distance, yaw};
-                },
-                frc::MakeCovMatrix<2>({0.1, 0.05}),
-                AngleMean<2, 4>({1}),
-                AngleResidual<2>({1}),
-                AngleResidual<4>({2, 3}),
-                AngleAdd<4>({2, 3}));
-        };
         m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
-            &m_observer, Constants::LoopPeriod, visionMeasurement, correctFn, targetInfo->timestamp);
+            &m_observer, Constants::LoopPeriod, visionMeasurement, m_visionCorrectionFn, targetInfo->timestamp);
     }
 
     m_drivetrain.SetPose(GetPose());
@@ -113,4 +115,21 @@ void PoseEstimatorCommand::Reset(frc::Pose2d currentPose, frc::Rotation2d curren
          currentTurretRotation.Radians().value()});
     m_drivetrainRotationOffset = currentPose.Rotation() - m_drivetrain.GetMeasuredRotation();
     m_turretRotationOffset = currentTurretRotation - m_turret.GetMeasuredRotation();
+}
+
+Eigen::Vector<double, 2> CalculateVisionMeasurement(
+    const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u)
+{
+    Eigen::Vector<double, 2> cameraOffset{
+        units::meter_t{Constants::CameraRotationRadius}.value() * std::cos(x[3]),
+        units::meter_t{Constants::CameraRotationRadius}.value() * std::sin(x[3])};
+    auto cameraTranslation = x.block<2, 1>(0, 0) + cameraOffset;
+    auto cameraRotation = x.block<2, 1>(2, 0).sum();
+    Eigen::Vector<double, 2> goalTranslation{
+        Constants::GoalTranslation.X().value(), Constants::GoalTranslation.Y().value()};
+    auto goalOffset = goalTranslation - cameraTranslation;
+    double distance = goalOffset.norm();
+    double yaw =
+        frc::InputModulus(atan2(goalOffset[1], goalOffset[0]) - cameraRotation, -wpi::numbers::pi, wpi::numbers::pi);
+    return Eigen::Vector<double, 2>{distance, yaw};
 }

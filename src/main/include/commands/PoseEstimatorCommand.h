@@ -1,5 +1,8 @@
 #pragma once
 
+#include <functional>
+
+#include <Eigen/Core>
 #include <frc/estimator/KalmanFilterLatencyCompensator.h>
 #include <frc/estimator/UnscentedKalmanFilter.h>
 #include <frc/geometry/Pose2d.h>
@@ -32,4 +35,8 @@ private:
 
     frc::UnscentedKalmanFilter<4, 4, 2> m_observer;
     frc::KalmanFilterLatencyCompensator<4, 4, 2, frc::UnscentedKalmanFilter<4, 4, 2>> m_latencyCompensator;
+
+    std::function<Eigen::Vector<double, 2>(const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u)>
+        m_visionMeasurementFn;
+    std::function<void(const Eigen::Vector<double, 4>& u, const Eigen::Vector<double, 2>& y)> m_visionCorrectionFn;
 };
