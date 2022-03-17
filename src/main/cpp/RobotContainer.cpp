@@ -27,16 +27,15 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureButtonBindings()
 {
-    /*
     // Hood Shooter Toggle ON
-    // frc2::JoystickButton(&m_joystick, 6)
-    //     .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
-    // frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 6)
+        .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
 
-    // // Turret Feededr toggle ON
-    // frc2::JoystickButton(&m_joystick, 6)
-    //     .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel));
-    // frc2::JoystickButton(&m_joystick, 5).WhenReleased(FeederSpinupCommand(0.0, m_flywheel));
+    // Turret Feededr toggle ON
+    frc2::JoystickButton(&m_joystick, 6)
+        .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 5).WhenReleased(FeederSpinupCommand(0.0, m_flywheel));
 
     // // Main Intake and Main Feeder Hold ON
     // frc2::JoystickButton(&m_joystick, 3)
@@ -56,16 +55,17 @@ void RobotContainer::ConfigureButtonBindings()
     // frc2::JoystickButton(&m_joystick, 10).WhenPressed(ActuatorCommand(0.50, m_actuators));
     // frc2::JoystickButton(&m_joystick, 60).WhenPressed(ActuatorCommand(0.75, m_actuators));
 
-    // // Main Robot Feeder Hold On
-    // frc2::JoystickButton(&m_joystick, 4).WhenReleased(IntakeFeederSpinupCommand(0.0, m_intakeSystem));
-    // frc2::JoystickButton(&m_joystick, 4)
-    //     .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
+    // Main Robot Feeder Hold On
+    frc2::JoystickButton(&m_joystick, 4).WhenReleased(IntakeFeederSpinupCommand(0.0, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 4)
+        .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
 
-    // // Intake Hold ON
-    // frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeSpinupCommand(0.0, m_intakeSystem));
-    // frc2::JoystickButton(&m_joystick, 2)
-    //     .WhenHeld(IntakeSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
+    // Intake Hold ON
+    frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeSpinupCommand(0.0, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 2)
+        .WhenHeld(IntakeSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
 
+    /*
     // All systems on
     frc2::JoystickButton(&m_joystick, 7).WhenPressed(IntakeSpinupCommand(0.0, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 7).WhenPressed(IntakeFeederSpinupCommand(0.0, m_intakeSystem));
@@ -77,7 +77,7 @@ void RobotContainer::ConfigureButtonBindings()
         .WhenPressed(IntakeSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 8)
         .WhenPressed(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel));
-        */
+    */
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand()

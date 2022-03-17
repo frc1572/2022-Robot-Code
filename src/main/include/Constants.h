@@ -26,7 +26,7 @@ namespace Constants
         constexpr double TurretFeederSpeed = 0.7;
         constexpr double IntakeFeederSpeed = 0.5;
         constexpr double IntakeSpeed = 0.3;
-        constexpr double HoodSpeed = 1000;
+        constexpr double HoodSpeed = 2000;
         constexpr double WinchOutput = 0.0;
     } // namespace Systemspeeds
     namespace Flywheel
@@ -84,8 +84,8 @@ namespace Constants
     namespace Climb
     {
         constexpr int WinchID = 22;
-        constexpr int TriggerReleaseID = 4;
-        constexpr int TriggerHoldPosition = 0.0;
-        constexpr int TriggerReleasePosition = 0.0;
+        // constexpr int TriggerReleaseID = 4;
+        // constexpr int TriggerHoldPosition = 0.0;
+        // constexpr int TriggerReleasePosition = 0.0;
     } // namespace Climb
 } // namespace Constants
