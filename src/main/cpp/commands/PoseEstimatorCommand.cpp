@@ -29,11 +29,11 @@ PoseEstimatorCommand::PoseEstimatorCommand(
     m_visionMeasurementFn(
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u)
         {
-            Eigen::Vector<double, 2> cameraOffset{
-                units::meter_t{Constants::CameraRotationRadius}.value() * std::cos(x[3]),
-                units::meter_t{Constants::CameraRotationRadius}.value() * std::sin(x[3])};
-            auto cameraTranslation = x.block<2, 1>(0, 0) + cameraOffset;
             auto cameraRotation = x.block<2, 1>(2, 0).sum();
+            Eigen::Vector<double, 2> cameraOffset{
+                units::meter_t{Constants::CameraRotationRadius}.value() * std::cos(cameraRotation),
+                units::meter_t{Constants::CameraRotationRadius}.value() * std::sin(cameraRotation)};
+            auto cameraTranslation = x.block<2, 1>(0, 0) + cameraOffset;
             Eigen::Vector<double, 2> goalTranslation{
                 Constants::GoalTranslation.X().value(), Constants::GoalTranslation.Y().value()};
             auto goalOffset = goalTranslation - cameraTranslation;
