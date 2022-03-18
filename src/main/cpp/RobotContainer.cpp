@@ -9,6 +9,7 @@
 #include "commands/ActuatorCommand.h"
 #include "commands/AutoFlywheelCommand.h"
 #include "commands/AutoTurretCommand.h"
+#include "commands/ClimbCommand.h"
 #include "commands/DriveTeleopCommand.h"
 #include "commands/FlywheelSpinupCommand.h"
 #include "commands/IntakeSystemCommand.h"
@@ -27,23 +28,37 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureButtonBindings()
 {
+    /*
+    if (m_joystick.GetRawButtonPressed(11) == true && m_translationJoystick.GetRawButtonPressed(1) == true)
+    {
+        WinchReleaseCommand(Constants::Systemspeeds::WinchRelease, m_climb);
+    }
+
+    if (WinchReleaseCommand(Constants::Systemspeeds::WinchRelease, m_climb).IsFinished() == true)
+    {
+        frc2::JoystickButton(&m_joystick, 8).WhenHeld(WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb));
+    }
+    */
+    frc2::JoystickButton(&m_joystick, 11)
+        .WhenPressed(WinchReleaseCommand(Constants::Systemspeeds::WinchRelease, m_climb));
+    frc2::JoystickButton(&m_joystick, 8).WhenHeld(WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb));
+
     // Hood Shooter Toggle ON
     frc2::JoystickButton(&m_joystick, 6)
         .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
     frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
-
     // Turret Feededr toggle ON
     frc2::JoystickButton(&m_joystick, 6)
         .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel));
     frc2::JoystickButton(&m_joystick, 5).WhenReleased(FeederSpinupCommand(0.0, m_flywheel));
 
-    // // Main Intake and Main Feeder Hold ON
-    // frc2::JoystickButton(&m_joystick, 3)
-    //     .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed * -1, m_intakeSystem));
-    // frc2::JoystickButton(&m_joystick, 3)
-    //     .WhenHeld(IntakeSpinupCommand(-Constants::Systemspeeds::IntakeSpeed, m_intakeSystem));
-    // frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeFeederSpinupCommand(0, m_intakeSystem));
-    // frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeSpinupCommand(0, m_intakeSystem));
+    // Main Intake and Main Feeder Hold ON
+    frc2::JoystickButton(&m_joystick, 3)
+        .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed * -1, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 3)
+        .WhenHeld(IntakeSpinupCommand(-Constants::Systemspeeds::IntakeSpeed, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeFeederSpinupCommand(0, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeSpinupCommand(0, m_intakeSystem));
 
     // // Intake Reverse
     // frc2::JoystickButton(&m_joystick, 1)

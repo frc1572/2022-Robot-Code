@@ -41,10 +41,10 @@ void Robot::RobotInit()
 void Robot::RobotPeriodic()
 {
     frc2::CommandScheduler::GetInstance().Run();
-    if (!frc::DriverStation::IsFMSAttached())
-    {
-        nt::NetworkTableInstance::GetDefault().Flush();
-    }
+    // if (!frc::DriverStation::IsFMSAttached())
+    //{
+    //     nt::NetworkTableInstance::GetDefault().Flush();
+    // }
 }
 
 /**

@@ -43,7 +43,7 @@ void VisionSubsystem::Periodic()
     }
     else
     {
-        std::cout << "Hitting the Vision Else Branch! " << std::endl;
+        // std::cout << "Hitting the Vision Else Branch! " << std::endl;
         auto bestTarget = result.GetBestTarget();
         auto distance = photonlib::PhotonUtils::CalculateDistanceToTarget(
                             m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch())) +
@@ -52,7 +52,7 @@ void VisionSubsystem::Periodic()
         auto latency = result.GetLatency();
         m_latestResult = {distance, yaw, frc::Timer::GetFPGATimestamp() - latency};
         frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", true);
-        // frc::SmartDashboard::PutNumber("VisionSubsystem.GoalDistanceMeters", distance.value());
+        frc::SmartDashboard::PutNumber("VisionSubsystem.GoalDistanceMeters", distance.value());
         frc::SmartDashboard::PutNumber("VisionSubsystem.GoalYawDegrees", yaw.Degrees().value());
         frc::SmartDashboard::PutNumber("VisionSubsystem.LatencySeconds", latency.value());
     }

@@ -14,8 +14,8 @@
 
 namespace Constants
 {
-    constexpr auto LoopPeriod = 1_s / 100;
-    const frc::Translation2d GoalTranslation{6_ft, 0_ft}; // 27, 13.5
+    constexpr auto LoopPeriod = 1_s / 50;
+    const frc::Translation2d GoalTranslation{27_ft, 13.5_ft}; // 27, 13.5
     constexpr auto UpperHubRadius = 26.69_in;
     // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
     constexpr auto CameraRotationRadius = 8.7333_in;
@@ -27,7 +27,8 @@ namespace Constants
         constexpr double IntakeFeederSpeed = 0.5;
         constexpr double IntakeSpeed = 0.3;
         constexpr double HoodSpeed = 2000;
-        constexpr double WinchOutput = 0.0;
+        constexpr double WinchOutput = 0.25;
+        constexpr double WinchRelease = 0.1;
     } // namespace Systemspeeds
     namespace Flywheel
     {
@@ -52,7 +53,7 @@ namespace Constants
         const double SteeringGearing = 72.0 / 14.0 * 24.0 / 8.0;
         constexpr auto WheelDiameter = 3.25_in;
         constexpr auto RolloutRatio = WheelDiameter / 2_rad;
-        constexpr auto ThrottleMaxVelocity = 4_fps; // adjusted for driver, nominally 17 ft/s
+        constexpr auto ThrottleMaxVelocity = 3_fps; // adjusted for driver, nominally 17 ft/s
         constexpr auto SteeringMaxVelocity = 1 * 360_deg_per_s;
     } // namespace SwerveModule
 
@@ -83,9 +84,6 @@ namespace Constants
     } // namespace IntakeSystem
     namespace Climb
     {
-        constexpr int WinchID = 22;
-        // constexpr int TriggerReleaseID = 4;
-        // constexpr int TriggerHoldPosition = 0.0;
-        // constexpr int TriggerReleasePosition = 0.0;
+        constexpr int WinchID = 16;
     } // namespace Climb
 } // namespace Constants

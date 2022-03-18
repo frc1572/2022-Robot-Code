@@ -1,29 +1,18 @@
-/*
 #include "subsystems/ClimbSubsystem.h"
 
+#include "frc2/command/WaitCommand.h"
 ClimbSubsystem::ClimbSubsystem()
 {
 }
 
 void ClimbSubsystem::WinchPull(double winchPower)
 {
-    Winch.Set(ControlMode::PercentOutput, winchPower);
+    m_winch.Set(ControlMode::PercentOutput, winchPower);
 }
 
-void ClimbSubsystem::TriggerRelease()
+void ClimbSubsystem::WinchRelease(double winchReleasePower)
 {
-    ClimbTrigger.Set(Constants::Climb::TriggerReleasePosition);
+    m_winch.Set(ControlMode::PercentOutput, winchReleasePower);
+    frc2::WaitCommand(1.0_s);
+    m_winch.Set(ControlMode::PercentOutput, 0.0);
 }
-
-bool ClimbSubsystem::TriggerReleased()
-{
-    if (ClimbTrigger.Get() != Constants::Climb::TriggerHoldPosition)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-*/

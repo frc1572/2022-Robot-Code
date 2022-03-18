@@ -1,4 +1,4 @@
-/*
+
 #pragma once
 
 #include <ctre/Phoenix.h>
@@ -12,11 +12,8 @@ class ClimbSubsystem : public frc2::SubsystemBase
 public:
     ClimbSubsystem();
     void WinchPull(double winchPower);
-    void TriggerRelease();
-    bool TriggerReleased();
+    void WinchRelease(double WinchReleasePower);
 
 private:
-    WPI_TalonFX Winch{Constants::Climb::WinchID, "canviore"};
-    frc::Servo ClimbTrigger{Constants::Climb::TriggerReleaseID};
+    WPI_TalonFX m_winch{Constants::Climb::WinchID, "canviore"};
 };
-*/

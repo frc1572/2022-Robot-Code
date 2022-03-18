@@ -49,7 +49,7 @@ private:
     DriveTrainSubsystem m_drivetrain;
     FlywheelSubsystem m_flywheel;
     // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
-    // ClimbSubsystem m_climb;
+    ClimbSubsystem m_climb;
     IntakeSystemSubsystem m_intakeSystem;
     TurretSubsystem m_turret;
     ActuatorSubsystem m_actuators;
@@ -71,12 +71,12 @@ private:
     { m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation()); };
 
     frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
-        "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 2_mps, 2_mps_sq), resetPose);
+        "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 1_mps, 1_mps_sq), resetPose);
     frc2::SequentialCommandGroup m_tuningRotationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
-        "tuningRotationCommand", pathplanner::PathPlanner::loadPath("tuningRotation", 2_mps, 2_mps_sq), resetPose);
+        "tuningRotationCommand", pathplanner::PathPlanner::loadPath("tuningRotation", 1_mps, 1_mps_sq), resetPose);
     frc2::SequentialCommandGroup m_tuningTranslationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
         "tuningTranslationCommand",
-        pathplanner::PathPlanner::loadPath("tuningTranslation", 2_mps, 2_mps_sq),
+        pathplanner::PathPlanner::loadPath("tuningTranslation", 1_mps, 1_mps_sq),
         resetPose);
 
     void ConfigureButtonBindings();
