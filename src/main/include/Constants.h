@@ -23,9 +23,10 @@ namespace Constants
 
     namespace Systemspeeds
     {
+        // double VairableHoodSpeed;
         constexpr double TurretFeederSpeed = 0.7;
         constexpr double IntakeFeederSpeed = 0.5;
-        constexpr double IntakeSpeed = 0.3;
+        constexpr double IntakeSpeed = 0.25;
         constexpr double HoodSpeed = 2000;
         constexpr double WinchOutput = 0.5;
         constexpr double WinchRelease = 0.25;
@@ -53,7 +54,7 @@ namespace Constants
         const double SteeringGearing = 72.0 / 14.0 * 24.0 / 8.0;
         constexpr auto WheelDiameter = 3.25_in;
         constexpr auto RolloutRatio = WheelDiameter / 2_rad;
-        constexpr auto ThrottleMaxVelocity = 3_fps; // adjusted for driver, nominally 17 ft/s
+        constexpr auto ThrottleMaxVelocity = 10_fps; // adjusted for driver, nominally 17 ft/s
         constexpr auto SteeringMaxVelocity = 1 * 360_deg_per_s;
     } // namespace SwerveModule
 

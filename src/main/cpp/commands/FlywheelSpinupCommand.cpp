@@ -20,7 +20,11 @@ FeederSpinupCommand::FeederSpinupCommand(double FeedRPM, FlywheelSubsystem& feed
     AddRequirements(&feeder);
     SetName("FeederSpinupCommand");
 }
+/*
+SetHoodSpeed::SetHoodSpeed(double SelectedHoodSpeed) : m_selectedHoodSpeed(SelectedHoodSpeed) {
 
+}
+*/
 void FlywheelSpinupCommand::Initialize()
 {
     m_flywheel.SetSetpoint(m_omega);

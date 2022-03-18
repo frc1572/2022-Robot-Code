@@ -11,6 +11,7 @@ class FlywheelSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, Flyw
 public:
     FlywheelSpinupCommand(rad_per_s_t omega, FlywheelSubsystem& flywheel);
     FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flywheel);
+
     void Initialize() override;
     bool IsFinished() override;
 
@@ -30,3 +31,15 @@ private:
     double m_feederRPM;
     FlywheelSubsystem& m_feeder;
 };
+/*
+class SetHoodSpeed : public frc2::CommandHelper<frc2::CommandBase, SetHoodSpeed>
+{
+public:
+    SetHoodSpeed(double SelectedHoodSpeed);
+    void Initialize() override;
+    bool IsFinished() override;
+
+private:
+    double m_selectedHoodSpeed;
+};
+*/

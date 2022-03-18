@@ -77,3 +77,16 @@ void FlywheelSubsystem::StartFeeder(double FeedRpm)
 {
     m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
 }
+
+
+/*
+frc2::SequentialCommandGroup FlywheelSubsystem::HoodShot(rad_per_s_t HoodRPM,  double FeedRPM) {
+        [this](rad_per_s_t HoodRPM, double FeedRPM) {
+            FlywheelSubsystem::StartFeeder(FeedRPM);
+            FlywheelSubsystem::SetSetpoint(HoodRPM);
+        }
+        
+        m_feeder.Set(ControlMode::PercentOutput, FeedRPm), 
+        FlywheelSubsystem::SetSetpoint(HoodRPM)
+}
+*/

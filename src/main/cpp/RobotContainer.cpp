@@ -5,6 +5,8 @@
 #include "RobotContainer.h"
 
 #include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/SequentialCommandGroup.h>
 
 #include "commands/ActuatorCommand.h"
 #include "commands/AutoFlywheelCommand.h"
@@ -15,7 +17,9 @@
 #include "commands/IntakeSystemCommand.h"
 #include "commands/TurretCommand.h"
 #include "Constants.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 #include "frc2/command/button/POVButton.h"
+#include "frc2/command/CommandHelper.h"
 
 RobotContainer::RobotContainer()
 {
@@ -25,18 +29,17 @@ RobotContainer::RobotContainer()
     m_climb.SetDefaultCommand(
         WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb, m_translationJoystick, m_joystick));
     m_poseEstimatorCommand.Schedule();
+    m_autoChooser.SetDefaultOption("Left2BallAuto", &m_LeftTwoBallAuto);
+    m_autoChooser.AddOption("Right2BallAuto", &m_RightTwoBallAuto);
+    frc::SmartDashboard::PutData(&m_autoChooser);
     ConfigureButtonBindings();
 }
 
 void RobotContainer::ConfigureButtonBindings()
 {
-    /*
-    if (m_steeringJoystick.GetRawButtonPressed(1) == true && m_translationJoystick.GetRawButtonPressed(1) == true)
-    {
-        frc2::JoystickButton(&m_joystick, 12).WhenHeld(WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb));
-    }
-    frc2::JoystickButton(&m_joystick, 12).WhenReleased(WinchCommand(0.0, m_climb));
-    */
+    // variable hood speed based on driver buttons
+    // frc2::JoystickButton(&m_translationJoystick, 2).WhenPressed(SetHoodSpeed(1000));
+
     // Hood Shooter Toggle ON
     frc2::JoystickButton(&m_joystick, 6)
         .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
@@ -72,7 +75,7 @@ void RobotContainer::ConfigureButtonBindings()
     // Intake Hold ON
     frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeSpinupCommand(0.0, m_intakeSystem));
     frc2::JoystickButton(&m_joystick, 2)
-        .WhenHeld(IntakeSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
+        .WhenHeld(IntakeSpinupCommand(Constants::Systemspeeds::IntakeSpeed, m_intakeSystem));
 
     /*
     // All systems on
@@ -92,7 +95,7 @@ void RobotContainer::ConfigureButtonBindings()
 frc2::Command* RobotContainer::GetAutonomousCommand()
 {
     // An example command will be run in autonomous
-    return &m_testAutoCommand;
+    return m_autoChooser.GetSelected();
 }
 
 void RobotContainer::Reset()
