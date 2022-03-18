@@ -12,8 +12,7 @@ class ClimbSubsystem : public frc2::SubsystemBase
 public:
     ClimbSubsystem();
     void WinchPull(double winchPower);
-    void WinchRelease(double WinchReleasePower);
 
 private:
-    WPI_TalonFX m_winch{Constants::Climb::WinchID, "canviore"};
+    WPI_TalonFX m_winch{Constants::Climb::WinchID, "canivore"};
 };

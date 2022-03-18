@@ -22,6 +22,8 @@ RobotContainer::RobotContainer()
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
     // m_flywheel.SetDefaultCommand(AutoFlywheelCommand(m_drivetrain, m_flywheel));
     m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret));
+    m_climb.SetDefaultCommand(
+        WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb, m_translationJoystick, m_joystick));
     m_poseEstimatorCommand.Schedule();
     ConfigureButtonBindings();
 }
@@ -29,20 +31,12 @@ RobotContainer::RobotContainer()
 void RobotContainer::ConfigureButtonBindings()
 {
     /*
-    if (m_joystick.GetRawButtonPressed(11) == true && m_translationJoystick.GetRawButtonPressed(1) == true)
+    if (m_steeringJoystick.GetRawButtonPressed(1) == true && m_translationJoystick.GetRawButtonPressed(1) == true)
     {
-        WinchReleaseCommand(Constants::Systemspeeds::WinchRelease, m_climb);
+        frc2::JoystickButton(&m_joystick, 12).WhenHeld(WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb));
     }
-
-    if (WinchReleaseCommand(Constants::Systemspeeds::WinchRelease, m_climb).IsFinished() == true)
-    {
-        frc2::JoystickButton(&m_joystick, 8).WhenHeld(WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb));
-    }
+    frc2::JoystickButton(&m_joystick, 12).WhenReleased(WinchCommand(0.0, m_climb));
     */
-    frc2::JoystickButton(&m_joystick, 11)
-        .WhenPressed(WinchReleaseCommand(Constants::Systemspeeds::WinchRelease, m_climb));
-    frc2::JoystickButton(&m_joystick, 8).WhenHeld(WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb));
-
     // Hood Shooter Toggle ON
     frc2::JoystickButton(&m_joystick, 6)
         .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
