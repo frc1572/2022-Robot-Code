@@ -64,8 +64,8 @@ PoseEstimatorCommand::PoseEstimatorCommand(
 void PoseEstimatorCommand::Execute()
 {
     auto chassisSpeeds = m_drivetrain.GetMeasuredChassisSpeeds();
-    auto drivetrainMeasuredAngle = m_drivetrain.GetMeasuredRotation() + m_drivetrainRotationOffset;
-    auto turretMeasuredAngle = m_turret.GetMeasuredRotation() + m_turretRotationOffset;
+    auto drivetrainMeasuredAngle = m_drivetrain.GetMeasuredRotation();
+    auto turretMeasuredAngle = m_turret.GetMeasuredRotation();
 
     auto fieldRelativeSpeeds =
         frc::Translation2d(chassisSpeeds.vx * 1_s, chassisSpeeds.vy * 1_s).RotateBy(drivetrainMeasuredAngle);
@@ -114,8 +114,6 @@ void PoseEstimatorCommand::Reset(frc::Pose2d currentPose, frc::Rotation2d curren
          currentPose.Y().value(),
          currentPose.Rotation().Radians().value(),
          currentTurretRotation.Radians().value()});
-    m_drivetrainRotationOffset = currentPose.Rotation() - m_drivetrain.GetMeasuredRotation();
-    m_turretRotationOffset = currentTurretRotation - m_turret.GetMeasuredRotation();
 }
 
 Eigen::Vector<double, 2> CalculateVisionMeasurement(

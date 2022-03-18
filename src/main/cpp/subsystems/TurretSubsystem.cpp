@@ -27,9 +27,10 @@ TurretSubsystem::TurretSubsystem()
 
 frc::Rotation2d TurretSubsystem::GetMeasuredRotation()
 {
-    return {
-        m_turret.GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX /
-        Constants::Turret::TurretGearing};
+    return frc::Rotation2d{
+               m_turret.GetSelectedSensorPosition() / Constants::TicksPerRevolution::TalonFX /
+               Constants::Turret::TurretGearing} +
+        m_rotationOffset;
 }
 
 void TurretSubsystem::SetDesiredPosition(frc::Rotation2d desiredPosition, rad_per_s_t desiredVelocity)
@@ -75,4 +76,9 @@ void TurretSubsystem::SimulationPeriodic()
     auto turretPositionTicks =
         m_turretSim.GetOutput(0) * 1_rad * Constants::Turret::TurretGearing * Constants::TicksPerRevolution::TalonFX;
     turretMotorSim.SetIntegratedSensorRawPosition(turretPositionTicks);
+}
+
+void TurretSubsystem::Reset(frc::Rotation2d currentRotation)
+{
+    m_rotationOffset = currentRotation - GetMeasuredRotation();
 }

@@ -23,6 +23,7 @@ public:
     decltype(1_rad_per_s) GetMeasuredVelocity();
     void Periodic() override;
     void SimulationPeriodic() override;
+    void Reset(frc::Rotation2d currentRotation);
 
 private:
     WPI_TalonFX m_turret{Constants::Turret::TurretPort, "canivore"};
@@ -36,4 +37,6 @@ private:
     frc::LinearPlantInversionFeedforward<2, 1> m_turretFeedForward{m_turretSystem, Constants::LoopPeriod};
 
     frc::sim::LinearSystemSim<2, 1, 1> m_turretSim{m_turretSystem, {0.0}};
+
+    frc::Rotation2d m_rotationOffset;
 };

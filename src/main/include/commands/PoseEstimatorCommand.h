@@ -30,9 +30,6 @@ private:
     TurretSubsystem& m_turret;
     VisionSubsystem& m_vision;
 
-    frc::Rotation2d m_drivetrainRotationOffset;
-    frc::Rotation2d m_turretRotationOffset;
-
     frc::UnscentedKalmanFilter<4, 4, 2> m_observer;
     frc::KalmanFilterLatencyCompensator<4, 4, 2, frc::UnscentedKalmanFilter<4, 4, 2>> m_latencyCompensator;
 

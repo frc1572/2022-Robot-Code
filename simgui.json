@@ -25,6 +25,8 @@
       "/LiveWindow/Ungrouped/VisionSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/frc2::SubsystemBase": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/left2BallCommand": "Command",
+      "/SmartDashboard/right2BallCommand": "Command",
       "/SmartDashboard/testAutoCommmand": "Command",
       "/SmartDashboard/tuningRotationCommand": "Command",
       "/SmartDashboard/tuningTranslationCommand": "Command"
@@ -42,6 +44,16 @@
       },
       "/SmartDashboard/Field": {
         "image": "2022-field.png",
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/left2BallCommand": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/right2BallCommand": {
         "window": {
           "visible": true
         }

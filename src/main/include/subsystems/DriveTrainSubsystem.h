@@ -37,7 +37,7 @@ public:
     void TestDrive();
     void Periodic() override;
     void SimulationPeriodic() override;
-    void Reset();
+    void Reset(frc::Rotation2d currentRotation);
     frc2::SequentialCommandGroup MakeDrivePathPlannerCommand(
         std::string name, pathplanner::PathPlannerTrajectory trajectory, std::function<void(frc::Pose2d)> resetPose);
 
@@ -66,4 +66,6 @@ private:
     frc::SwerveDriveOdometry<4> m_swerveOdometry{m_swerveKinematics, frc::Rotation2d(0_rad)};
 
     frc::Field2d m_field;
+
+    frc::Rotation2d m_rotationOffset;
 };

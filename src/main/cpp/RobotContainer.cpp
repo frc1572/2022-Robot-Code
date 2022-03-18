@@ -97,5 +97,5 @@ frc2::Command* RobotContainer::GetAutonomousCommand()
 
 void RobotContainer::Reset()
 {
-    m_drivetrain.Reset();
+    // m_drivetrain.Reset();
 }

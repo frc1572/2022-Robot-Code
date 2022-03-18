@@ -68,7 +68,11 @@ private:
     PoseEstimatorCommand m_poseEstimatorCommand{m_drivetrain, m_turret, m_vision};
 
     std::function<void(frc::Pose2d)> resetPose = [this](frc::Pose2d pose)
-    { m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation()); };
+    {
+        m_drivetrain.Reset(pose.Rotation());
+        m_turret.Reset({});
+        m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation());
+    };
 
     frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
         "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 1_mps, 1_mps_sq), resetPose);
@@ -78,6 +82,10 @@ private:
         "tuningTranslationCommand",
         pathplanner::PathPlanner::loadPath("tuningTranslation", 1_mps, 1_mps_sq),
         resetPose);
+    frc2::SequentialCommandGroup m_left2BallCommand = m_drivetrain.MakeDrivePathPlannerCommand(
+        "left2BallCommand", pathplanner::PathPlanner::loadPath("left2Ball", 1_mps, 1_mps_sq), resetPose);
+    frc2::SequentialCommandGroup m_right2BallCommand = m_drivetrain.MakeDrivePathPlannerCommand(
+        "right2BallCommand", pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq), resetPose);
 
     void ConfigureButtonBindings();
 };

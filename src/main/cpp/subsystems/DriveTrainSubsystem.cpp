@@ -55,7 +55,7 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetInvertedChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
-    return m_IMU.GetRotation2d();
+    return m_IMU.GetRotation2d() + m_rotationOffset;
 }
 
 frc::Pose2d DriveTrainSubsystem::GetPose()
@@ -99,9 +99,9 @@ void DriveTrainSubsystem::SimulationPeriodic()
     imuSim.AddHeading(units::degree_t(chassisSpeeds.omega * Constants::LoopPeriod).value());
 }
 
-void DriveTrainSubsystem::Reset()
+void DriveTrainSubsystem::Reset(frc::Rotation2d currentRotation)
 {
-    // m_IMU.Reset();
+    m_rotationOffset = currentRotation - GetMeasuredRotation();
     for (auto& module : m_swerveModules)
     {
         module.Reset();
