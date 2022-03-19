@@ -14,7 +14,7 @@
 TurretSubsystem::TurretSubsystem()
 {
     m_turret.ConfigFactoryDefault();
-    m_turret.SetNeutralMode(NeutralMode::Brake);
+    m_turret.SetNeutralMode(NeutralMode::Coast);
     if (frc::RobotBase::IsReal())
     {
         m_turret.SetInverted(true);
@@ -47,7 +47,7 @@ decltype(1_rad_per_s) TurretSubsystem::GetMeasuredVelocity()
 
 void TurretSubsystem::Periodic()
 {
-    auto turretOffsetAngle = m_desiredPosition.Radians() + m_turretOffset / Constants::Turret::TurretGearing;
+    auto turretOffsetAngle = m_desiredPosition.Radians() - m_rotationOffset.Radians();
     auto turretFeedForward = units::volt_t{
         m_turretFeedForward.Calculate(Eigen::Vector2d(turretOffsetAngle.value(), m_desiredVelocity.value()))[0]};
     if (units::math::abs(turretFeedForward) < Constants::MinimumFFVoltage)
@@ -80,5 +80,6 @@ void TurretSubsystem::SimulationPeriodic()
 
 void TurretSubsystem::Reset(frc::Rotation2d currentRotation)
 {
+    m_rotationOffset = 0_deg;
     m_rotationOffset = currentRotation - GetMeasuredRotation();
 }

@@ -14,8 +14,10 @@
 #include "commands/ClimbCommand.h"
 #include "commands/DriveTeleopCommand.h"
 #include "commands/FlywheelSpinupCommand.h"
+#include "commands/IntakeFeederCommand.h"
 #include "commands/IntakeSystemCommand.h"
 #include "commands/TurretCommand.h"
+#include "commands/TurretManualControl.h"
 #include "Constants.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 #include "frc2/command/button/POVButton.h"
@@ -29,8 +31,12 @@ RobotContainer::RobotContainer()
     m_climb.SetDefaultCommand(
         WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb, m_translationJoystick, m_joystick));
     m_poseEstimatorCommand.Schedule();
-    m_autoChooser.SetDefaultOption("Left2BallAuto", &m_LeftTwoBallAuto);
-    m_autoChooser.AddOption("Right2BallAuto", &m_RightTwoBallAuto);
+    // m_autoChooser.SetDefaultOption("Left2BallAuto", &m_LeftTwoBallAuto);
+    // m_autoChooser.AddOption("Right2BallAuto", &m_RightTwoBallAuto);
+    m_autoChooser.SetDefaultOption("RightOnlyReset", &m_resetRightOnly);
+    m_autoChooser.AddOption("LeftOnlyReset", &m_resetLeftOnly);
+    m_autoChooser.AddOption("LEFT2BALLAUTO", &m_LeftTwoBallAuto);
+    m_autoChooser.AddOption("RIGHT2BALLAUTO", &m_RightTwoBallAuto);
     frc::SmartDashboard::PutData(&m_autoChooser);
     ConfigureButtonBindings();
 }
@@ -39,7 +45,7 @@ void RobotContainer::ConfigureButtonBindings()
 {
     // variable hood speed based on driver buttons
     // frc2::JoystickButton(&m_translationJoystick, 2).WhenPressed(SetHoodSpeed(1000));
-
+    frc2::JoystickButton(&m_joystick, 1).WhenHeld(TurretManualControl(m_turret));
     // Hood Shooter Toggle ON
     frc2::JoystickButton(&m_joystick, 6)
         .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
@@ -51,10 +57,10 @@ void RobotContainer::ConfigureButtonBindings()
 
     // Main Intake and Main Feeder Hold ON
     frc2::JoystickButton(&m_joystick, 3)
-        .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed * -1, m_intakeSystem));
+        .WhenHeld(IntakeFeederCommand(Constants::Systemspeeds::IntakeFeederSpeed * -1, m_IntakeFeeder));
     frc2::JoystickButton(&m_joystick, 3)
         .WhenHeld(IntakeSpinupCommand(-Constants::Systemspeeds::IntakeSpeed, m_intakeSystem));
-    frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeFeederSpinupCommand(0, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeFeederCommand(0, m_IntakeFeeder));
     frc2::JoystickButton(&m_joystick, 3).WhenReleased(IntakeSpinupCommand(0, m_intakeSystem));
 
     // // Intake Reverse
@@ -68,9 +74,9 @@ void RobotContainer::ConfigureButtonBindings()
     // frc2::JoystickButton(&m_joystick, 60).WhenPressed(ActuatorCommand(0.75, m_actuators));
 
     // Main Robot Feeder Hold On
-    frc2::JoystickButton(&m_joystick, 4).WhenReleased(IntakeFeederSpinupCommand(0.0, m_intakeSystem));
+    frc2::JoystickButton(&m_joystick, 4).WhenReleased(IntakeFeederCommand(0.0, m_IntakeFeeder));
     frc2::JoystickButton(&m_joystick, 4)
-        .WhenHeld(IntakeFeederSpinupCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_intakeSystem));
+        .WhenHeld(IntakeFeederCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_IntakeFeeder));
 
     // Intake Hold ON
     frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeSpinupCommand(0.0, m_intakeSystem));

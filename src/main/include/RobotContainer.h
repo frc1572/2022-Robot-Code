@@ -17,15 +17,19 @@
 #include <units/length.h>
 
 #include "commands/FlywheelSpinupCommand.h"
+#include "commands/IntakeFeederCommand.h"
 #include "commands/IntakeSystemCommand.h"
 #include "commands/PoseEstimatorCommand.h"
 #include "frc/Controller.h"
 #include "frc/smartdashboard/SendableChooser.h"
 #include "frc/smartdashboard/SendableChooserBase.h"
+#include "frc2/command/InstantCommand.h"
+#include "frc2/command/ParallelRaceGroup.h"
 #include "subsystems/ActuatorSubsystem.h"
 #include "subsystems/ClimbSubsystem.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
+#include "subsystems/IntakeFeederSubsystem.h"
 #include "subsystems/IntakeSystemSubsystem.h"
 #include "subsystems/TurretSubsystem.h"
 #include "subsystems/VisionSubsystem.h"
@@ -53,7 +57,7 @@ private:
     // The robot's subsystems and commands are defined here...
     DriveTrainSubsystem m_drivetrain;
     FlywheelSubsystem m_flywheel;
-    // Added the actuators as a subsystem/class, aswell as used the flywheel subsystem/class for the feeder
+    IntakeFeederSubsystem m_IntakeFeeder;
     ClimbSubsystem m_climb;
     IntakeSystemSubsystem m_intakeSystem;
     TurretSubsystem m_turret;
@@ -75,11 +79,11 @@ private:
     std::function<void(frc::Pose2d)> resetPose = [this](frc::Pose2d pose)
     {
         m_drivetrain.Reset(pose.Rotation());
-        m_turret.Reset({180_deg});
+        m_turret.Reset({});
         m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation());
     };
 
-    // frc2::SequentialCommandGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
+    // frc2::SequentialComman9++dGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
     //    "testAutoCommmand", pathplanner::PathPlanner::loadPath("testAutoCommand", 1_mps, 1_mps_sq), resetPose);
     // frc2::SequentialCommandGroup m_tuningRotationCommand = m_drivetrain.MakeDrivePathPlannerCommand(
     //     "tuningRotationCommand", pathplanner::PathPlanner::loadPath("tuningRotation", 1_mps, 1_mps_sq), resetPose);
@@ -91,21 +95,37 @@ private:
     //    "left2BallCommand", pathplanner::PathPlanner::loadPath("left2Ball", 1_mps, 1_mps_sq), resetPose);
     // frc2::SequentialCommandGroup m_right2BallCommand = m_drivetrain.MakeDrivePathPlannerCommand(
     //    "right2BallCommand", pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq), resetPose);
-    frc2::ParallelCommandGroup m_LeftTwoBallAuto{
-        IntakeSpinupCommand(Constants::Systemspeeds::IntakeSpeed, m_intakeSystem),
-        IntakeFeederSpinupCommand(0.2, m_intakeSystem),
-        frc2::SequentialCommandGroup(
-            std::move(m_drivetrain.MakeDrivePathPlannerCommand(
-                "left2BallCommand", pathplanner::PathPlanner::loadPath("left2Ball", 1_mps, 1_mps_sq), resetPose)),
-            FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel),
-            FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel))};
-    frc2::ParallelCommandGroup m_RightTwoBallAuto{
-        IntakeSpinupCommand(Constants::Systemspeeds::IntakeSpeed, m_intakeSystem),
-        IntakeFeederSpinupCommand(0.2, m_intakeSystem),
-        frc2::SequentialCommandGroup(
-            std::move(m_drivetrain.MakeDrivePathPlannerCommand(
-                "right2BallCommand", pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq), resetPose)),
-            FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel),
-            FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel))};
+
+    frc2::SequentialCommandGroup m_LeftTwoBallAuto{
+        IntakeSpinupCommand(-Constants::Systemspeeds::IntakeSpeed, m_intakeSystem).WithTimeout(0.5_s),
+        frc2::ParallelCommandGroup(
+            IntakeSpinupCommand(Constants::Systemspeeds::IntakeSpeed, m_intakeSystem),
+            IntakeFeederCommand(0.2, m_IntakeFeeder),
+            frc2::SequentialCommandGroup(
+                std::move(m_drivetrain.MakeDrivePathPlannerCommand(
+                              "left2BallCommand",
+                              pathplanner::PathPlanner::loadPath("left2Ball", 0.1_mps, 0.1_mps_sq),
+                              resetPose))
+                    .WithTimeout(2_s),
+                FlywheelSpinupCommand(1900, m_flywheel),
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel)))};
+
+    frc2::SequentialCommandGroup m_RightTwoBallAuto{
+        IntakeSpinupCommand(-0.3, m_intakeSystem).WithTimeout(0.5_s),
+        frc2::ParallelCommandGroup(
+            IntakeSpinupCommand(Constants::Systemspeeds::IntakeSpeed, m_intakeSystem),
+            IntakeFeederCommand(0.2, m_IntakeFeeder),
+            frc2::SequentialCommandGroup(
+                std::move(m_drivetrain.MakeDrivePathPlannerCommand(
+                              "right2BallCommand",
+                              pathplanner::PathPlanner::loadPath("right2Ball", 0.1_mps, 0.1_mps_sq),
+                              resetPose))
+                    .WithTimeout(2_s),
+                FlywheelSpinupCommand(1900, m_flywheel),
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_flywheel)))};
+
+    frc2::InstantCommand m_resetLeftOnly{[this]() { resetPose({23.1548_ft, 15.4612_ft, 159.00_deg}); }};
+    frc2::InstantCommand m_resetRightOnly{[this]() { resetPose({25.8845_ft, 9.3302_ft, -111.00_deg}); }};
+
     void ConfigureButtonBindings();
 };

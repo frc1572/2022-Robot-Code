@@ -26,8 +26,8 @@ namespace Constants
         // double VairableHoodSpeed;
         constexpr double TurretFeederSpeed = 0.7;
         constexpr double IntakeFeederSpeed = 0.5;
-        constexpr double IntakeSpeed = 0.25;
-        constexpr double HoodSpeed = 2000;
+        constexpr double IntakeSpeed = 0.45;
+        constexpr double HoodSpeed = 1900;
         constexpr double WinchOutput = 0.5;
         constexpr double WinchRelease = 0.25;
     } // namespace Systemspeeds
@@ -49,7 +49,8 @@ namespace Constants
 
         constexpr Ks_t SteeringKs = 0.7027_V;
         constexpr Kv_t<units::radian_t> SteeringKv = 0.26826_V / 1_rad_per_s;
-        constexpr Ka_t<units::radian_t> SteeringKa = 0.0008629_V / 1_rad_per_s_sq; // TODO: transcription error
+        constexpr Ka_t<units::radian_t> SteeringKa =
+            0.0008629_V / 1_rad_per_s_sq; // TODO:\\\\\\\\\\\\\\\\0 transcription error
         const double ThrottleGearing = 6.54;
         const double SteeringGearing = 72.0 / 14.0 * 24.0 / 8.0;
         constexpr auto WheelDiameter = 3.25_in;

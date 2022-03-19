@@ -101,6 +101,7 @@ void DriveTrainSubsystem::SimulationPeriodic()
 
 void DriveTrainSubsystem::Reset(frc::Rotation2d currentRotation)
 {
+    m_rotationOffset = 0_deg;
     m_rotationOffset = currentRotation - GetMeasuredRotation();
     for (auto& module : m_swerveModules)
     {
@@ -148,6 +149,5 @@ frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlannerCommand(
                            resetPose({initialState.pose.Translation(), initialState.holonomicRotation});
                        });
     cmd.SetName(name);
-    frc::SmartDashboard::PutData(&cmd);
     return cmd;
 }

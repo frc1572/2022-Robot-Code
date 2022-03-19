@@ -11,9 +11,7 @@ public:
     IntakeSystemSubsystem();
     void Periodic() override;
     void StartIntake(double IntakeRpm);
-    void StartIntakeFeeder(double IntakeFeederRpm);
 
 private:
     WPI_TalonFX m_intake{Constants::IntakeSystem::IntakeID, "canivore"};
-    WPI_TalonFX m_intakeFeeder{Constants::IntakeSystem::MainFeederID, "canivore"};
 };
