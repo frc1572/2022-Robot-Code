@@ -53,7 +53,7 @@ void VisionSubsystem::Periodic()
         m_latestResult = std::nullopt;
         frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", false);
     }
-    if (aspectRatio > 2)
+    if (aspectRatio > 3)
     {
         m_latestResult = std::nullopt;
         frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", false);

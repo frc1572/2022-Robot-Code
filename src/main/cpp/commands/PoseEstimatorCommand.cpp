@@ -85,7 +85,7 @@ void PoseEstimatorCommand::Execute()
     {
         // std::cout << "Popped Latest result! " << std::endl;
         auto expectedYaw = units::radian_t{m_visionMeasurementFn(m_observer.Xhat(), {})[1]};
-        if (units::math::abs(targetInfo->yaw.Radians() - expectedYaw) < 60_deg)
+        if (units::math::abs(targetInfo->yaw.Radians() - expectedYaw) < 45_deg)
         {
             Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
             m_latencyCompensator.ApplyPastGlobalMeasurement<2>(

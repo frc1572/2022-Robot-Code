@@ -173,7 +173,7 @@ private:
             frc2::ParallelCommandGroup(
                 FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
                 FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
-                IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s)))};
+                IntakeFeederCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_IntakeFeeder).WithTimeout(3_s)))};
     frc2::ParallelCommandGroup m_resetRightLowGoalShot{
         TurretManual180(m_turret).WithTimeout(10_s),
         frc2::SequentialCommandGroup(
@@ -185,7 +185,7 @@ private:
             frc2::ParallelCommandGroup(
                 FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
                 FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
-                IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s)))};
+                IntakeFeederCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_IntakeFeeder).WithTimeout(3_s)))};
 
     void ConfigureButtonBindings();
 };
