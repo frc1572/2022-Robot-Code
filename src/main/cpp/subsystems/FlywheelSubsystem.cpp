@@ -9,7 +9,7 @@
 FlywheelSubsystem::FlywheelSubsystem()
 {
     m_leader.ConfigFactoryDefault();
-    m_feeder.ConfigFactoryDefault();
+
     // Disable Talon FX velocity filtering so that our Kalman filter can do the
     // work
 
@@ -19,7 +19,7 @@ FlywheelSubsystem::FlywheelSubsystem()
 
     m_leader.ConfigClosedLoopPeakOutput(0, .4);
 
-    m_feeder.SetNeutralMode(Brake);
+
 
     m_follower.ConfigFactoryDefault();
     m_follower.SetNeutralMode(Coast);
@@ -73,10 +73,7 @@ void FlywheelSubsystem::SetSetpoint(rad_per_s_t setpoint)
     // frc::SmartDashboard::PutNumber("Flywheel.Setpoint", setpoint.to<double>());
 }
 
-void FlywheelSubsystem::StartFeeder(double FeedRpm)
-{
-    m_feeder.Set(ControlMode::PercentOutput, FeedRpm);
-}
+
 
 
 /*

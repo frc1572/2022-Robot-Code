@@ -29,6 +29,7 @@ public:
     std::optional<TargetInfo> PopLatestResult();
     void Periodic() override;
     void SimulationPeriodic() override;
+    // void DriverMode(bool drivermode);
 
 private:
     photonlib::PhotonCamera m_camera{"limelight"};

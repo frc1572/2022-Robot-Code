@@ -1,5 +1,6 @@
 #include "subsystems/VisionSubsystem.h"
 
+#include <algorithm>
 #include <functional>
 #include <iostream>
 
@@ -19,7 +20,8 @@ VisionSubsystem::VisionSubsystem(
     m_simPoseProvider(simPoseProvider)
 {
     SetName("VisionSubsystem");
-    m_camera.SetDriverMode(false);
+
+    m_camera.SetDriverMode(true);
     m_camera.SetLEDMode(photonlib::LEDMode::kOn);
     m_camera.SetPipelineIndex(0);
     m_cameraSim.AddSimVisionTarget(photonlib::SimVisionTarget{m_simGoalPose, m_targetHeight, 62.75_in, 12_in});
@@ -35,6 +37,15 @@ std::optional<VisionSubsystem::TargetInfo> VisionSubsystem::PopLatestResult()
 void VisionSubsystem::Periodic()
 {
     auto result = m_camera.GetLatestResult();
+    auto Corners = result.GetBestTarget().GetCorners();
+    auto [minX, maxX] = std::minmax_element(
+        Corners.begin(),
+        Corners.end(),
+        [](std::pair<double, double> a, std::pair<double, double> b) { return a.first < b.first; });
+    auto [minY, maxY] = std::minmax_element(
+        Corners.begin(),
+        Corners.end(),
+        [](std::pair<double, double> a, std::pair<double, double> b) { return a.first < b.first; });
 
     if (!result.HasTargets())
     {
@@ -64,3 +75,9 @@ void VisionSubsystem::SimulationPeriodic()
     m_cameraSim.ProcessFrame(pose);
     // spdlog::info("{}, {}", pose.X().value(), pose.Y().value());
 }
+/*
+void VisionSubsystem::DriverMode(bool drivermode)
+{
+    m_camera.SetDriverMode(drivermode);
+}
+*/

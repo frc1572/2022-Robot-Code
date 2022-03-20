@@ -14,12 +14,7 @@ FlywheelSpinupCommand::FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flyw
 {
 }
 
-FeederSpinupCommand::FeederSpinupCommand(double FeedRPM, FlywheelSubsystem& feeder)
-  : m_feederRPM(FeedRPM), m_feeder(feeder)
-{
-    AddRequirements(&feeder);
-    SetName("FeederSpinupCommand");
-}
+
 /*
 SetHoodSpeed::SetHoodSpeed(double SelectedHoodSpeed) : m_selectedHoodSpeed(SelectedHoodSpeed) {
 
@@ -35,11 +30,4 @@ bool FlywheelSpinupCommand::IsFinished()
     return false;
 }
 
-void FeederSpinupCommand::Initialize()
-{
-    m_feeder.StartFeeder(m_feederRPM);
-}
-bool FeederSpinupCommand::IsFinished()
-{
-    return false;
-}
+

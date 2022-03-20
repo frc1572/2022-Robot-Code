@@ -20,17 +20,6 @@ private:
     FlywheelSubsystem& m_flywheel;
 };
 
-class FeederSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, FeederSpinupCommand>
-{
-public:
-    FeederSpinupCommand(double FeederRPM, FlywheelSubsystem& feeder);
-    void Initialize() override;
-    bool IsFinished() override;
-
-private:
-    double m_feederRPM;
-    FlywheelSubsystem& m_feeder;
-};
 /*
 class SetHoodSpeed : public frc2::CommandHelper<frc2::CommandBase, SetHoodSpeed>
 {

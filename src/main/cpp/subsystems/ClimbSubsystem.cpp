@@ -4,7 +4,7 @@
 ClimbSubsystem::ClimbSubsystem()
 {
     m_winch.ConfigFactoryDefault();
-    m_winch.SetNeutralMode(Coast);
+    m_winch.SetNeutralMode(Brake);
     m_winch.SetInverted(true);
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <subsystems/VisionSubsystem.h>
+
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
