@@ -84,9 +84,13 @@ void PoseEstimatorCommand::Execute()
     if (auto targetInfo = m_vision.PopLatestResult())
     {
         // std::cout << "Popped Latest result! " << std::endl;
-        Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
-        m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
-            &m_observer, Constants::LoopPeriod, visionMeasurement, m_visionCorrectionFn, targetInfo->timestamp);
+        auto expectedYaw = units::radian_t{m_visionMeasurementFn(m_observer.Xhat(), {})[1]};
+        if (units::math::abs(targetInfo->yaw.Radians() - expectedYaw) < 60_deg)
+        {
+            Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
+            m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
+                &m_observer, Constants::LoopPeriod, visionMeasurement, m_visionCorrectionFn, targetInfo->timestamp);
+        }
     }
 
     m_drivetrain.SetPose(GetPose());

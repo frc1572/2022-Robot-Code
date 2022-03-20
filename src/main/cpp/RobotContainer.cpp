@@ -30,7 +30,7 @@ RobotContainer::RobotContainer()
     // m_flywheel.SetDefaultCommand(AutoFlywheelCommand(m_drivetrain, m_flywheel));
     m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret));
     m_climb.SetDefaultCommand(
-        WinchCommand(Constants::Systemspeeds::WinchOutput, m_climb, m_translationJoystick, m_joystick));
+        WinchCommand(Constants::Systemspeeds::WinchRelease, m_climb, m_translationJoystick, m_joystick));
     m_poseEstimatorCommand.Schedule();
     // m_autoChooser.SetDefaultOption("Left2BallAuto", &m_LeftTwoBallAuto);
     // m_autoChooser.AddOption("Right2BallAuto", &m_RightTwoBallAuto);

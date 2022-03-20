@@ -16,10 +16,15 @@ WinchCommand::WinchCommand(
 
 void WinchCommand::Execute()
 {
-    std::cout << "Excecute Is running" << std::endl;
-    if (m_translationJoystick.GetRawButton(1) == true && m_joystick.GetRawButton(12) == true)
+    // std::cout << "Excecute Is running" << std::endl;
+    if (m_joystick.GetRawButton(7) == true && m_joystick.GetRawButton(12) == true)
     {
         m_climb.WinchPull(m_desiredWinchPower);
+        std::cout << "Winch Pull Command is Running" << std::endl;
+    }
+    else if (m_joystick.GetRawButton(8) == true && m_joystick.GetRawButton(12) == true)
+    {
+        m_climb.WinchPull(Constants::Systemspeeds::WinchOutput);
         std::cout << "Winch Pull Command is Running" << std::endl;
     }
     else

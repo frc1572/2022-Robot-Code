@@ -45,9 +45,15 @@ void VisionSubsystem::Periodic()
     auto [minY, maxY] = std::minmax_element(
         Corners.begin(),
         Corners.end(),
-        [](std::pair<double, double> a, std::pair<double, double> b) { return a.first < b.first; });
+        [](std::pair<double, double> a, std::pair<double, double> b) { return a.second < b.second; });
+    double aspectRatio = (maxX->first - minX->first) / (maxY->second - minY->second);
 
     if (!result.HasTargets())
+    {
+        m_latestResult = std::nullopt;
+        frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", false);
+    }
+    if (aspectRatio > 2)
     {
         m_latestResult = std::nullopt;
         frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", false);

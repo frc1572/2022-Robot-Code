@@ -29,8 +29,9 @@ namespace Constants
         constexpr double IntakeSpeed = 0.45;
         constexpr double HoodSpeed = 1900;
         constexpr double HoodReverseSpeed = 6000;
-        constexpr double WinchOutput = 0.5;
+        constexpr double WinchOutput = 1.0;
         constexpr double WinchRelease = 0.25;
+
     } // namespace Systemspeeds
     namespace Flywheel
     {

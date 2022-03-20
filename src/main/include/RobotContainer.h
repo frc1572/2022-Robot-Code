@@ -21,6 +21,7 @@
 #include "commands/IntakeSystemCommand.h"
 #include "commands/PoseEstimatorCommand.h"
 #include "commands/TurretFeederCommand.h"
+#include "commands/TurretManualControl.h"
 #include "frc/Controller.h"
 #include "frc/smartdashboard/SendableChooser.h"
 #include "frc/smartdashboard/SendableChooserBase.h"
@@ -136,26 +137,55 @@ private:
     frc2::InstantCommand m_resetLeftOnly{[this]() { resetPose({23.1548_ft, 15.4612_ft, 159.00_deg}); }};
     frc2::InstantCommand m_resetRightOnly{[this]() { resetPose({25.8845_ft, 9.3302_ft, -111.00_deg}); }};
 
+    /*
     frc2::SequentialCommandGroup m_resetLeftLowGoalShot{
-        frc2::InstantCommand(
-            [this]() {
-                resetPose({23.1548_ft, 15.4612_ft, 159.00_deg});
-            }),
-        frc2::WaitCommand(5_s),
-        frc2::ParallelCommandGroup(
-            FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
-            FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
-            IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s))};
+            frc2::InstantCommand(
+                [this]() {
+                    resetPose({23.1548_ft, 15.4612_ft, 159.00_deg});
+                }),
+            frc2::WaitCommand(5_s),
+            frc2::ParallelCommandGroup(
+                FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
+                IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s))};
+
+
     frc2::SequentialCommandGroup m_resetRightLowGoalShot{
-        frc2::InstantCommand(
-            [this]() {
-                resetPose({25.8845_ft, 9.3302_ft, -111.00_deg});
-            }),
-        frc2::WaitCommand(5_s),
-        frc2::ParallelCommandGroup(
-            FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
-            FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
-            IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s))};
+            frc2::InstantCommand(
+                [this]() {
+                    resetPose({25.8845_ft, 9.3302_ft, -111.00_deg});
+                }),
+            frc2::WaitCommand(5_s),
+            frc2::ParallelCommandGroup(
+                FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
+                IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s))};
+                */
+
+    frc2::ParallelCommandGroup m_resetLeftLowGoalShot{
+        TurretManual180(m_turret).WithTimeout(10_s),
+        frc2::SequentialCommandGroup(
+            frc2::InstantCommand(
+                [this]() {
+                    resetPose({23.1548_ft, 15.4612_ft, 159.00_deg});
+                }),
+            frc2::WaitCommand(5_s),
+            frc2::ParallelCommandGroup(
+                FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
+                IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s)))};
+    frc2::ParallelCommandGroup m_resetRightLowGoalShot{
+        TurretManual180(m_turret).WithTimeout(10_s),
+        frc2::SequentialCommandGroup(
+            frc2::InstantCommand(
+                [this]() {
+                    resetPose({25.8845_ft, 9.3302_ft, -111.00_deg});
+                }),
+            frc2::WaitCommand(5_s),
+            frc2::ParallelCommandGroup(
+                FlywheelSpinupCommand(900, m_flywheel).WithTimeout(3_s),
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(3_s),
+                IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(3_s)))};
 
     void ConfigureButtonBindings();
 };
