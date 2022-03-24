@@ -101,6 +101,18 @@ private:
     // frc2::SequentialCommandGroup m_right2BallCommand = m_drivetrain.MakeDrivePathPlannerCommand(
     //    "right2BallCommand", pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq), resetPose);
 
+    frc2::SequentialCommandGroup m_smallForwardAutoTest{
+        frc2::InstantCommand(
+            [this]() {
+                resetPose({3.28084_ft, 9.84252_ft, 0.00_deg});
+            }),
+        m_drivetrain.MakeDrivePathPlannerCommand(
+            "m_SmallForwardCommand",
+            pathplanner::PathPlanner::loadPath("Small Forward Testing Path", 0.25_mps, 0.25_mps_sq),
+            resetPose),
+        frc2::WaitCommand(1_s),
+        FlywheelSpinupCommand(900, m_flywheel).WithTimeout(2_s)};
+
     frc2::SequentialCommandGroup m_LeftTwoBallAuto{
         frc2::WaitCommand(5_s),
         IntakeSpinupCommand(-0.3, m_intakeSystem).WithTimeout(0.5_s),
