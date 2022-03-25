@@ -106,12 +106,25 @@ private:
             [this]() {
                 resetPose({3.28084_ft, 9.84252_ft, 0.00_deg});
             }),
-        m_drivetrain.MakeDrivePathPlannerCommand(
-            "m_SmallForwardCommand",
-            pathplanner::PathPlanner::loadPath("Small Forward Testing Path", 0.25_mps, 0.25_mps_sq),
-            resetPose),
-        frc2::WaitCommand(1_s),
-        FlywheelSpinupCommand(900, m_flywheel).WithTimeout(2_s)};
+        frc2::ParallelCommandGroup(
+            m_drivetrain.MakeDrivePathPlannerCommand(
+                "m_SmallForwardCommand",
+                pathplanner::PathPlanner::loadPath("Small Forward Testing Path", 1.0_mps, 1.0_mps_sq),
+                resetPose),
+            IntakeSpinupCommand(0.3, m_intakeSystem).WithTimeout(3_s),
+            IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(3_s)),
+        frc2::ParallelCommandGroup(
+            m_drivetrain.MakeDrivePathPlannerCommand(
+                "m_SecondHalfTestingPath",
+                pathplanner::PathPlanner::loadPath("Second Half Testing Path", 1.0_mps, 1.0_mps_sq),
+                resetPose),
+            IntakeSpinupCommand(0.3, m_intakeSystem).WithTimeout(4_s),
+            IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(4_s)),
+        frc2::WaitCommand(0.5_s),
+        frc2::ParallelCommandGroup(
+            IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(2_s),
+            FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(2_s),
+            FlywheelSpinupCommand(900, m_flywheel).WithTimeout(2_s))};
 
     frc2::SequentialCommandGroup m_LeftTwoBallAuto{
         frc2::WaitCommand(5_s),

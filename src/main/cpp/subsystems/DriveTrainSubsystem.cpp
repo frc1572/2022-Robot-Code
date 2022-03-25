@@ -1,5 +1,6 @@
 #include "subsystems/DriveTrainSubsystem.h"
 
+#include <iostream>
 #include <vector>
 
 #include <frc/MathUtil.h>
@@ -148,6 +149,9 @@ frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlannerCommand(
                        [initialState, resetPose]() {
                            resetPose({initialState.pose.Translation(), initialState.holonomicRotation});
                        });
+    std::cout << "X: " << initialState.pose.Translation().X().value()
+              << "Y: " << initialState.pose.Translation().Y().value()
+              << "Initial Rotation: " << initialState.holonomicRotation.Radians().value() << std::endl;
     cmd.SetName(name);
     return cmd;
 }
