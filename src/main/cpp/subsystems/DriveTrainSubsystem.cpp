@@ -110,8 +110,9 @@ void DriveTrainSubsystem::Reset(frc::Rotation2d currentRotation)
     }
 }
 
-frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlannerCommand(
-    std::string name, pathplanner::PathPlannerTrajectory trajectory, std::function<void(frc::Pose2d)> resetPose)
+frc2::SwerveControllerCommand<4> DriveTrainSubsystem::MakeDrivePathPlannerCommand(
+    /*std::string name,*/ pathplanner::PathPlannerTrajectory
+        trajectory /*, std::function<void(frc::Pose2d)> resetPose*/)
 {
     auto initialState = *trajectory.getState(0);
 
@@ -143,15 +144,15 @@ frc2::SequentialCommandGroup DriveTrainSubsystem::MakeDrivePathPlannerCommand(
                        {
                            m_swerveModules[i].SetDesiredState(moduleStates[i]);
                        }
-                   },
+                   }/*,
                    {this})
                    .BeforeStarting(
                        [initialState, resetPose]() {
                            resetPose({initialState.pose.Translation(), initialState.holonomicRotation});
-                       });
+                       }*/);
     std::cout << "X: " << initialState.pose.Translation().X().value()
               << "Y: " << initialState.pose.Translation().Y().value()
               << "Initial Rotation: " << initialState.holonomicRotation.Radians().value() << std::endl;
-    cmd.SetName(name);
+    // cmd.SetName(name);
     return cmd;
 }

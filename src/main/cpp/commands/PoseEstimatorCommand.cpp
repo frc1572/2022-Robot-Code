@@ -94,11 +94,11 @@ void PoseEstimatorCommand::Execute()
     }
 
     m_drivetrain.SetPose(GetPose());
-    // frc::SmartDashboard::PutNumber("CH X: ", chassisSpeeds.vx.value());
-    // frc::SmartDashboard::PutNumber("CH Y: ", chassisSpeeds.vy.value());
-    // frc::SmartDashboard::PutNumber("CH Omega: ", chassisSpeeds.omega.value());
-    // frc::SmartDashboard::PutNumber("FR X: ", fieldRelativeSpeeds.X().value());
-    // frc::SmartDashboard::PutNumber("FR Y: ", fieldRelativeSpeeds.Y().value());
+    frc::SmartDashboard::PutNumber("CH X: ", chassisSpeeds.vx.value());
+    frc::SmartDashboard::PutNumber("CH Y: ", chassisSpeeds.vy.value());
+    frc::SmartDashboard::PutNumber("CH Omega: ", chassisSpeeds.omega.value());
+    frc::SmartDashboard::PutNumber("FR X: ", fieldRelativeSpeeds.X().value());
+    frc::SmartDashboard::PutNumber("FR Y: ", fieldRelativeSpeeds.Y().value());
 }
 
 bool PoseEstimatorCommand::RunsWhenDisabled() const

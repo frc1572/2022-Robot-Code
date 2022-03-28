@@ -5,6 +5,7 @@
 #pragma once
 
 #include <functional>
+#include <iostream>
 
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
@@ -84,8 +85,9 @@ private:
     std::function<void(frc::Pose2d)> resetPose = [this](frc::Pose2d pose)
     {
         m_drivetrain.Reset(pose.Rotation());
-        m_turret.Reset({});
+        m_turret.Reset({0_deg});
         m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation());
+        std::cout << "Ran resetPose Command" << std::endl;
     };
 
     // frc2::SequentialComman9++dGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
@@ -108,16 +110,12 @@ private:
             }),
         frc2::ParallelCommandGroup(
             m_drivetrain.MakeDrivePathPlannerCommand(
-                "m_SmallForwardCommand",
-                pathplanner::PathPlanner::loadPath("Small Forward Testing Path", 1.0_mps, 1.0_mps_sq),
-                resetPose),
+                pathplanner::PathPlanner::loadPath("Small Forward Testing Path", 1.0_mps, 1.0_mps_sq)),
             IntakeSpinupCommand(0.3, m_intakeSystem).WithTimeout(3_s),
             IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(3_s)),
         frc2::ParallelCommandGroup(
             m_drivetrain.MakeDrivePathPlannerCommand(
-                "m_SecondHalfTestingPath",
-                pathplanner::PathPlanner::loadPath("Second Half Testing Path", 1.0_mps, 1.0_mps_sq),
-                resetPose),
+                pathplanner::PathPlanner::loadPath("Second Half Testing Path", 1.0_mps, 1.0_mps_sq)),
             IntakeSpinupCommand(0.3, m_intakeSystem).WithTimeout(4_s),
             IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(4_s)),
         frc2::WaitCommand(0.5_s),
@@ -142,9 +140,7 @@ private:
                 IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(4_s),
                 frc2::SequentialCommandGroup(
                     std::move(m_drivetrain.MakeDrivePathPlannerCommand(
-                                  "left2BallCommand",
-                                  pathplanner::PathPlanner::loadPath("left2Ball", 0.25_mps, 0.25_mps_sq),
-                                  resetPose))
+                                  pathplanner::PathPlanner::loadPath("left2Ball", 0.25_mps, 0.25_mps_sq)))
                         .WithTimeout(2_s))))};
 
     frc2::SequentialCommandGroup m_RightTwoBallAuto{
@@ -162,9 +158,7 @@ private:
                 IntakeFeederCommand(0.2, m_IntakeFeeder).WithTimeout(4_s),
                 frc2::SequentialCommandGroup(
                     std::move(m_drivetrain.MakeDrivePathPlannerCommand(
-                                  "Right2BallCommand",
-                                  pathplanner::PathPlanner::loadPath("right2Ball", 0.25_mps, 0.25_mps_sq),
-                                  resetPose))
+                                  pathplanner::PathPlanner::loadPath("right2Ball", 0.25_mps, 0.25_mps_sq)))
                         .WithTimeout(2_s))))};
 
     frc2::InstantCommand m_resetLeftOnly{[this]() { resetPose({23.1548_ft, 15.4612_ft, 159.00_deg}); }};
@@ -230,8 +224,7 @@ private:
         // IntakeFeederCommand(0.0, m_IntakeFeeder).WithTimeout(0.1_s),
         IntakeSpinupCommand(0.25, m_intakeSystem).WithTimeout(0.5_s),
         frc2::SequentialCommandGroup(
-            m_drivetrain.MakeDrivePathPlannerCommand(
-                "Right2BallCommand", pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq), resetPose),
+            m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq)),
             frc2::ParallelCommandGroup(
                 IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(0.1_s),
                 FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(2_s),
@@ -241,8 +234,7 @@ private:
             FlywheelSpinupCommand(0.0, m_flywheel).WithTimeout(0.1_s)),
         frc2::SequentialCommandGroup(
             IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(0.1_s),
-            m_drivetrain.MakeDrivePathPlannerCommand(
-                "Right3&4BallCommand", pathplanner::PathPlanner::loadPath("Right3&4", 1_mps, 1_mps_sq), resetPose),
+            m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("Right3&4", 1_mps, 1_mps_sq)),
             frc2::ParallelCommandGroup(
                 IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(0.1_s),
                 FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(2_s),
@@ -252,8 +244,7 @@ private:
             FlywheelSpinupCommand(0.0, m_flywheel).WithTimeout(0.1_s)),
         frc2::SequentialCommandGroup(
             IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(0.1_s),
-            m_drivetrain.MakeDrivePathPlannerCommand(
-                "RightBallCommand", pathplanner::PathPlanner::loadPath("Right5", 1_mps, 1_mps_sq), resetPose),
+            m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("Right5", 1_mps, 1_mps_sq)),
             frc2::ParallelCommandGroup(
                 IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(0.1_s),
                 FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(2_s),
@@ -272,8 +263,7 @@ private:
         IntakeSpinupCommand(-0.3, m_intakeSystem).WithTimeout(0.5_s),
         IntakeSpinupCommand(0.25, m_intakeSystem).WithTimeout(0.5_s),
         frc2::SequentialCommandGroup(
-            m_drivetrain.MakeDrivePathPlannerCommand(
-                "Right2BallCommand", pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq), resetPose),
+            m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq)),
             frc2::SequentialCommandGroup(
                 frc2::ParallelCommandGroup(
                     FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(1_s),
@@ -284,8 +274,7 @@ private:
             FlywheelSpinupCommand(0.0, m_flywheel).WithTimeout(0.1_s)),
         frc2::SequentialCommandGroup(
             IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(0.1_s),
-            m_drivetrain.MakeDrivePathPlannerCommand(
-                "Right3BallCommand", pathplanner::PathPlanner::loadPath("Right3", 1_mps, 1_mps_sq), resetPose),
+            m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("Right3", 1_mps, 1_mps_sq)),
             frc2::SequentialCommandGroup(
                 frc2::ParallelCommandGroup(
                     FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(1_s),

@@ -16,6 +16,7 @@
 #include <frc/Timer.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/SwerveControllerCommand.h>
 #include <pathplanner/lib/PathPlanner.h>
 #include <units/angle.h>
 #include <wpi/array.h>
@@ -38,8 +39,9 @@ public:
     void Periodic() override;
     void SimulationPeriodic() override;
     void Reset(frc::Rotation2d currentRotation);
-    frc2::SequentialCommandGroup MakeDrivePathPlannerCommand(
-        std::string name, pathplanner::PathPlannerTrajectory trajectory, std::function<void(frc::Pose2d)> resetPose);
+    frc2::SwerveControllerCommand<4> MakeDrivePathPlannerCommand(
+        /*std::string name,*/ pathplanner::PathPlannerTrajectory
+            trajectory /*, std::function<void(frc::Pose2d)> resetPose*/);
 
 private:
     WPI_Pigeon2 m_IMU{10, "canivore"};

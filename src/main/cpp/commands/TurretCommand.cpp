@@ -5,7 +5,7 @@
 TurretCommand::TurretCommand(frc::Rotation2d PlannedTurretAngle, TurretSubsystem& turret)
   : m_plannedTurretAngle(PlannedTurretAngle), m_turret(turret)
 {
-    AddRequirements(&m_turret);
+    // AddRequirements(&m_turret);
 }
 
 void TurretCommand::Execute()
