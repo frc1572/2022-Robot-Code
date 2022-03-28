@@ -16,14 +16,15 @@ bool TurretManualControl::IsFinished()
     return false;
 }
 
-TurretManual180::TurretManual180(TurretSubsystem& turret) : m_turret(turret)
+TurretManual180::TurretManual180(double DesiredRotation, TurretSubsystem& turret)
+  : m_turret(turret), m_desiredRotation(DesiredRotation)
 {
     AddRequirements(&m_turret);
 }
 
 void TurretManual180::Initialize()
 {
-    m_turret.SetDesiredPosition(180_deg);
+    m_turret.SetDesiredPosition(m_desiredRotation * 1_deg);
 }
 
 bool TurretManual180::IsFinished()

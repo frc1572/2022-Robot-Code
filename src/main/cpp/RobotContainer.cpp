@@ -41,6 +41,8 @@ RobotContainer::RobotContainer()
     m_autoChooser.AddOption("Left1BallAutoNOMOVE", &m_resetLeftLowGoalShot);
     m_autoChooser.AddOption("Right1BallAutoNOMOVE", &m_resetRightLowGoalShot);
     m_autoChooser.AddOption("SmallForwardTest", &m_smallForwardAutoTest);
+    m_autoChooser.AddOption("Right5ball", &m_Right5ball);
+    m_autoChooser.AddOption("Right3ball", &m_Right3ball);
     frc::SmartDashboard::PutData(&m_autoChooser);
     ConfigureButtonBindings();
 }

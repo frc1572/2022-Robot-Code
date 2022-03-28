@@ -34,10 +34,14 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     m_steeringMotor->ConfigClosedloopRamp(0.05);
     m_steeringMotor->Config_kP(0, 0.2);
     m_steeringMotor->Config_kD(0, 0.005);
+    m_steeringMotor->ConfigClosedLoopPeakOutput(0, .66);
     if (frc::RobotBase::IsReal())
     {
         m_steeringMotor->SetInverted(true);
     }
+
+    m_throttleMotor->SetStatusFramePeriod(StatusFrame::Status_2_Feedback0_, Constants::LoopPeriod / 1_ms);
+    m_steeringMotor->SetStatusFramePeriod(StatusFrame::Status_2_Feedback0_, Constants::LoopPeriod / 1_ms);
     // spdlog::info("{}, {}", throttlePort, m_steeringMotor->GetSelectedSensorPosition());
 }
 

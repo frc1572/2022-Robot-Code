@@ -14,12 +14,6 @@ FlywheelSpinupCommand::FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flyw
 {
 }
 
-
-/*
-SetHoodSpeed::SetHoodSpeed(double SelectedHoodSpeed) : m_selectedHoodSpeed(SelectedHoodSpeed) {
-
-}
-*/
 void FlywheelSpinupCommand::Initialize()
 {
     m_flywheel.SetSetpoint(m_omega);
@@ -29,5 +23,3 @@ bool FlywheelSpinupCommand::IsFinished()
 {
     return false;
 }
-
-

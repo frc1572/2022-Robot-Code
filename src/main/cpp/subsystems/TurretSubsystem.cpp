@@ -21,6 +21,7 @@ TurretSubsystem::TurretSubsystem()
     }
     m_turret.Config_kP(0, 0.225);
     m_turret.Config_kD(0, 0.15);
+    m_turret.SetStatusFramePeriod(StatusFrame::Status_2_Feedback0_, Constants::LoopPeriod / 1_ms);
     // m_turret.ConfigClosedLoopPeakOutput(0, .75);
     SetName(fmt::format("TurretSubsystem({})", m_turret.GetDeviceID()));
 }

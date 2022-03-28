@@ -21,10 +21,11 @@ private:
 class TurretManual180 : public frc2::CommandHelper<frc2::CommandBase, TurretManual180>
 {
 public:
-    TurretManual180(TurretSubsystem& turret);
+    TurretManual180(double DesiredRotation, TurretSubsystem& turret);
     void Initialize() override;
     bool IsFinished() override;
 
 private:
     TurretSubsystem& m_turret;
+    double m_desiredRotation;
 };
