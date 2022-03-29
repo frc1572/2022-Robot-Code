@@ -278,12 +278,44 @@ private:
             frc2::SequentialCommandGroup(
                 frc2::ParallelCommandGroup(
                     FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(1_s),
-                    FlywheelSpinupCommand(1900, m_flywheel).WithTimeout(1_s)),
+                    FlywheelSpinupCommand(2000, m_flywheel).WithTimeout(1_s)),
                 IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(2_s)),
             IntakeSpinupCommand(0.0, m_intakeSystem).WithTimeout(0.1_s),
             IntakeFeederCommand(0.0, m_IntakeFeeder).WithTimeout(0.1_s),
             FeederSpinupCommand(0.0, m_turretFeeder).WithTimeout(0.1_s),
             FlywheelSpinupCommand(0.0, m_flywheel).WithTimeout(0.1_s))};
+
+    // Maybe Works, Untested
+    frc2::SequentialCommandGroup m_LeftTwoBall1HangarStore{
+        frc2::InstantCommand(
+            [this]() {
+                resetPose({23.1548_ft, 15.4612_ft, 159.00_deg});
+            }),
+        IntakeSpinupCommand(-0.3, m_intakeSystem).WithTimeout(0.5_s),
+        IntakeSpinupCommand(0.25, m_intakeSystem).WithTimeout(0.5_s),
+        frc2::SequentialCommandGroup(
+            m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("left2Ball", 1_mps, 1_mps_sq)),
+            frc2::ParallelCommandGroup(
+                IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(0.1_s),
+                FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(2_s),
+                FlywheelSpinupCommand(1900, m_flywheel).WithTimeout(2_s)),
+            IntakeFeederCommand(0.0, m_IntakeFeeder).WithTimeout(0.1_s),
+            FeederSpinupCommand(0.0, m_turretFeeder).WithTimeout(0.1_s),
+            FlywheelSpinupCommand(0.0, m_flywheel).WithTimeout(0.1_s)),
+        frc2::SequentialCommandGroup(
+            IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(0.1_s),
+            m_drivetrain.MakeDrivePathPlannerCommand(
+                pathplanner::PathPlanner::loadPath("Left1HangarHide", 1_mps, 1_mps_sq)),
+            frc2::SequentialCommandGroup(
+                frc2::ParallelCommandGroup(
+                    IntakeFeederCommand(-0.75, m_IntakeFeeder).WithTimeout(1_s),
+                    IntakeSpinupCommand(-0.3, m_intakeSystem).WithTimeout(1_s),
+                    FeederSpinupCommand(-0.75, m_turretFeeder).WithTimeout(1_s),
+                    FlywheelSpinupCommand(-1900, m_flywheel).WithTimeout(1_s)),
+                IntakeFeederCommand(0.0, m_IntakeFeeder).WithTimeout(0.1_s),
+                FeederSpinupCommand(0.0, m_turretFeeder).WithTimeout(0.1_s),
+                FlywheelSpinupCommand(0.0, m_flywheel).WithTimeout(0.1_s),
+                IntakeSpinupCommand(0.0, m_intakeSystem).WithTimeout(0.1_s)))};
 
     void ConfigureButtonBindings();
 };

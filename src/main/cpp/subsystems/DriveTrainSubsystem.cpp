@@ -123,33 +123,34 @@ frc2::SwerveControllerCommand<4> DriveTrainSubsystem::MakeDrivePathPlannerComman
     }
 
     auto cmd = frc2::SwerveControllerCommand<4>(
-                   frc::Trajectory(wpilibStates),
-                   [this]() { return GetPose(); },
-                   m_swerveKinematics,
-                   m_translationController,
-                   m_translationController,
-                   m_headingController,
-                   [trajectory, timer = frc::Timer()]() mutable
-                   {
-                       if (timer.HasElapsed(trajectory.getTotalTime()))
-                       {
-                           timer.Reset();
-                       }
-                       timer.Start();
-                       return trajectory.sample(timer.Get()).holonomicRotation;
-                   },
-                   [this](std::array<frc::SwerveModuleState, 4> moduleStates)
-                   {
-                       for (unsigned int i = 0; i < m_swerveModules.size(); i++)
-                       {
-                           m_swerveModules[i].SetDesiredState(moduleStates[i]);
-                       }
-                   }/*,
-                   {this})
-                   .BeforeStarting(
-                       [initialState, resetPose]() {
-                           resetPose({initialState.pose.Translation(), initialState.holonomicRotation});
-                       }*/);
+        frc::Trajectory(wpilibStates),
+        [this]() { return GetPose(); },
+        m_swerveKinematics,
+        m_translationController,
+        m_translationController,
+        m_headingController,
+        [trajectory, timer = frc::Timer()]() mutable
+        {
+            if (timer.HasElapsed(trajectory.getTotalTime()))
+            {
+                timer.Reset();
+            }
+            timer.Start();
+            return trajectory.sample(timer.Get()).holonomicRotation;
+        },
+        [this](std::array<frc::SwerveModuleState, 4> moduleStates)
+        {
+            for (unsigned int i = 0; i < m_swerveModules.size(); i++)
+            {
+                m_swerveModules[i].SetDesiredState(moduleStates[i]);
+            }
+        },
+        {this})
+        /*
+        [initialState, resetPose]() {
+            resetPose({initialState.pose.Translation(), initialState.holonomicRotation});
+        })*/
+        ;
     std::cout << "X: " << initialState.pose.Translation().X().value()
               << "Y: " << initialState.pose.Translation().Y().value()
               << "Initial Rotation: " << initialState.holonomicRotation.Radians().value() << std::endl;
