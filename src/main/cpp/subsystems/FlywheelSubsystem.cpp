@@ -19,8 +19,6 @@ FlywheelSubsystem::FlywheelSubsystem()
 
     m_leader.ConfigClosedLoopPeakOutput(0, .4);
 
-
-
     m_follower.ConfigFactoryDefault();
     m_follower.SetNeutralMode(Coast);
     m_follower.Follow(m_leader);
@@ -73,8 +71,15 @@ void FlywheelSubsystem::SetSetpoint(rad_per_s_t setpoint)
     // frc::SmartDashboard::PutNumber("Flywheel.Setpoint", setpoint.to<double>());
 }
 
+rad_per_s_t FlywheelSubsystem::GetDesiredVelocity()
+{
+    return rad_per_s_t{m_loop.NextR(0)};
+}
 
-
+rad_per_s_t FlywheelSubsystem::GetEstimatedVelocity()
+{
+    return rad_per_s_t{m_loop.Xhat(0)};
+}
 
 /*
 frc2::SequentialCommandGroup FlywheelSubsystem::HoodShot(rad_per_s_t HoodRPM,  double FeedRPM) {
@@ -82,8 +87,8 @@ frc2::SequentialCommandGroup FlywheelSubsystem::HoodShot(rad_per_s_t HoodRPM,  d
             FlywheelSubsystem::StartFeeder(FeedRPM);
             FlywheelSubsystem::SetSetpoint(HoodRPM);
         }
-        
-        m_feeder.Set(ControlMode::PercentOutput, FeedRPm), 
+
+        m_feeder.Set(ControlMode::PercentOutput, FeedRPm),
         FlywheelSubsystem::SetSetpoint(HoodRPM)
 }
 */

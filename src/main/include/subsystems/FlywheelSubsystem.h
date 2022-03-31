@@ -9,8 +9,9 @@
 #include <frc/system/LinearSystemLoop.h>
 #include <frc/system/plant/DCMotor.h>
 #include <frc/system/plant/LinearSystemId.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/SubsystemBase.h>
+
 #include "Constants.h"
 #include "CustomUnits.h"
 #include "frc/Joystick.h"
@@ -22,9 +23,11 @@ public:
     void Periodic() override;
     void SimulationPeriodic() override;
     void SetSetpoint(rad_per_s_t setpoint);
+    rad_per_s_t GetDesiredVelocity();
+    rad_per_s_t GetEstimatedVelocity();
 
-    //void SetHoodSpeed(rad_per_s_t SelectedHoodSpeed);
-    //frc2::SequentialCommandGroup HoodShot(rad_per_s_t HoodRPM,  double FeedRPM);
+    // void SetHoodSpeed(rad_per_s_t SelectedHoodSpeed);
+    // frc2::SequentialCommandGroup HoodShot(rad_per_s_t HoodRPM,  double FeedRPM);
 
 private:
     WPI_TalonFX m_leader{Constants::Flywheel::LeaderID, "canivore"};

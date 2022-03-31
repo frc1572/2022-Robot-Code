@@ -78,7 +78,7 @@ model {
                 cppCompiler.define 'SPDLOG_CLOCK_COARSE'
                 cppCompiler.define 'SPDLOG_NO_THREAD_ID'
                 cppCompiler.define 'SPDLOG_NO_ATOMIC_LEVELS'
-                cppCompiler.args << '-Ofast' /*<< '-march=armv7-a'*/ << '-funroll-loops' << '-ffast-math' << '-mfpu=neon'
+                cppCompiler.args << '-Ofast' << '-march=armv7-a' << '-funroll-loops' << '-ffast-math' << '-mfpu=neon'
             }
 
             // Set deploy task to deploy this component

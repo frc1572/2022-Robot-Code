@@ -28,7 +28,7 @@ RobotContainer::RobotContainer()
 {
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
     m_flywheel.SetDefaultCommand(AutoFlywheelCommand(m_drivetrain, m_flywheel));
-    m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret));
+    m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret, m_flywheel));
     m_climb.SetDefaultCommand(
         WinchCommand(Constants::Systemspeeds::WinchRelease, m_climb, m_translationJoystick, m_joystick));
     m_poseEstimatorCommand.Schedule();
