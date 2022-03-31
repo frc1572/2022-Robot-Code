@@ -29,11 +29,6 @@ public:
         std::function<frc::Pose2d()> poseProvider);
     std::optional<TargetInfo> GetLatestResult();
     void Periodic() override;
-<<<<<<< HEAD
-    void SimulationPeriodic() override;
-    // void DriverMode(bool drivermode);
-=======
->>>>>>> 08ddc2f (switch to LL)
 
 private:
     std::shared_ptr<nt::NetworkTable> m_table;

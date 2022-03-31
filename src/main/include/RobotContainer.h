@@ -265,9 +265,9 @@ private:
         frc2::SequentialCommandGroup(
             m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("right2Ball", 1_mps, 1_mps_sq)),
             frc2::SequentialCommandGroup(
-                frc2::ParallelCommandGroup(
-                    FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(1_s),
-                    FlywheelSpinupCommand(1900, m_flywheel).WithTimeout(1_s)),
+                // frc2::ParallelCommandGroup(
+                FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(1_s),
+                // FlywheelSpinupCommand(1900, m_flywheel).WithTimeout(1_s)),
                 IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(2_s)),
             IntakeFeederCommand(0.0, m_IntakeFeeder).WithTimeout(0.1_s),
             FeederSpinupCommand(0.0, m_turretFeeder).WithTimeout(0.1_s),
@@ -276,9 +276,9 @@ private:
             IntakeFeederCommand(0.1, m_IntakeFeeder).WithTimeout(0.1_s),
             m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("Right3", 1_mps, 1_mps_sq)),
             frc2::SequentialCommandGroup(
-                frc2::ParallelCommandGroup(
-                    FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(1_s),
-                    FlywheelSpinupCommand(2000, m_flywheel).WithTimeout(1_s)),
+                // frc2::ParallelCommandGroup(
+                FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(1_s),
+                // FlywheelSpinupCommand(2000, m_flywheel).WithTimeout(1_s)),
                 IntakeFeederCommand(0.75, m_IntakeFeeder).WithTimeout(2_s)),
             IntakeSpinupCommand(0.0, m_intakeSystem).WithTimeout(0.1_s),
             IntakeFeederCommand(0.0, m_IntakeFeeder).WithTimeout(0.1_s),
