@@ -25,6 +25,7 @@
       "/LiveWindow/Ungrouped/VisionSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/frc2::SubsystemBase": "Subsystem",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/left2BallCommand": "Command",
       "/SmartDashboard/right2BallCommand": "Command",
       "/SmartDashboard/testAutoCommmand": "Command",
@@ -98,7 +99,7 @@
               "autoFit": true
             }
           ],
-          "height": 550,
+          "height": -6,
           "series": [
             {
               "color": [

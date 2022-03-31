@@ -63,6 +63,8 @@ PoseEstimatorCommand::PoseEstimatorCommand(
 
 void PoseEstimatorCommand::Execute()
 {
+    auto previousTranslation = m_observer.Xhat().block<2, 1>(0, 0);
+
     auto chassisSpeeds = m_drivetrain.GetMeasuredChassisSpeeds();
     auto drivetrainMeasuredAngle = m_drivetrain.GetMeasuredRotation();
     auto turretMeasuredAngle = m_turret.GetMeasuredRotation();
@@ -91,6 +93,16 @@ void PoseEstimatorCommand::Execute()
             m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
                 &m_observer, Constants::LoopPeriod, visionMeasurement, m_visionCorrectionFn, targetInfo->timestamp);
         }
+    }
+
+    auto translationChange = m_observer.Xhat().block<2, 1>(0, 0) - previousTranslation;
+    if (units::meter_t{translationChange.norm()} / Constants::LoopPeriod > Constants::SwerveModule::ThrottleMaxVelocity)
+    {
+        auto limitedTranslation = previousTranslation +
+            translationChange.normalized() *
+                units::meter_t{Constants::SwerveModule::ThrottleMaxVelocity * Constants::LoopPeriod}.value();
+        m_observer.SetXhat(0, limitedTranslation[0]);
+        m_observer.SetXhat(1, limitedTranslation[1]);
     }
 
     m_drivetrain.SetPose(GetPose());
