@@ -81,7 +81,7 @@ void PoseEstimatorCommand::Execute()
     m_observer.Predict(u, Constants::LoopPeriod);
     m_observer.Correct(u, localY);
 
-    if (auto targetInfo = m_vision.PopLatestResult())
+    if (auto targetInfo = m_vision.GetLatestResult())
     {
         // std::cout << "Popped Latest result! " << std::endl;
         auto expectedYaw = units::radian_t{m_visionMeasurementFn(m_observer.Xhat(), {})[1]};

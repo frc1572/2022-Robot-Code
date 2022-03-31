@@ -1,11 +1,12 @@
 #pragma once
 
+#include <memory>
 #include <optional>
 
+#include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc2/command/SubsystemBase.h>
-#include <photonlib/PhotonCamera.h>
-#include <photonlib/SimVisionSystem.h>
+#include <networktables/NetworkTable.h>
 #include <units/length.h>
 #include <units/time.h>
 
@@ -26,20 +27,18 @@ public:
         units::meter_t targetHeight,
         units::degree_t cameraPitch,
         std::function<frc::Pose2d()> poseProvider);
-    std::optional<TargetInfo> PopLatestResult();
+    std::optional<TargetInfo> GetLatestResult();
     void Periodic() override;
+<<<<<<< HEAD
     void SimulationPeriodic() override;
     // void DriverMode(bool drivermode);
+=======
+>>>>>>> 08ddc2f (switch to LL)
 
 private:
-    photonlib::PhotonCamera m_camera{"limelight"};
+    std::shared_ptr<nt::NetworkTable> m_table;
     units::meter_t m_cameraHeight;
     units::meter_t m_targetHeight;
     units::degree_t m_cameraPitch;
     std::optional<TargetInfo> m_latestResult;
-
-    frc::Pose2d m_simGoalPose{Constants::GoalTranslation, 0_deg};
-    photonlib::SimVisionSystem m_cameraSim{
-        "limelight", 77.6_deg, m_cameraPitch, {}, m_cameraHeight, 30_ft, 960, 720, 1};
-    std::function<frc::Pose2d()> m_simPoseProvider;
 };
