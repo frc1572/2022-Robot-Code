@@ -20,7 +20,7 @@ void WinchCommand::Execute()
     if (m_joystick.GetRawButton(7) == true && m_joystick.GetRawButton(12) == true)
     {
         m_climb.WinchPull(m_desiredWinchPower);
-        std::cout << "Winch Pull Command is Running" << std::endl;
+        // std::cout << "Winch Pull Command is Running" << std::endl;
     }
     else if (m_joystick.GetRawButton(8) == true && m_joystick.GetRawButton(12) == true)
     {

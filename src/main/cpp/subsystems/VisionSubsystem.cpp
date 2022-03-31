@@ -42,10 +42,24 @@ void VisionSubsystem::Periodic()
     {
         m_latestResult = std::nullopt;
         frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", false);
+        std::cout << "!result Target" << std::endl;
     }
 
     else
     {
+        auto bestTarget = result.GetBestTarget();
+        auto distance = photonlib::PhotonUtils::CalculateDistanceToTarget(
+                            m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch())) +
+            (frc::RobotBase::IsReal() ? Constants::UpperHubRadius : decltype(Constants::UpperHubRadius){0});
+        auto yaw = frc::Rotation2d(units::degree_t(-bestTarget.GetYaw()));
+        auto latency = result.GetLatency();
+        m_latestResult = {distance, yaw, frc::Timer::GetFPGATimestamp() - latency};
+        frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", true);
+        frc::SmartDashboard::PutNumber("VisionSubsystem.GoalDistanceMeters", distance.value());
+        frc::SmartDashboard::PutNumber("VisionSubsystem.GoalYawDegrees", yaw.Degrees().value());
+        frc::SmartDashboard::PutNumber("VisionSubsystem.LatencySeconds", latency.value());
+        std::cout << "Result HAS target running" << std::endl;
+        /*
         // std::cout << "Hitting the Vision Else Branch! " << std::endl;
         auto Corners = result.GetBestTarget().GetCorners();
         auto [minX, maxX] = std::minmax_element(
@@ -57,25 +71,17 @@ void VisionSubsystem::Periodic()
             Corners.end(),
             [](std::pair<double, double> a, std::pair<double, double> b) { return a.second < b.second; });
         double aspectRatio = (maxX->first - minX->first) / (maxY->second - minY->second);
-        if (aspectRatio > 3)
+        if (aspectRatio < 2)
         {
             m_latestResult = std::nullopt;
             frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", false);
         }
         else
         {
-            auto bestTarget = result.GetBestTarget();
-            auto distance = photonlib::PhotonUtils::CalculateDistanceToTarget(
-                                m_cameraHeight, m_targetHeight, m_cameraPitch, units::degree_t(bestTarget.GetPitch())) +
-                (frc::RobotBase::IsReal() ? Constants::UpperHubRadius : decltype(Constants::UpperHubRadius){0});
-            auto yaw = frc::Rotation2d(units::degree_t(-bestTarget.GetYaw()));
-            auto latency = result.GetLatency();
-            m_latestResult = {distance, yaw, frc::Timer::GetFPGATimestamp() - latency};
-            frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", true);
-            frc::SmartDashboard::PutNumber("VisionSubsystem.GoalDistanceMeters", distance.value());
-            frc::SmartDashboard::PutNumber("VisionSubsystem.GoalYawDegrees", yaw.Degrees().value());
-            frc::SmartDashboard::PutNumber("VisionSubsystem.LatencySeconds", latency.value());
+
+
         }
+        */
     }
 }
 

@@ -17,7 +17,6 @@ namespace Constants
     constexpr auto LoopPeriod = 1_s / 50;
     const frc::Translation2d GoalTranslation{27_ft, 13.5_ft}; // 27, 13.5
     constexpr auto UpperHubRadius = 26.69_in;
-    // frc::Translation2d GoalTranslation{54_ft / 2, 27_ft / 2};
     constexpr auto CameraRotationRadius = 8.7333_in;
     constexpr auto MinimumFFVoltage = 1.0_V;
 
@@ -57,7 +56,7 @@ namespace Constants
         const double SteeringGearing = 72.0 / 14.0 * 24.0 / 8.0;
         constexpr auto WheelDiameter = 3.25_in;
         constexpr auto RolloutRatio = WheelDiameter / 2_rad;
-        constexpr auto ThrottleMaxVelocity = 10_fps; // adjusted for driver, nominally 17 ft/s
+        constexpr auto ThrottleMaxVelocity = 12.5_fps; // adjusted for driver, nominally 17 ft/s
         constexpr auto SteeringMaxVelocity = 1 * 360_deg_per_s;
     } // namespace SwerveModule
 
