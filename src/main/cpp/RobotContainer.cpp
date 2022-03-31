@@ -27,7 +27,7 @@
 RobotContainer::RobotContainer()
 {
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
-    m_flywheel.SetDefaultCommand(AutoFlywheelCommand(m_drivetrain, m_flywheel));
+
     m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret, m_flywheel));
     m_climb.SetDefaultCommand(
         WinchCommand(Constants::Systemspeeds::WinchRelease, m_climb, m_translationJoystick, m_joystick));
@@ -53,9 +53,8 @@ void RobotContainer::ConfigureButtonBindings()
     // frc2::JoystickButton(&m_translationJoystick, 2).WhenPressed(SetHoodSpeed(1000));
     frc2::JoystickButton(&m_joystick, 1).WhenHeld(TurretManualControl(m_turret));
     // Hood Shooter Toggle ON
-    // frc2::JoystickButton(&m_joystick, 6)
-    //    .WhenPressed(FlywheelSpinupCommand(Constants::Systemspeeds::HoodSpeed, m_flywheel));
-    // frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 6).WhenPressed(AutoFlywheelCommand(m_drivetrain, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
     // Turret Feededr toggle ON
     frc2::JoystickButton(&m_joystick, 6)
         .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder));

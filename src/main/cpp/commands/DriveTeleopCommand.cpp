@@ -1,6 +1,7 @@
 #include "commands/DriveTeleopCommand.h"
 
 #include <cmath>
+#include <iostream>
 
 #include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -14,9 +15,12 @@ DriveTeleopCommand::DriveTeleopCommand(
 }
 void DriveTeleopCommand::Execute()
 {
-    double rawTranslationX = frc::ApplyDeadband(m_translationJoystick.GetY(), 0.05);
-    double rawTranslationY = frc::ApplyDeadband(m_translationJoystick.GetX(), 0.05);
+    double rawTranslationX = frc::ApplyDeadband(m_translationJoystick.GetY(), 0.025);
+    double rawTranslationY = frc::ApplyDeadband(m_translationJoystick.GetX(), 0.025);
+    rawTranslationX *= rawTranslationX * wpi::sgn(rawTranslationX);
+    rawTranslationY *= rawTranslationY * wpi::sgn(rawTranslationY);
 
+    std::cout << "Ty: " << rawTranslationY << "Tx: " << rawTranslationX << std::endl;
     // Normalize input so that throttle does not run faster when moving diagonally
     double translationAngle = atan2(rawTranslationY, rawTranslationX);
     double translationX = rawTranslationX * cos(translationAngle) * wpi::sgn(rawTranslationX);

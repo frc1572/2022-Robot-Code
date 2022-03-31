@@ -44,7 +44,8 @@ void VisionSubsystem::Periodic()
         auto ty = units::degree_t{m_table->GetNumber("ty", 0)};
         auto tl = units::millisecond_t{m_table->GetNumber("tl", 0)} + 11_ms;
 
-        auto distance = (m_targetHeight - m_cameraHeight) / units::math::tan(m_cameraPitch + ty);
+        auto distance =
+            (m_targetHeight - m_cameraHeight) / units::math::tan(m_cameraPitch + ty) + Constants::UpperHubRadius;
         m_latestResult = {distance, tx, frc::Timer::GetFPGATimestamp() - tl};
         frc::SmartDashboard::PutBoolean("VisionSubsystem.HasTarget", true);
         frc::SmartDashboard::PutNumber("VisionSubsystem.GoalDistanceMeters", distance.value());

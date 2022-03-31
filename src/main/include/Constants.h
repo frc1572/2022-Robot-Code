@@ -41,7 +41,7 @@ namespace Constants
         constexpr Kv_t<units::radian_t> Kv = 0.025_V / 1_rad_per_s;
         constexpr Ka_t<units::radian_t> Ka = 0.0025_V / 1_rad_per_s_sq;
         constexpr auto Diameter = 4_in;
-        constexpr auto Angle = 45_deg;
+        constexpr auto Angle = 23.68_deg;
     } // namespace Flywheel
 
     namespace SwerveModule

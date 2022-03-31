@@ -19,7 +19,7 @@ TurretSubsystem::TurretSubsystem()
     {
         m_turret.SetInverted(true);
     }
-    m_turret.Config_kP(0, 0.225);
+    m_turret.Config_kP(0, 0.25);
     m_turret.Config_kD(0, 0.15);
     m_turret.SetStatusFramePeriod(StatusFrame::Status_2_Feedback0_, Constants::LoopPeriod / 1_ms);
     // m_turret.ConfigClosedLoopPeakOutput(0, .25);
