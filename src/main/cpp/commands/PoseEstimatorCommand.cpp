@@ -63,7 +63,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
 
 void PoseEstimatorCommand::Execute()
 {
-    auto previousTranslation = m_observer.Xhat().block<2, 1>(0, 0);
+    auto previousTranslation = Eigen::Vector<double, 2>(m_observer.Xhat().block<2, 1>(0, 0));
 
     auto chassisSpeeds = m_drivetrain.GetMeasuredChassisSpeeds();
     auto drivetrainMeasuredAngle = m_drivetrain.GetMeasuredRotation();
