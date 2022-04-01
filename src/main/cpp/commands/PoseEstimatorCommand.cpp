@@ -18,8 +18,8 @@ PoseEstimatorCommand::PoseEstimatorCommand(
     m_observer(
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return u; },
         [](const Eigen::Vector<double, 4>& x, const Eigen::Vector<double, 4>& u) { return x.block<2, 1>(2, 0); },
-        {1.0, 1.0, 2.0, 4.0},
-        {0.0005, 0.0005},
+        {1, 1, 2.0, 4.0},
+        {0.0000, 0.0000},
         AngleMean<4, 4>({2, 3}),
         AngleMean<2, 4>({0, 1}),
         AngleResidual<4>({2, 3}),
@@ -49,7 +49,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
                 u,
                 y,
                 m_visionMeasurementFn,
-                frc::MakeCovMatrix<2>({1.0, 1.0}),
+                frc::MakeCovMatrix<2>({10, 1}),
                 AngleMean<2, 4>({1}),
                 AngleResidual<2>({1}),
                 AngleResidual<4>({2, 3}),
@@ -87,7 +87,8 @@ void PoseEstimatorCommand::Execute()
     {
         // std::cout << "Popped Latest result! " << std::endl;
         auto expectedYaw = units::radian_t{m_visionMeasurementFn(m_observer.Xhat(), {})[1]};
-        if (units::math::abs(targetInfo->yaw.Radians() - expectedYaw) < 45_deg)
+        if (units::math::abs(targetInfo->yaw.Radians() - expectedYaw) < 45_deg &&
+            m_turret.GetMeasuredVelocity() < 30_deg_per_s)
         {
             Eigen::Vector<double, 2> visionMeasurement{targetInfo->distance.value(), targetInfo->yaw.Radians().value()};
             m_latencyCompensator.ApplyPastGlobalMeasurement<2>(
