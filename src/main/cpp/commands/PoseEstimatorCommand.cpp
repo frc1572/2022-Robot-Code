@@ -39,7 +39,7 @@ PoseEstimatorCommand::PoseEstimatorCommand(
             auto goalOffset = goalTranslation - cameraTranslation;
             double yaw = frc::InputModulus(
                 atan2(goalOffset[1], goalOffset[0]) - cameraRotation, -wpi::numbers::pi, wpi::numbers::pi);
-            double distance = goalOffset.norm() * std::cos(yaw);
+            double distance = goalOffset.norm() * std::abs(std::cos(yaw));
             return Eigen::Vector<double, 2>{distance, yaw};
         }),
     m_visionCorrectionFn(
