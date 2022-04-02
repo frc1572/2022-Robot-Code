@@ -56,6 +56,7 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetInvertedChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
+    frc::SmartDashboard::PutNumber("Gyro Angle: ", m_IMU.GetRotation2d().Degrees().value());
     return m_IMU.GetRotation2d() + m_rotationOffset;
 }
 
