@@ -21,15 +21,14 @@ void AutoTurretCommand::Execute()
 {
     if (auto turretAngle = m_vision.GetLatestResult())
     {
-        auto desiredAngle = m_turret.GetMeasuredRotation() + turretAngle->yaw + CalculateInertiaCompensationAngle();
+        auto desiredAngle = m_turret.GetMeasuredRotation() + turretAngle->yaw;
         m_turret.SetDesiredPosition(desiredAngle, rad_per_s_t{0});
     }
     else
     {
         auto pose = m_drivetrain.GetPose();
         auto goalOffset = Constants::GoalTranslation - pose.Translation();
-        auto desiredAngle =
-            frc::Rotation2d{units::math::atan2(goalOffset.Y(), goalOffset.X())} + CalculateInertiaCompensationAngle();
+        auto desiredAngle = frc::Rotation2d{units::math::atan2(goalOffset.Y(), goalOffset.X())} - pose.Rotation();
         m_turret.SetDesiredPosition(desiredAngle, rad_per_s_t{0});
     }
     // m_previousDesiredAngle = desiredAngle;

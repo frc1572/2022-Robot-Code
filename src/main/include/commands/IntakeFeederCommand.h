@@ -10,6 +10,7 @@ class IntakeFeederCommand : public frc2::CommandHelper<frc2::CommandBase, Intake
 public:
     IntakeFeederCommand(double IntakeFeederRPM, IntakeFeederSubsystem& intakeFeeder);
     void Initialize() override;
+    void Execute() override;
     bool IsFinished() override;
 
 private:

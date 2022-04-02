@@ -1,5 +1,6 @@
 #include "commands/IntakeFeederCommand.h"
 
+#include "frc/smartdashboard/SmartDashboard.h"
 IntakeFeederCommand::IntakeFeederCommand(double IntakeFeederRPM, IntakeFeederSubsystem& intakeFeeder)
   : m_intakeFeederRPM(IntakeFeederRPM), m_intakeFeeder(intakeFeeder)
 {
@@ -9,7 +10,11 @@ IntakeFeederCommand::IntakeFeederCommand(double IntakeFeederRPM, IntakeFeederSub
 
 void IntakeFeederCommand::Initialize()
 {
-    m_intakeFeeder.StartIntakeFeeder(m_intakeFeederRPM);
+    // m_intakeFeeder.StartIntakeFeeder(m_intakeFeederRPM);
+}
+void IntakeFeederCommand::Execute()
+{
+    m_intakeFeeder.StartIntakeFeeder(frc::SmartDashboard::GetNumber("Conveyor Speed (0-1): ", 0));
 }
 bool IntakeFeederCommand::IsFinished()
 {

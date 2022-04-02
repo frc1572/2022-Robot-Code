@@ -16,7 +16,13 @@ FlywheelSpinupCommand::FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flyw
 
 void FlywheelSpinupCommand::Initialize()
 {
-    m_flywheel.SetSetpoint(m_omega);
+    // m_flywheel.SetSetpoint(m_omega);
+}
+
+void FlywheelSpinupCommand::Execute()
+{
+    m_flywheel.SetSetpoint(
+        frc::SmartDashboard::GetNumber("Desired Flywheel RPM:", 0.0) * 2_rad * wpi::numbers::pi / 1_min);
 }
 
 bool FlywheelSpinupCommand::IsFinished()

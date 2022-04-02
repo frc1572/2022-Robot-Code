@@ -7,17 +7,19 @@
 #include "helper/LinearLookupTable.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
+#include "subsystems/VisionSubsystem.h"
 
 class AutoFlywheelCommand : public frc2::CommandHelper<frc2::CommandBase, AutoFlywheelCommand>
 {
 public:
-    AutoFlywheelCommand(DriveTrainSubsystem& drivetrain, FlywheelSubsystem& flywheel);
+    AutoFlywheelCommand(DriveTrainSubsystem& drivetrain, FlywheelSubsystem& flywheel, VisionSubsystem& vision);
     void Execute() override;
     void End(bool interrupted) override;
 
 private:
     DriveTrainSubsystem& m_drivetrain;
     FlywheelSubsystem& m_flywheel;
+    VisionSubsystem& m_vision;
 
     LinearLookupTable<units::meter_t, double> m_lut{{
         {1_m, 1000},

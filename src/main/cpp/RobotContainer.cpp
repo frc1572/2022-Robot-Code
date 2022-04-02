@@ -26,6 +26,8 @@
 
 RobotContainer::RobotContainer()
 {
+    frc::SmartDashboard::PutNumber("Desired Flywheel RPM:", 0);
+    frc::SmartDashboard::PutNumber("Conveyor Speed (0-1): ", 0);
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
 
     m_turret.SetDefaultCommand(AutoTurretCommand(m_drivetrain, m_turret, m_flywheel, m_vision));
@@ -43,6 +45,7 @@ RobotContainer::RobotContainer()
     m_autoChooser.AddOption("SmallForwardTest", &m_smallForwardAutoTest);
     m_autoChooser.AddOption("Right5ball", &m_Right5ball);
     m_autoChooser.AddOption("Right3ball", &m_Right3ball);
+
     frc::SmartDashboard::PutData(&m_autoChooser);
     ConfigureButtonBindings();
 }
@@ -53,7 +56,8 @@ void RobotContainer::ConfigureButtonBindings()
     // frc2::JoystickButton(&m_translationJoystick, 2).WhenPressed(SetHoodSpeed(1000));
     frc2::JoystickButton(&m_joystick, 1).WhenHeld(TurretManualControl(m_turret));
     // Hood Shooter Toggle ON
-    frc2::JoystickButton(&m_joystick, 6).WhenPressed(AutoFlywheelCommand(m_drivetrain, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 6).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
+    // frc2::JoystickButton(&m_joystick, 6).WhenPressed(AutoFlywheelCommand(m_drivetrain, m_flywheel, m_vision));
     frc2::JoystickButton(&m_joystick, 5).WhenPressed(FlywheelSpinupCommand(0, m_flywheel));
     // Turret Feededr toggle ON
     frc2::JoystickButton(&m_joystick, 6)
@@ -76,8 +80,7 @@ void RobotContainer::ConfigureButtonBindings()
 
     // Main Robot Feeder Hold On
     frc2::JoystickButton(&m_joystick, 4).WhenReleased(IntakeFeederCommand(0.0, m_IntakeFeeder));
-    frc2::JoystickButton(&m_joystick, 4)
-        .WhenHeld(IntakeFeederCommand(Constants::Systemspeeds::IntakeFeederSpeed, m_IntakeFeeder));
+    frc2::JoystickButton(&m_joystick, 4).WhenHeld(IntakeFeederCommand(0, m_IntakeFeeder));
 
     // Intake Hold ON
     frc2::JoystickButton(&m_joystick, 2).WhenReleased(IntakeSpinupCommand(0.0, m_intakeSystem));

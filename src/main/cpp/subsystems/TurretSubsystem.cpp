@@ -19,8 +19,7 @@ TurretSubsystem::TurretSubsystem()
     {
         m_turret.SetInverted(true);
     }
-    m_turret.Config_kP(0, 0.5);
-    m_turret.Config_kD(0, 0.25);
+    m_turret.Config_kP(0, 0.05);
     m_turret.SetStatusFramePeriod(StatusFrame::Status_2_Feedback0_, Constants::LoopPeriod / 1_ms);
     // m_turret.ConfigClosedLoopPeakOutput(0, .25);
     SetName(fmt::format("TurretSubsystem({})", m_turret.GetDeviceID()));

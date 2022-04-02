@@ -4,6 +4,7 @@
 #include <frc2/command/CommandHelper.h>
 
 #include "CustomUnits.h"
+#include "frc/smartdashboard/SmartDashboard.h"
 #include "subsystems/FlywheelSubsystem.h"
 
 class FlywheelSpinupCommand : public frc2::CommandHelper<frc2::CommandBase, FlywheelSpinupCommand>
@@ -13,6 +14,7 @@ public:
     FlywheelSpinupCommand(double rpm, FlywheelSubsystem& flywheel);
 
     void Initialize() override;
+    void Execute() override;
     bool IsFinished() override;
 
 private:
