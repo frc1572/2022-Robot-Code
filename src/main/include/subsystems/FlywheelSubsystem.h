@@ -38,14 +38,14 @@ private:
 
     frc::LinearQuadraticRegulator<1, 1> m_controller = frc::LinearQuadraticRegulator{
         m_plant,
-        {0.05}, // radians/s
+        {0.01}, // radians/s
         {12},   // volts
         Constants::LoopPeriod};
 
     frc::KalmanFilter<1, 1, 1> m_filter = frc::KalmanFilter{
         m_plant,
-        {5}, // model error stddev
-        {5}, // measurement error stddev
+        {200},  // model error stddev
+        {1.67}, // measurement error stddev
         Constants::LoopPeriod};
 
     frc::LinearSystemLoop<1, 1, 1> m_loop =

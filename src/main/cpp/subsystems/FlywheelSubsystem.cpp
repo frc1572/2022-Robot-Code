@@ -44,8 +44,8 @@ void FlywheelSubsystem::Periodic()
         m_follower.Set(ControlMode::PercentOutput, 0.0);
     }
 
-    // frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", velocity.to<double>());
-    // frc::SmartDashboard::PutNumber("Flywheel.EstimatedState", m_loop.Xhat(0));
+    frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", GetEstimatedVelocity().value());
+    frc::SmartDashboard::PutNumber("Flywheel.DesiredState", GetDesiredVelocity().value());
 }
 
 void FlywheelSubsystem::SimulationPeriodic()

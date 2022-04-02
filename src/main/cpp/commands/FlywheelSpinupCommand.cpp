@@ -25,6 +25,11 @@ void FlywheelSpinupCommand::Execute()
         frc::SmartDashboard::GetNumber("Desired Flywheel RPM:", 0.0) * 2_rad * wpi::numbers::pi / 1_min);
 }
 
+void FlywheelSpinupCommand::End(bool interrupted)
+{
+    m_flywheel.SetSetpoint(0.0 * 2_rad * wpi::numbers::pi / 1_min);
+}
+
 bool FlywheelSpinupCommand::IsFinished()
 {
     return false;
