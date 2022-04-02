@@ -34,11 +34,10 @@ public:
     frc::ChassisSpeeds GetInvertedChassisSpeeds();
     frc::Rotation2d GetMeasuredRotation();
     frc::Pose2d GetPose();
-    void SetPose(frc::Pose2d pose);
     void TestDrive();
     void Periodic() override;
     void SimulationPeriodic() override;
-    void Reset(frc::Rotation2d currentRotation);
+    void Reset(frc::Pose2d currentPose);
     frc2::SwerveControllerCommand<4> MakeDrivePathPlannerCommand(
         /*std::string name,*/ pathplanner::PathPlannerTrajectory
             trajectory /*, std::function<void(frc::Pose2d)> resetPose*/);
@@ -47,7 +46,6 @@ private:
     WPI_Pigeon2 m_IMU{10, "canivore"};
 
     frc::ChassisSpeeds m_desiredChassisSpeeds;
-    frc::Pose2d m_pose;
 
     wpi::array<SwerveModuleSubsystem, 4> m_swerveModules{
         SwerveModuleSubsystem{1, 2, -1143 / Constants::TicksPerRevolution::TalonFX},
@@ -68,6 +66,4 @@ private:
     frc::SwerveDriveOdometry<4> m_swerveOdometry{m_swerveKinematics, frc::Rotation2d(0_rad)};
 
     frc::Field2d m_field;
-
-    frc::Rotation2d m_rotationOffset;
 };

@@ -84,7 +84,7 @@ private:
 
     std::function<void(frc::Pose2d)> resetPose = [this](frc::Pose2d pose)
     {
-        m_drivetrain.Reset(pose.Rotation());
+        m_drivetrain.Reset(pose);
         m_turret.Reset({0_deg});
         m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation());
         std::cout << "Ran resetPose Command" << std::endl;

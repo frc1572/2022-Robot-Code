@@ -13,20 +13,29 @@ AutoTurretCommand::AutoTurretCommand(
 
 void AutoTurretCommand::Initialize()
 {
-    m_previousDesiredAngle = CalculateDesiredAngle();
+    // m_previousDesiredAngle = CalculateDesiredAngle();
     m_previousPose = m_drivetrain.GetPose();
 }
 
 void AutoTurretCommand::Execute()
 {
-    auto turretAngle = m_vision.GetLatestResult();
-    auto desiredAngle = CalculateDesiredAngle() + turretAngle->yaw;
-    auto desiredVelocity = (desiredAngle.Radians() - m_previousDesiredAngle.Radians()) / Constants::LoopPeriod;
-    m_turret.SetDesiredPosition(desiredAngle, desiredVelocity);
-    m_previousDesiredAngle = desiredAngle;
+    if (auto turretAngle = m_vision.GetLatestResult())
+    {
+        auto desiredAngle = m_turret.GetMeasuredRotation() + turretAngle->yaw + CalculateInertiaCompensationAngle();
+        m_turret.SetDesiredPosition(desiredAngle, rad_per_s_t{0});
+    }
+    else
+    {
+        auto pose = m_drivetrain.GetPose();
+        auto goalOffset = Constants::GoalTranslation - pose.Translation();
+        auto desiredAngle =
+            frc::Rotation2d{units::math::atan2(goalOffset.Y(), goalOffset.X())} + CalculateInertiaCompensationAngle();
+        m_turret.SetDesiredPosition(desiredAngle, rad_per_s_t{0});
+    }
+    // m_previousDesiredAngle = desiredAngle;
 }
 
-frc::Rotation2d AutoTurretCommand::CalculateDesiredAngle()
+frc::Rotation2d AutoTurretCommand::CalculateInertiaCompensationAngle()
 {
     auto pose = m_drivetrain.GetPose();
     auto goalOffset = Constants::GoalTranslation - pose.Translation();
@@ -41,9 +50,10 @@ frc::Rotation2d AutoTurretCommand::CalculateDesiredAngle()
         auto flightTime =
             goalOffset.Norm() / (flywheelTangentialVelocity * units::math::cos(Constants::Flywheel::Angle));
         // TODO: account for turret rotation
-        goalOffset = goalOffset - frc::Translation2d{dx * flightTime, dy * flightTime};
+        return {units::math::atan2(dy * flightTime, dx * flightTime)};
     }
-
-    m_previousPose = pose;
-    return frc::Rotation2d(units::math::atan2(goalOffset.Y(), goalOffset.X())) - pose.Rotation();
+    else
+    {
+        return {0_deg};
+    }
 }

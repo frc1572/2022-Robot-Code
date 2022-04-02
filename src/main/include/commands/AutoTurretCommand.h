@@ -27,5 +27,5 @@ private:
     frc::Rotation2d m_previousDesiredAngle;
     frc::Pose2d m_previousPose;
 
-    frc::Rotation2d CalculateDesiredAngle();
+    frc::Rotation2d CalculateInertiaCompensationAngle();
 };

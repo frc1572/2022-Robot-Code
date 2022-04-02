@@ -56,27 +56,12 @@ frc::ChassisSpeeds DriveTrainSubsystem::GetInvertedChassisSpeeds()
 
 frc::Rotation2d DriveTrainSubsystem::GetMeasuredRotation()
 {
-    frc::SmartDashboard::PutNumber("Gyro Angle: ", m_IMU.GetRotation2d().Degrees().value());
-    return m_IMU.GetRotation2d() + m_rotationOffset;
+    return GetPose().Rotation();
 }
 
 frc::Pose2d DriveTrainSubsystem::GetPose()
 {
-    // TODO: use a kalman filter to estimate pose instead of odometry
-    // m_swerveOdometry.UpdateWithTime(
-    //     frc::Timer::GetFPGATimestamp(),
-    //     GetMeasuredRotation(),
-    //     m_swerveModules[0].GetMeasuredState(),
-    //     m_swerveModules[1].GetMeasuredState(),
-    //     m_swerveModules[2].GetMeasuredState(),
-    //     m_swerveModules[3].GetMeasuredState());
-    // return m_swerveOdometry.GetPose();
-    return m_pose;
-}
-
-void DriveTrainSubsystem::SetPose(frc::Pose2d pose)
-{
-    m_pose = pose;
+    return m_swerveOdometry.GetPose();
 }
 
 void DriveTrainSubsystem::TestDrive()
@@ -88,6 +73,13 @@ void DriveTrainSubsystem::TestDrive()
 }
 void DriveTrainSubsystem::Periodic()
 {
+    m_swerveOdometry.UpdateWithTime(
+        frc::Timer::GetFPGATimestamp(),
+        m_IMU.GetRotation2d(),
+        m_swerveModules[0].GetMeasuredState(),
+        m_swerveModules[1].GetMeasuredState(),
+        m_swerveModules[2].GetMeasuredState(),
+        m_swerveModules[3].GetMeasuredState());
     auto pose = GetPose();
     m_field.SetRobotPose(pose);
     frc::SmartDashboard::PutData("Field", &m_field);
@@ -101,10 +93,9 @@ void DriveTrainSubsystem::SimulationPeriodic()
     imuSim.AddHeading(units::degree_t(chassisSpeeds.omega * Constants::LoopPeriod).value());
 }
 
-void DriveTrainSubsystem::Reset(frc::Rotation2d currentRotation)
+void DriveTrainSubsystem::Reset(frc::Pose2d currentPose)
 {
-    m_rotationOffset = 0_deg;
-    m_rotationOffset = currentRotation - GetMeasuredRotation();
+    m_swerveOdometry.ResetPosition(currentPose, m_IMU.GetRotation2d());
     for (auto& module : m_swerveModules)
     {
         module.Reset();
