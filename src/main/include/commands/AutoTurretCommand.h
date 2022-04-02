@@ -8,11 +8,13 @@
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
 #include "subsystems/TurretSubsystem.h"
+#include "subsystems/VisionSubsystem.h"
 
 class AutoTurretCommand : public frc2::CommandHelper<frc2::CommandBase, AutoTurretCommand>
 {
 public:
-    AutoTurretCommand(DriveTrainSubsystem& drivetrain, TurretSubsystem& turret, FlywheelSubsystem& flywheel);
+    AutoTurretCommand(
+        DriveTrainSubsystem& drivetrain, TurretSubsystem& turret, FlywheelSubsystem& flywheel, VisionSubsystem& vision);
     void Initialize() override;
     void Execute() override;
 
@@ -20,6 +22,7 @@ private:
     DriveTrainSubsystem& m_drivetrain;
     TurretSubsystem& m_turret;
     FlywheelSubsystem& m_flywheel;
+    VisionSubsystem& m_vision;
 
     frc::Rotation2d m_previousDesiredAngle;
     frc::Pose2d m_previousPose;

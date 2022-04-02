@@ -4,8 +4,8 @@
 #include <wpi/numbers>
 
 AutoTurretCommand::AutoTurretCommand(
-    DriveTrainSubsystem& drivetrain, TurretSubsystem& turret, FlywheelSubsystem& flywheel)
-  : m_drivetrain(drivetrain), m_turret(turret), m_flywheel(flywheel)
+    DriveTrainSubsystem& drivetrain, TurretSubsystem& turret, FlywheelSubsystem& flywheel, VisionSubsystem& vision)
+  : m_drivetrain(drivetrain), m_turret(turret), m_flywheel(flywheel), m_vision(vision)
 {
     AddRequirements(&m_turret);
     SetName("AutoTurretCommand");
@@ -19,7 +19,8 @@ void AutoTurretCommand::Initialize()
 
 void AutoTurretCommand::Execute()
 {
-    auto desiredAngle = CalculateDesiredAngle();
+    auto turretAngle = m_vision.GetLatestResult();
+    auto desiredAngle = CalculateDesiredAngle() + turretAngle->yaw;
     auto desiredVelocity = (desiredAngle.Radians() - m_previousDesiredAngle.Radians()) / Constants::LoopPeriod;
     m_turret.SetDesiredPosition(desiredAngle, desiredVelocity);
     m_previousDesiredAngle = desiredAngle;
