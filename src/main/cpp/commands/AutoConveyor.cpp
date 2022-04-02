@@ -13,8 +13,8 @@ AutoConveyor::AutoConveyor(
 void AutoConveyor::Execute()
 {
     // 50 rpm  = 5.235 rad per s
-    auto RPMOffset = m_flywheel.GetEstimatedVelocity() - m_flywheel.GetDesiredVelocity();
-    if (units::math::abs(RPMOffset) < 50 * 2_rad * wpi::numbers::pi / 60_s)
+    auto RPMOffset = m_flywheel.GetMeasuredVelocity() - m_flywheel.GetDesiredVelocity();
+    if (units::math::abs(RPMOffset) < 100 * 2_rad * wpi::numbers::pi / 60_s)
     {
         if (auto targetInfo = m_vision.GetLatestResult())
         {

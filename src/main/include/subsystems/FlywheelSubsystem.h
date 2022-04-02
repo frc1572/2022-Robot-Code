@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
+#include <frc/controller/LinearPlantInversionFeedforward.h>
 #include <frc/controller/LinearQuadraticRegulator.h>
 #include <frc/estimator/KalmanFilter.h>
 #include <frc/Servo.h>
@@ -21,13 +22,9 @@ class FlywheelSubsystem : public frc2::SubsystemBase
 public:
     FlywheelSubsystem();
     void Periodic() override;
-    void SimulationPeriodic() override;
     void SetSetpoint(rad_per_s_t setpoint);
     rad_per_s_t GetDesiredVelocity();
-    rad_per_s_t GetEstimatedVelocity();
-
-    // void SetHoodSpeed(rad_per_s_t SelectedHoodSpeed);
-    // frc2::SequentialCommandGroup HoodShot(rad_per_s_t HoodRPM,  double FeedRPM);
+    rad_per_s_t GetMeasuredVelocity();
 
 private:
     WPI_TalonFX m_leader{Constants::Flywheel::LeaderID, "canivore"};
@@ -36,20 +33,7 @@ private:
     frc::LinearSystem<1, 1, 1> m_plant =
         frc::LinearSystemId::IdentifyVelocitySystem<units::radians>(Constants::Flywheel::Kv, Constants::Flywheel::Ka);
 
-    frc::LinearQuadraticRegulator<1, 1> m_controller = frc::LinearQuadraticRegulator{
-        m_plant,
-        {0.01}, // radians/s
-        {12},   // volts
-        Constants::LoopPeriod};
+    frc::LinearPlantInversionFeedforward<1, 1> m_feedforward{m_plant, Constants::LoopPeriod};
 
-    frc::KalmanFilter<1, 1, 1> m_filter = frc::KalmanFilter{
-        m_plant,
-        {200},  // model error stddev
-        {1.67}, // measurement error stddev
-        Constants::LoopPeriod};
-
-    frc::LinearSystemLoop<1, 1, 1> m_loop =
-        frc::LinearSystemLoop{m_plant, m_controller, m_filter, 12_V, Constants::LoopPeriod};
-
-    frc::sim::LinearSystemSim<1, 1, 1> m_plantSim = frc::sim::LinearSystemSim{m_plant, {5}};
+    rad_per_s_t m_desiredVelocity;
 };
