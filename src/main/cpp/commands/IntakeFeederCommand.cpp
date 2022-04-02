@@ -14,7 +14,8 @@ void IntakeFeederCommand::Initialize()
 }
 void IntakeFeederCommand::Execute()
 {
-    m_intakeFeeder.StartIntakeFeeder(/*frc::SmartDashboard::GetNumber("Conveyor Speed (0-1): ", 0)*/ m_intakeFeederRPM);
+    m_intakeFeeder.StartIntakeFeeder(
+        frc::SmartDashboard::GetNumber("Conveyor Speed (0-1): ", 0) /* m_intakeFeederRPM*/);
 }
 
 void IntakeFeederCommand::End(bool interrupted)

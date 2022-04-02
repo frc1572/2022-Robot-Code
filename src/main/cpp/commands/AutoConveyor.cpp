@@ -14,7 +14,7 @@ void AutoConveyor::Execute()
 {
     // 50 rpm  = 5.235 rad per s
     auto RPMOffset = m_flywheel.GetEstimatedVelocity() - m_flywheel.GetDesiredVelocity();
-    if (units::math::abs(RPMOffset) < 100 * 2_rad * wpi::numbers::pi / 60_s)
+    if (units::math::abs(RPMOffset) < 50 * 2_rad * wpi::numbers::pi / 60_s)
     {
         if (auto targetInfo = m_vision.GetLatestResult())
         {
@@ -26,6 +26,10 @@ void AutoConveyor::Execute()
             auto distance = (Constants::GoalTranslation - m_drivetrain.GetPose().Translation()).Norm();
             m_conveyor.StartIntakeFeeder(m_ConveyorLUT.Lookup(distance));
         }
+    }
+    else
+    {
+        m_conveyor.StartIntakeFeeder(0);
     }
 }
 
