@@ -18,6 +18,7 @@ FlywheelSubsystem::FlywheelSubsystem()
     m_leader.SetNeutralMode(Coast);
 
     m_leader.ConfigClosedLoopPeakOutput(0, .4);
+    m_leader.Config_kP(0, .75);
 
     m_follower.ConfigFactoryDefault();
     m_follower.SetNeutralMode(Coast);
@@ -33,12 +34,18 @@ void FlywheelSubsystem::Periodic()
     {
         ffVoltage = 0_V;
     }
-
-    m_leader.Set(
-        ControlMode::Velocity,
-        m_desiredVelocity * Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
-        DemandType::DemandType_ArbitraryFeedForward,
-        ffVoltage / 12_V);
+    if (m_desiredVelocity > 0_deg_per_s)
+    {
+        m_leader.Set(
+            ControlMode::Velocity,
+            m_desiredVelocity * Constants::VelocityFactor::TalonFX * Constants::TicksPerRevolution::TalonFX,
+            DemandType::DemandType_ArbitraryFeedForward,
+            ffVoltage / 12_V);
+    }
+    else
+    {
+        m_leader.Set(ControlMode::PercentOutput, 0);
+    }
 
     frc::SmartDashboard::PutNumber("Flywheel.MeasuredState", GetMeasuredVelocity().value());
     frc::SmartDashboard::PutNumber("Flywheel.DesiredState", GetDesiredVelocity().value());
