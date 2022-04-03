@@ -58,10 +58,10 @@ private:
         frc::Translation2d{11.75_in, -11.75_in},
         frc::Translation2d{-11.75_in, -11.75_in}};
 
-    frc::PIDController m_translationController{4, 0.0, 0.0, Constants::LoopPeriod};
+    frc::PIDController m_translationController{10, 0.0, 0.0, Constants::LoopPeriod};
 
     frc::ProfiledPIDController<units::radians> m_headingController{
-        4, 0.0, 0.0, {1440_deg_per_s, 1440_deg_per_s_sq}, Constants::LoopPeriod};
+        5, 0.0, 0.0, {1440_deg_per_s, 1440_deg_per_s_sq}, Constants::LoopPeriod};
 
     frc::SwerveDriveOdometry<4> m_swerveOdometry{m_swerveKinematics, frc::Rotation2d(0_rad)};
 

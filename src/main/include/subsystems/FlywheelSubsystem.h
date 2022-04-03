@@ -25,6 +25,7 @@ public:
     void SetSetpoint(rad_per_s_t setpoint);
     rad_per_s_t GetDesiredVelocity();
     rad_per_s_t GetMeasuredVelocity();
+    rad_per_s_t GetFollowerMeasuredVelocity();
 
 private:
     WPI_TalonFX m_leader{Constants::Flywheel::LeaderID, "canivore"};

@@ -37,15 +37,16 @@ RobotContainer::RobotContainer()
     // m_poseEstimatorCommand.Schedule();
     //  m_autoChooser.SetDefaultOption("Left2BallAuto", &m_LeftTwoBallAuto);
     //  m_autoChooser.AddOption("Right2BallAuto", &m_RightTwoBallAuto);
-    m_autoChooser.SetDefaultOption("RightOnlyReset", &m_resetRightOnly);
-    m_autoChooser.AddOption("LeftOnlyReset", &m_resetLeftOnly);
-    m_autoChooser.AddOption("LEFT2BALLAUTO", &m_LeftTwoBallAuto);
-    m_autoChooser.AddOption("RIGHT2BALLAUTO", &m_RightTwoBallAuto);
-    m_autoChooser.AddOption("Left1BallAutoNOMOVE", &m_resetLeftLowGoalShot);
-    m_autoChooser.AddOption("Right1BallAutoNOMOVE", &m_resetRightLowGoalShot);
-    m_autoChooser.AddOption("SmallForwardTest", &m_smallForwardAutoTest);
-    m_autoChooser.AddOption("Right5ball", &m_Right5ball);
-    m_autoChooser.AddOption("Right3ball", &m_Right3ball);
+    m_autoChooser.SetDefaultOption("Right5ballSafeShoot", &m_Right5ballSafeShoot);
+    m_autoChooser.AddOption("Right5ballSafeShoot", &m_Right5ballSafeShoot);
+    // m_autoChooser.AddOption("LeftOnlyReset", &m_resetLeftOnly);
+    // m_autoChooser.AddOption("LEFT2BALLAUTO", &m_LeftTwoBallAuto);
+    // m_autoChooser.AddOption("RIGHT2BALLAUTO", &m_RightTwoBallAuto);
+    // m_autoChooser.AddOption("Left1BallAutoNOMOVE", &m_resetLeftLowGoalShot);
+    // m_autoChooser.AddOption("Right1BallAutoNOMOVE", &m_resetRightLowGoalShot);
+    // m_autoChooser.AddOption("SmallForwardTest", &m_smallForwardAutoTest);
+    // m_autoChooser.AddOption("Right5ball", &m_Right5ball);
+    // m_autoChooser.AddOption("Right3ball", &m_Right3ball);
 
     frc::SmartDashboard::PutData(&m_autoChooser);
     ConfigureButtonBindings();
