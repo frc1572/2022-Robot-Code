@@ -91,7 +91,6 @@ private:
         m_drivetrain.Reset(pose);
         m_turret.Reset({0_deg});
         m_poseEstimatorCommand.Reset(pose, m_turret.GetMeasuredRotation());
-        std::cout << "Ran resetPose Command" << std::endl;
     };
 
     // frc2::SequentialComman9++dGroup m_testAutoCommand = m_drivetrain.MakeDrivePathPlannerCommand(
@@ -164,7 +163,7 @@ private:
                     std::move(m_drivetrain.MakeDrivePathPlannerCommand(
                                   pathplanner::PathPlanner::loadPath("right2Ball", 0.25_mps, 0.25_mps_sq)))
                         .WithTimeout(2_s))))};
-
+    */
     frc2::InstantCommand m_resetLeftOnly{[this]() { resetPose({23.1548_ft, 15.4612_ft, 159.00_deg}); }};
     frc2::InstantCommand m_resetRightOnly{[this]() { resetPose({25.8845_ft, 9.3302_ft, -111.00_deg}); }};
 
@@ -294,12 +293,14 @@ private:
                 frc2::SequentialCommandGroup(
                     IntakeSpinupCommand(-1, m_intakeSystem).WithTimeout(0.25_s),
                     IntakeSpinupCommand(0.25, m_intakeSystem))),
-            FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(.1_s),
-            AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel).WithTimeout(1.35_s),
+            frc2::ParallelCommandGroup(
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(1.35_s),
+                AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel).WithTimeout(1.35_s)),
             FeederSpinupCommand(0.0, m_turretFeeder).WithTimeout(0.1_s),
             m_drivetrain.MakeDrivePathPlannerCommand(pathplanner::PathPlanner::loadPath("Right3", 4_mps, 1_mps_sq)),
-            FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(.1_s),
-            AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel).WithTimeout(.75_s),
+            frc2::ParallelCommandGroup(
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(.75_s),
+                AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel).WithTimeout(.75_s)),
             m_drivetrain.MakeDrivePathPlannerCommand(
                 pathplanner::PathPlanner::loadPath("Right45Grab", 4_mps, 2_mps_sq)),
             m_drivetrain.MakeDrivePathPlannerCommand(
@@ -309,8 +310,9 @@ private:
                     m_drivetrain.Drive(frc::ChassisSpeeds{0_mps, 0_mps, 0_deg_per_s});
                 },
                 {&m_drivetrain}),
-            FeederSpinupCommand(0.2, m_turretFeeder).WithTimeout(.1_s),
-            AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel).WithTimeout(1.5_s),
+            frc2::ParallelCommandGroup(
+                FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder).WithTimeout(1.5_s),
+                AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel).WithTimeout(1.5_s)),
             IntakeSpinupCommand(0.0, m_intakeSystem).WithTimeout(0.1_s),
             FeederSpinupCommand(0.0, m_turretFeeder).WithTimeout(0.1_s))};
     /*

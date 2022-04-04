@@ -25,12 +25,12 @@ void WinchCommand::Execute()
     else if (m_joystick.GetRawButton(8) == true && m_joystick.GetRawButton(12) == true)
     {
         m_climb.WinchPull(Constants::Systemspeeds::WinchOutput);
-        std::cout << "Winch Pull Command is Running" << std::endl;
+        // std::cout << "Winch Pull Command is Running" << std::endl;
     }
     else
     {
         m_climb.WinchPull(0.0);
-        std::cout << "Winch Pull Command is NOT Running" << std::endl;
+        // std::cout << "Winch Pull Command is NOT Running" << std::endl;
     }
 }
 

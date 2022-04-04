@@ -20,20 +20,27 @@ void DriveTeleopCommand::Execute()
     rawTranslationX *= rawTranslationX * wpi::sgn(rawTranslationX);
     rawTranslationY *= rawTranslationY * wpi::sgn(rawTranslationY);
 
-    std::cout << "Ty: " << rawTranslationY << "Tx: " << rawTranslationX << std::endl;
     // Normalize input so that throttle does not run faster when moving diagonally
     double translationAngle = atan2(rawTranslationY, rawTranslationX);
     double translationX = rawTranslationX * cos(translationAngle) * wpi::sgn(rawTranslationX);
     double translationY = rawTranslationY * sin(translationAngle) * wpi::sgn(rawTranslationY);
 
     double steeringX = frc::ApplyDeadband(m_steeringJoystick.GetX(), 0.05);
+    steeringX *= steeringX * wpi::sgn(steeringX);
 
-    m_drivetrain.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-        -translationX * Constants::SwerveModule::ThrottleMaxVelocity,
-        -translationY * Constants::SwerveModule::ThrottleMaxVelocity,
-        -steeringX * Constants::SwerveModule::SteeringMaxVelocity,
-        m_drivetrain.GetMeasuredRotation()));
-    auto distance = (Constants::GoalTranslation.Norm() - m_drivetrain.GetPose().Translation().Norm());
-
-    // frc::SmartDashboard::PutNumber("Distance: ", distance.value());
+    if (m_translationJoystick.GetRawButton(1))
+    {
+        m_drivetrain.Drive(frc::ChassisSpeeds{
+            -translationX * Constants::SwerveModule::ThrottleMaxVelocity,
+            -translationY * Constants::SwerveModule::ThrottleMaxVelocity,
+            -steeringX * Constants::SwerveModule::SteeringMaxVelocity});
+    }
+    else
+    {
+        m_drivetrain.Drive(frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+            -translationX * Constants::SwerveModule::ThrottleMaxVelocity,
+            -translationY * Constants::SwerveModule::ThrottleMaxVelocity,
+            -steeringX * Constants::SwerveModule::SteeringMaxVelocity,
+            m_drivetrain.GetMeasuredRotation()));
+    }
 }

@@ -13,8 +13,10 @@ TurretFeederSubsystem::TurretFeederSubsystem()
 
     m_feeder.SetNeutralMode(Brake);
     m_feeder.ConfigFactoryDefault();
-    // Set Feeder to coast and config Default
-    // frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
+    // m_feeder.ConfigVoltageMeasurementFilter(true);
+    // m_feeder.ConfigVoltageCompSaturation(9);
+    //  Set Feeder to coast and config Default
+    //  frc::SmartDashboard::PutNumber("Flywheel.Setpoint", 0);
 }
 
 void TurretFeederSubsystem::StartFeeder(double FeedRpm)

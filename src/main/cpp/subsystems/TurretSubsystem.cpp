@@ -19,9 +19,13 @@ TurretSubsystem::TurretSubsystem()
     {
         m_turret.SetInverted(true);
     }
-    m_turret.Config_kP(0, 0.05);
+    m_turret.Config_kP(0, 0.075);
+    // m_turret.Config_kD(0, 0.1);
+    m_turret.ConfigClosedloopRamp(.25);
     m_turret.SetStatusFramePeriod(StatusFrame::Status_2_Feedback0_, Constants::LoopPeriod / 1_ms);
-    // m_turret.ConfigClosedLoopPeakOutput(0, .25);
+    m_turret.ConfigVoltageMeasurementFilter(true);
+    m_turret.ConfigVoltageCompSaturation(6);
+    // m_turret.ConfigClosedLoopPeakOutput(0, .05);
     SetName(fmt::format("TurretSubsystem({})", m_turret.GetDeviceID()));
 }
 
@@ -47,6 +51,10 @@ decltype(1_rad_per_s) TurretSubsystem::GetMeasuredVelocity()
 
 void TurretSubsystem::Periodic()
 {
+    auto turretSubsystemWrappedRotationDegrees =
+        frc::InputModulus(m_desiredPosition.Radians(), 0_rad, -2_rad * wpi::numbers::pi);
+    frc::SmartDashboard::PutNumber(
+        "turretSubsystemWrappedRotationDegrees", units::degree_t{turretSubsystemWrappedRotationDegrees}.value());
     auto turretOffsetAngle = frc::AngleModulus(m_desiredPosition.Radians()) - m_rotationOffset.Radians();
     auto turretFeedForward = units::volt_t{
         m_turretFeedForward.Calculate(Eigen::Vector2d(turretOffsetAngle.value(), m_desiredVelocity.value()))[0]};

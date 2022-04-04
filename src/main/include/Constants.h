@@ -23,7 +23,7 @@ namespace Constants
     namespace Systemspeeds
     {
         // double VairableHoodSpeed;
-        constexpr double TurretFeederSpeed = 0.7;
+        constexpr double TurretFeederSpeed = .5;
         constexpr double IntakeFeederSpeed = 0.5;
         constexpr double IntakeSpeed = 0.45;
         constexpr double HoodSpeed = 1900;
@@ -42,6 +42,7 @@ namespace Constants
         constexpr Ka_t<units::radian_t> Ka = 0.0025_V / 1_rad_per_s_sq;
         constexpr auto Diameter = 4_in;
         constexpr auto Angle = 23.68_deg;
+        constexpr double FlyWheelGearing = 1.5;
     } // namespace Flywheel
 
     namespace SwerveModule

@@ -11,6 +11,7 @@
 #include <units/time.h>
 
 #include "Constants.h"
+#include "frc/filter/LinearFilter.h"
 
 class VisionSubsystem : public frc2::SubsystemBase
 {
@@ -36,4 +37,6 @@ private:
     units::meter_t m_targetHeight;
     units::degree_t m_cameraPitch;
     std::optional<TargetInfo> m_latestResult;
+
+    frc::LinearFilter<units::meter_t> m_filter = frc::LinearFilter<units::meter_t>::MovingAverage(50);
 };

@@ -22,6 +22,7 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     m_throttleMotor->ConfigFactoryDefault();
     m_throttleMotor->ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor);
     m_throttleMotor->SetNeutralMode(NeutralMode::Brake);
+
     if (frc::RobotBase::IsReal())
     {
         m_throttleMotor->SetInverted(false);
@@ -35,6 +36,8 @@ SwerveModuleSubsystem::SwerveModuleSubsystem(int throttlePort, int steeringPort,
     m_steeringMotor->Config_kP(0, 0.2);
     m_steeringMotor->Config_kD(0, 0.005);
     m_steeringMotor->ConfigClosedLoopPeakOutput(0, .66);
+    m_steeringMotor->ConfigVoltageMeasurementFilter(true);
+    m_steeringMotor->ConfigVoltageCompSaturation(6);
     if (frc::RobotBase::IsReal())
     {
         m_steeringMotor->SetInverted(true);

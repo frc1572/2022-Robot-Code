@@ -28,7 +28,8 @@ void AutoTurretCommand::Execute()
     {
         auto pose = m_drivetrain.GetPose();
         auto goalOffset = Constants::GoalTranslation - pose.Translation();
-        auto desiredAngle = frc::Rotation2d{units::math::atan2(goalOffset.Y(), goalOffset.X())} - pose.Rotation();
+        auto desiredAngle =
+            frc::Rotation2d{units::math::atan2(goalOffset.Y(), goalOffset.X())} - pose.Rotation() - 180_deg;
         m_turret.SetDesiredPosition(desiredAngle, rad_per_s_t{0});
     }
     // m_previousDesiredAngle = desiredAngle;

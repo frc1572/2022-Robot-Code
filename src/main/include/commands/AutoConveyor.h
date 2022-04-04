@@ -4,6 +4,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <units/length.h>
 
+#include "frc/filter/LinearFilter.h"
 #include "helper/LinearLookupTable.h"
 #include "subsystems/DriveTrainSubsystem.h"
 #include "subsystems/FlywheelSubsystem.h"
@@ -28,10 +29,12 @@ private:
     FlywheelSubsystem& m_flywheel;
 
     LinearLookupTable<units::meter_t, double> m_ConveyorLUT{{
-        {2_m, 0.85},
-        {2.5_m, 0.65},
-        {3_m, 0.65},
-        {3.5_m, 0.70},
-        {4_m, 0.65},
+        {2_m, 0.55},
+        {2.5_m, 0.55},
+        {3_m, 0.55},
+        {3.5_m, 0.50},
+        {4_m, 0.55},
     }};
+
+    frc::LinearFilter<rad_per_s_t> m_filter = frc::LinearFilter<rad_per_s_t>::MovingAverage(25);
 };

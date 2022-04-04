@@ -4,6 +4,8 @@
 
 #include "RobotContainer.h"
 
+#include <cameraserver/CameraServer.h>
+
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/SequentialCommandGroup.h>
@@ -27,6 +29,13 @@
 
 RobotContainer::RobotContainer()
 {
+    auto camera = frc::CameraServer::StartAutomaticCapture();
+    camera.SetResolution(320, 240);
+    camera.SetFPS(30);
+    camera.SetExposureManual(40);
+    camera.SetBrightness(70);
+    camera.SetWhiteBalanceManual(4600);
+
     frc::SmartDashboard::PutNumber("Desired Flywheel RPM:", 0);
     frc::SmartDashboard::PutNumber("Conveyor Speed (0-1): ", 0);
     m_drivetrain.SetDefaultCommand(DriveTeleopCommand(m_drivetrain, m_translationJoystick, m_steeringJoystick));
@@ -37,9 +46,10 @@ RobotContainer::RobotContainer()
     // m_poseEstimatorCommand.Schedule();
     //  m_autoChooser.SetDefaultOption("Left2BallAuto", &m_LeftTwoBallAuto);
     //  m_autoChooser.AddOption("Right2BallAuto", &m_RightTwoBallAuto);
-    m_autoChooser.SetDefaultOption("Right5ballSafeShoot", &m_Right5ballSafeShoot);
+    m_autoChooser.SetDefaultOption("RightOnlyReset", &m_resetRightOnly);
+    m_autoChooser.AddOption("RightOnlyReset", &m_resetRightOnly);
     m_autoChooser.AddOption("Right5ballSafeShoot", &m_Right5ballSafeShoot);
-    // m_autoChooser.AddOption("LeftOnlyReset", &m_resetLeftOnly);
+    m_autoChooser.AddOption("LeftOnlyReset", &m_resetLeftOnly);
     // m_autoChooser.AddOption("LEFT2BALLAUTO", &m_LeftTwoBallAuto);
     // m_autoChooser.AddOption("RIGHT2BALLAUTO", &m_RightTwoBallAuto);
     // m_autoChooser.AddOption("Left1BallAutoNOMOVE", &m_resetLeftLowGoalShot);
@@ -59,17 +69,17 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton(&m_joystick, 1).WhenHeld(TurretManualControl(m_turret));
     // Hood Shooter Toggle ON
 
-    frc2::JoystickButton(&m_joystick, 6).WhenHeld(AutoFlywheelCommand(m_drivetrain, m_flywheel, m_vision));
-    frc2::JoystickButton(&m_joystick, 6).WhenHeld(AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel));
-    frc2::JoystickButton(&m_joystick, 6)
-        .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder));
-    // frc2::JoystickButton(&m_joystick, 6).WhenHeld(FlywheelSpinupCommand(0, m_flywheel));
-    // frc2::JoystickButton(&m_joystick, 6).WhenHeld(IntakeFeederCommand(0, m_IntakeFeeder));
+    // frc2::JoystickButton(&m_joystick, 6).WhenHeld(AutoFlywheelCommand(m_drivetrain, m_flywheel, m_vision));
+    // frc2::JoystickButton(&m_joystick, 6).WhenHeld(AutoConveyor(m_IntakeFeeder, m_vision, m_drivetrain, m_flywheel));
     // frc2::JoystickButton(&m_joystick, 6)
     //     .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder));
-    //  Turret Feededr toggle ON
-    //  frc2::JoystickButton(&m_joystick, 6)
-    //     .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder));
+    frc2::JoystickButton(&m_joystick, 6).WhenHeld(FlywheelSpinupCommand(0, m_flywheel));
+    frc2::JoystickButton(&m_joystick, 6).WhenHeld(IntakeFeederCommand(0, m_IntakeFeeder));
+    frc2::JoystickButton(&m_joystick, 6)
+        .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder));
+    //   Turret Feededr toggle ON
+    //   frc2::JoystickButton(&m_joystick, 6)
+    //      .WhenHeld(FeederSpinupCommand(Constants::Systemspeeds::TurretFeederSpeed, m_turretFeeder));
     frc2::JoystickButton(&m_joystick, 6).WhenReleased(FeederSpinupCommand(0.0, m_turretFeeder));
 
     // Main Intake and Main Feeder Hold ON
