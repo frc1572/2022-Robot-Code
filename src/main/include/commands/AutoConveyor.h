@@ -29,11 +29,11 @@ private:
     FlywheelSubsystem& m_flywheel;
 
     LinearLookupTable<units::meter_t, double> m_ConveyorLUT{{
-        {2_m, 0.55},
-        {2.5_m, 0.55},
-        {3_m, 0.55},
-        {3.5_m, 0.50},
-        {4_m, 0.55},
+        {2_m, 0.60},
+        {2.5_m, 0.60},
+        {3_m, 0.60},
+        {3.5_m, 0.60},
+        {4_m, 0.60},
     }};
 
     frc::LinearFilter<rad_per_s_t> m_filter = frc::LinearFilter<rad_per_s_t>::MovingAverage(25);
