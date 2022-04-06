@@ -9,6 +9,8 @@ IntakeSystemSubsystem::IntakeSystemSubsystem()
     m_intake.ConfigFactoryDefault();
 
     m_intake.SetNeutralMode(Coast);
+    m_intake.ConfigVoltageMeasurementFilter(true);
+    m_intake.ConfigVoltageCompSaturation(9);
 }
 
 void IntakeSystemSubsystem::Periodic()

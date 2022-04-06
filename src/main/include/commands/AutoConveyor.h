@@ -19,6 +19,7 @@ public:
         VisionSubsystem& Vision,
         DriveTrainSubsystem& DriveTrain,
         FlywheelSubsystem& flywheel);
+    void Initialize() override;
     void Execute() override;
     void End(bool Interuptable) override;
 
@@ -27,13 +28,14 @@ private:
     VisionSubsystem& m_vision;
     DriveTrainSubsystem& m_drivetrain;
     FlywheelSubsystem& m_flywheel;
+    rad_per_s_t PreviousVelocity;
+    rad_per_s_t CurrentVelocity;
 
     LinearLookupTable<units::meter_t, double> m_ConveyorLUT{{
-        {2_m, 0.60},
-        {2.5_m, 0.60},
-        {3_m, 0.60},
-        {3.5_m, 0.60},
-        {4_m, 0.60},
+        {2_m, 0.65},
+        {2.5_m, 0.65},
+        {3_m, 0.80},
+        {3.5_m, 0.80},
     }};
 
     frc::LinearFilter<rad_per_s_t> m_filter = frc::LinearFilter<rad_per_s_t>::MovingAverage(25);

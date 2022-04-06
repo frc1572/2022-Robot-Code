@@ -21,8 +21,9 @@ void FlywheelSpinupCommand::Initialize()
 
 void FlywheelSpinupCommand::Execute()
 {
-    m_flywheel.SetSetpoint(
-        frc::SmartDashboard::GetNumber("Desired Flywheel RPM:", 0.0) * 2_rad * wpi::numbers::pi / 1_min);
+    // m_flywheel.SetSetpoint(
+    //     frc::SmartDashboard::GetNumber("Desired Flywheel RPM:", 0.0) * 2_rad * wpi::numbers::pi / 1_min);
+    m_flywheel.SetSetpoint(m_omega);
 }
 
 void FlywheelSpinupCommand::End(bool interrupted)
